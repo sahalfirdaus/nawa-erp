@@ -209,6 +209,7 @@ const MKT_LOG = [
 ['2026-10-27','Thia','Tasya','OFFERING / Harga Jakarta Taipei School','Harga sudah terkirim, menunggu keputusan'],
 ['2026-10-30','Thia','Tasya','KONSULTASI / Call-an sama sekolah MTS 1 Bekasi','Interested']];
 const DP_SCH = [['SD Labshool','Harga terkirim, belum fix'],['TK Kinderfield Bekasi','Harga terkirim'],['TK Kinderfield','Fix harga'],['TK Raudha','Tidak jadi pakai jasa Nawa'],['SMPIT Nurul Fikri Depok','Harga terkirim'],['','Konsultasi awal'],['TKIT Citra Az-Zahra','Harga terkirim'],['','Follow-up offering & penawaran diskon'],['Pelita 2','Harga terkirim'],['','Hanya berdua soal sheet month line'],['SMPI Al Azhar 2 Pejaten','Undangan presentasi & meeting'],['SMA Pembangunan Jaya','Kasih offering'],['','Tanyain ada briefing atau tidak'],['','Follow up undangan presentasi / meeting'],['','Koordinasi data & materi desain'],['MHIS','Penerimaan & koordinasi konsep yearbook'],['','Rescheduling meeting & presentasi'],['','Follow-up project progress'],['','Calon klien mengajukan pemesanan 43 pcs. PIC menyampaikan minimum order 100 pcs dan menawarkan pengajuan khusus ke management. Budget maksimal Rp700.000.'],['','Follow up budget negotiation'],['','Revisian MOU'],['SMA Yasporbi Pancoran','Harga terkirim'],['','Follow up'],['SD Kharisma Bangsa Tangerang Selatan','Harga terkirim'],['SDS Marie Joseph Kelapa Gading','Harga terkirim'],['MtsN 1 Kota Bekasi','Harga'],['MTS 1 Kota Bekasi','Price offering & package coordination'],['SD Banjarsari Bandung','Harga'],['Yayasan Scientia International Indonesia','Harga'],['Scientia International Indonesia','Follow up'],['','Follow up undangan presentasi / meeting'],['SD Kharisma Bangsa Tangerang Selatan','Konsultasi'],['SMK Panca Bhakti Banjarnegara','Harga'],['Jakarta Taipei School','Harga'],['Jakarta Taipei School','Harga'],['MTS 1 Bekasi','Call-an']];
+const OWNER_EMAIL = 'firdaussahal@gmail.com'; // satu-satunya akun yang bisa membuka Setting
 const ST_ROLES = ['Admin', 'Manajer', 'Keuangan', 'Marketing', 'Operasional'], ST_GROUPS = ['Utama', 'Marketing', 'Operasional', 'Keuangan', 'Administrasi', 'Tim', 'Archive Project', 'Setting'], ST_LV = ['Tidak', 'Lihat', 'Edit'];
 const stDefAccess = () => ({Admin: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 2}, Manajer: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 0}, Keuangan: {Utama: 1, Marketing: 0, Operasional: 0, Keuangan: 2, Administrasi: 1, Tim: 0, 'Archive Project': 0, Setting: 0}, Marketing: {Utama: 1, Marketing: 2, Operasional: 1, Keuangan: 0, Administrasi: 0, Tim: 0, 'Archive Project': 1, Setting: 0}, Operasional: {Utama: 1, Marketing: 0, Operasional: 2, Keuangan: 0, Administrasi: 1, Tim: 0, 'Archive Project': 1, Setting: 0}});
 const ST_AUTH = () => ({url: 'https://bfohwbaitznoqhfceqnh.supabase.co', key: 'sb_publishable_C-FM2kU1CFPhkHUjPpbLBQ_RTcKeMZX', required: true, google: true});
@@ -415,7 +416,7 @@ class Component extends DCLogic {
   }
   cloudSave() { clearTimeout(this._cloudT); this.setState({cloudState: 'saving'}); this._cloudT = setTimeout(() => this.cloudPush(), 700); }
   async cloudSyncUsers() {
-    if (this.state.cloudRole !== 'Admin') return;
+    if (String(this._cloudEmail || '').toLowerCase() !== OWNER_EMAIL) return;
     const au = this.state.d.auth || {};
     try {
       const c = await this.sbClient(au.url, au.key, true), me = (this._cloudEmail || '').toLowerCase();
@@ -494,7 +495,7 @@ class Component extends DCLogic {
     this.setState({regBusy: false});
   }
   async loadRequests() {
-    if (this.state.cloudRole !== 'Admin') return;
+    if (String(this._cloudEmail || '').toLowerCase() !== OWNER_EMAIL) return;
     try {
       const c = await this.regClient();
       const r = await c.from('access_requests').select('*').eq('status', 'pending').order('created_at', {ascending: true});
@@ -724,7 +725,8 @@ class Component extends DCLogic {
     const me = authOn && s.cloudRole ? {name: s.authEmail, role: s.cloudRole, email: s.authEmail, active: true} : null;
     const cloudDone = ['denied', 'error'].includes(s.cloudState);
     const accOf = d.access || stDefAccess();
-    const grpLvl = g => !authOn ? 2 : !me ? 0 : me.role === 'Admin' ? 2 : ((accOf[me.role] || {})[g] || 0);
+    const isOwner = authOn && !!me && String(me.email || '').toLowerCase() === OWNER_EMAIL;
+    const grpLvl = g => g === 'Setting' ? (isOwner ? 2 : 0) : !authOn ? 2 : !me ? 0 : me.role === 'Admin' ? 2 : ((accOf[me.role] || {})[g] || 0);
     const viewGrp = view === 'setting' ? 'Setting' : ((NAV.find(g => g.items.some(it => it[0] === view)) || {}).g || 'Utama');
     const blocked = authOn && !!me && grpLvl(viewGrp) === 0;
     const gateOn = authOn && (!s.authReady || !s.authEmail || !me);
@@ -952,7 +954,7 @@ class Component extends DCLogic {
     const stUserRows = stUsers.map(u => ({name: u.name, email: u.email || '—', role: u.role, st: u.active ? 'Aktif' : 'Nonaktif', sbg: u.active ? T('green').bg : T('gray').bg, sfg: u.active ? T('green').fg : T('gray').fg, init: (u.name || '?').trim().charAt(0).toUpperCase(),
       edit: () => this.setState({showUs: true, usf: {id: u.id, name: u.name, email: u.email || '', role: u.role, active: u.active ? '1' : '0'}}),
       toggle: () => this.upd(dd2 => { const x = dd2.users.find(z => z.id === u.id); x.active = !x.active; }, u.active ? u.name + ' dinonaktifkan' : u.name + ' diaktifkan')}));
-    const stMatrix = ST_GROUPS.map(g => ({group: g, cells: ST_ROLES.map(r => { const lv = r === 'Admin' ? 2 : ((stAcc[r] || {})[g] || 0), tn = ['gray', 'blue', 'green'][lv];
+    const stMatrix = ST_GROUPS.filter(g => g !== 'Setting').map(g => ({group: g, cells: ST_ROLES.map(r => { const lv = r === 'Admin' ? 2 : ((stAcc[r] || {})[g] || 0), tn = ['gray', 'blue', 'green'][lv];
       return {label: ST_LV[lv], bg: T(tn).bg, fg: T(tn).fg, op: r === 'Admin' ? 0.6 : 1, on: () => { if (r === 'Admin') return; this.upd(dd2 => { dd2.access = dd2.access || stDefAccess(); dd2.access[r] = dd2.access[r] || {}; dd2.access[r][g] = ((dd2.access[r][g] || 0) + 1) % 3; }, 'Hak akses ' + r + ' · ' + g + ' diubah'); }}; })}));
     const stRoleHead = ST_ROLES.map(r => ({role: r, n: stUsers.filter(u => u.role === r && u.active).length}));
 
@@ -1301,8 +1303,8 @@ class Component extends DCLogic {
       regWaitTitle: s.regState === 'approved' ? 'Akun Anda sudah disetujui' : s.regState === 'rejected' ? 'Pendaftaran tidak disetujui' : 'Pendaftaran terkirim',
       regWaitText: s.regState === 'approved' ? 'Membuka aplikasi… Jika tidak terbuka otomatis, klik Cek status.' : s.regState === 'rejected' ? 'Admin tidak menyetujui pendaftaran akun ' + (s.authEmail || '') + '. Hubungi admin bila ini keliru.' : 'Data Anda sudah diterima. Admin akan meninjau pendaftaran akun ' + (s.authEmail || '') + '. Halaman ini akan terbuka otomatis setelah disetujui, atau klik Cek status nanti.', authEmail: s.authEmail || '', lgf: s.lgf || {}, lgEmail: this.fset('lgf', 'email'), lgPass: this.fset('lgf', 'password'),
       authErr: s.authErr || '', hasAuthErr: !!s.authErr, authInfo: s.authInfo || '', hasAuthInfo: !!s.authInfo, authOpacity: s.authBusy ? 0.6 : 1, authGoogle: !!au.google && !(typeof location !== 'undefined' && /^about:/.test(location.href)), authMagic: !(typeof location !== 'undefined' && /^about:/.test(location.href)),
-      isAdminCloud: authOn && s.cloudRole === 'Admin', xferOn: !authOn || s.cloudRole === 'Admin', xfer: s.xfer || '', xferSet: e => this.setState({xfer: e.target.value}), xferExport: () => this.exportData(), xferImport: () => this.importData(this.state.xfer || ''), xferFile: e => this.importDataFile(e), xferMsg: s.xferMsg || '', hasXferMsg: !!s.xferMsg, arcImport: e => this.importArchive(e), arcStatus: s.arcStatus || '', hasArcStatus: !!s.arcStatus, arcCount: String((s.rkData || []).length), doLogin: () => this.doLogin(), doMagic: () => this.doMagic(), doGoogle: () => this.doGoogle(), doLogout: () => this.doLogout(), testConn: () => this.testConn(),
-      showSetBtn: grpLvl('Setting') > 0, reqCount: String((s.reqs || []).length), hasReqBadge: authOn && s.cloudRole === 'Admin' && (s.reqs || []).length > 0, noReqs: !(s.reqs || []).length, reqReload: () => this.loadRequests(),
+      isAdminCloud: isOwner, xferOn: !authOn || isOwner, xfer: s.xfer || '', xferSet: e => this.setState({xfer: e.target.value}), xferExport: () => this.exportData(), xferImport: () => this.importData(this.state.xfer || ''), xferFile: e => this.importDataFile(e), xferMsg: s.xferMsg || '', hasXferMsg: !!s.xferMsg, arcImport: e => this.importArchive(e), arcStatus: s.arcStatus || '', hasArcStatus: !!s.arcStatus, arcCount: String((s.rkData || []).length), doLogin: () => this.doLogin(), doMagic: () => this.doMagic(), doGoogle: () => this.doGoogle(), doLogout: () => this.doLogout(), testConn: () => this.testConn(),
+      showSetBtn: grpLvl('Setting') > 0, reqCount: String((s.reqs || []).length), hasReqBadge: isOwner && (s.reqs || []).length > 0, noReqs: !(s.reqs || []).length, reqReload: () => this.loadRequests(),
       reqRows: (s.reqs || []).map(q => ({name: q.name, email: q.email, phone: q.phone || '—', jabatan: q.jabatan || '—', divisi: q.divisi || '—', note: q.note || '', hasNote: !!q.note, date: q.created_at ? new Date(q.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) : '', role: (s.reqRole || {})[q.id] || 'Marketing',
         setRole: e => { const v = e.target.value; this.setState(st => ({reqRole: {...st.reqRole, [q.id]: v}})); }, approve: () => this.decideReq(q, true), reject: () => { if (window.confirm('Tolak pendaftaran ' + q.name + '?')) this.decideReq(q, false); }})), hasAuthMe: !!(authOn && s.authEmail), authTest: s.authTest || '', hasAuthTest: !!s.authTest, authRedirect: (typeof location !== 'undefined' && !/^about:/.test(location.href)) ? location.href.split('#')[0] : 'Alamat belum terdeteksi karena aplikasi sedang dibuka di dalam bingkai pratinjau. Buka aplikasi di tab sendiri dari halaman utamanya, lalu alamat yang benar akan tampil di sini. Login dengan email dan kata sandi tidak membutuhkan alamat ini.',
       authStatus: authOn ? 'Login aktif' : (au.url && au.key ? 'Tersambung, belum wajib' : 'Belum diatur'), authBg: authOn ? T('green').bg : T('gray').bg, authFg: authOn ? T('green').fg : T('gray').fg,
