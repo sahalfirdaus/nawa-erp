@@ -979,6 +979,30 @@ input[type=range]{accent-color:#2F5D50;width:100%}
     <!-- INVOICE -->
     <sc-if value="{{ is.invoice }}" hint-placeholder-val="{{ false }}">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+      <sc-for list="{{ piuKpis }}" as="k" hint-placeholder-count="4"><div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-size:13px;color:#6B675E">{{ k.label }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;white-space:nowrap;color:{{ k.fg }}">{{ k.value }}</span><span style="font-size:12px;color:#6B675E">{{ k.sub }}</span></div></sc-for>
+    </div>
+    <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;overflow-x:auto">
+      <div style="padding:14px 16px;border-bottom:1px solid #E4E0D6;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 style="margin:0;font-size:15px;font-weight:600">Piutang per proyek</h2><span style="font-size:12px;color:#6B675E">Nilai MoU − pembayaran diterima (Buku Kas)</span></div>
+      <sc-if value="{{ piuEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:18px;font-size:13px;color:#6B675E">Belum ada proyek dengan nilai MoU.</div></sc-if>
+      <div style="min-width:760px">
+        <div style="display:grid;grid-template-columns:minmax(180px,1.4fr) 130px 130px 130px minmax(140px,1fr) 100px;gap:12px;padding:9px 16px;font-size:12px;color:#6B675E;border-bottom:1px solid #EFECE5"><span>Proyek</span><span style="text-align:right">Nilai MoU</span><span style="text-align:right">Diterima</span><span style="text-align:right">Sisa piutang</span><span>Progres</span><span>Status</span></div>
+        <sc-for list="{{ piuRows }}" as="r" hint-placeholder-count="2"><details style="border-bottom:1px solid #EFECE5"><summary style="list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(180px,1.4fr) 130px 130px 130px minmax(140px,1fr) 100px;gap:12px;padding:11px 16px;align-items:center">
+          <div style="min-width:0"><div style="font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.name }}</div><div style="font-size:12px;color:#6B675E">{{ r.cnt }}</div></div>
+          <span style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px">{{ r.tender }}</span>
+          <span style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px">{{ r.recv }}</span>
+          <span style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:{{ r.sisaC }}">{{ r.sisa }}</span>
+          <div style="display:flex;align-items:center;gap:8px;min-width:0"><div style="flex:1;height:6px;background:#EFECE5;border-radius:99px;overflow:hidden"><div style="height:100%;background:#2F5D50;border-radius:99px;width:{{ r.w }}"></div></div><span style="font-size:12px;color:#6B675E;width:34px;text-align:right">{{ r.pct }}</span></div>
+          <span><span style="padding:3px 9px;border-radius:99px;font-size:12px;font-weight:500;background:{{ r.bg }};color:{{ r.fg }};white-space:nowrap">{{ r.status }}</span></span>
+        </summary>
+          <div style="padding:2px 16px 12px 32px;display:flex;flex-direction:column;gap:4px">
+            <sc-if value="{{ r.hasPays }}" hint-placeholder-val="{{ false }}"><sc-for list="{{ r.pays }}" as="x" hint-placeholder-count="2"><div style="display:grid;grid-template-columns:100px minmax(0,1fr) 130px;gap:12px;font-size:12.5px;color:#3A3832"><span style="color:#6B675E">{{ x.dt }}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ x.desc }}</span><span style="text-align:right;font-family:'IBM Plex Mono',monospace">{{ x.amt }}</span></div></sc-for></sc-if>
+            <sc-if value="{{ r.noPays }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;color:#6B675E">Belum ada pembayaran yang cocok di Buku Kas.</span></sc-if>
+          </div>
+        </details></sc-for>
+      </div>
+    </div>
+    <h2 style="margin:6px 0 -4px;font-size:15px;font-weight:600">Invoice</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
       <sc-for list="{{ invKpis }}" as="k" hint-placeholder-count="3"><div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:4px"><span style="font-size:13px;color:#6B675E">{{ k.label }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;white-space:nowrap">{{ k.value }}</span></div></sc-for>
     </div>
     <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;align-items:end">
@@ -2386,9 +2410,13 @@ class Component extends DCLogic {
       {label: 'Hutang produksi', value: rps(navOwe + prSum('owe')), sub: `HPP ${hppPct}% dari ${rps(navContract + prSum('contract'))}`, rows: split2(navOwe, prSum('owe')), go: go('produksi')},
       {label: 'Pembayaran diterima', value: rps(navRecv + payInSum), sub: `${payInRows.length + agrIn.length} pembayaran dari ${active.length + navCount} proyek aktif`, rows: split2(navRecv, payInSum), go: go('laporan')},
       {label: 'Potensi keuntungan', value: rps(navContract - navHpp + prSum('contract') - prSum('hpp')), sub: `${rps((navContract - navHpp + prSum('contract') - prSum('hpp')) / Math.max(1, (TODAY.getFullYear() - 2026) * 12 + TODAY.getMonth() - 6 + 1))} / bulan · rata-rata sejak Juli 2026`, rows: split2(navContract - navHpp, prSum('contract') - prSum('hpp')), go: go('produksi')}].map(k => ({rows: [], ...k}));
+    const piuP = (() => { const ps = d.projects.filter(p => (+p.price || 0) * (+p.copies || 0) > 0); const got = new Map(ps.map(p => [p.id, []]));
+      (d.ledger || []).filter(x => +x.in > 0 && !x.noPL).forEach(x => { const t = ((x.purpose || '') + ' ' + (x.payee || '') + ' ' + (x.via || '')).toLowerCase(); const hit = ps.find(p => projKeys(p).some(k => t.includes(k))); if (hit) got.get(hit.id).push(x); });
+      return ps.map(p => { const pays = got.get(p.id).sort((a, b) => (a.date || '').localeCompare(b.date || '')); const tender = (+p.price || 0) * (+p.copies || 0); const recv = pays.length ? pays.reduce((t, x) => t + (+x.in || 0), 0) : (+p.collected || 0); return {p, pays, tender, recv, sisa: Math.max(0, tender - recv)}; }).sort((a, b) => b.sisa - a.sisa); })();
+    const piuTender = piuP.reduce((t, r) => t + r.tender, 0), piuRecv = piuP.reduce((t, r) => t + Math.min(r.recv, r.tender), 0), piuSisa = piuP.reduce((t, r) => t + r.sisa, 0), piuOpenN = piuP.filter(r => r.sisa > 0).length;
     const piuOpen = d.invoices.filter(i => i.status !== 'Lunas'), piuLate = piuOpen.filter(i => dd(i.due) < 0), piuSum = a => a.reduce((t, i) => t + (+i.amount || 0), 0);
-    const piutangCard = {label: 'Piutang Client', value: rps(piuSum(piuOpen)), sub: `${piuOpen.length} invoice belum lunas` + (piuLate.length ? ` · ${piuLate.length} lewat jatuh tempo` : ''),
-      rows: [{label: 'Terlambat', vol: rps(piuSum(piuLate)), pct: String(piuLate.length)}, {label: 'Belum tempo', vol: rps(piuSum(piuOpen) - piuSum(piuLate)), pct: String(piuOpen.length - piuLate.length)}], go: go('invoice')};
+    const piutangCard = {label: 'Piutang Client', value: rps(piuSisa), sub: `${piuOpenN} proyek belum lunas · ${piuTender ? Math.round(piuRecv / piuTender * 100) : 0}% tertagih`,
+      rows: [{label: 'Total tender (MoU)', vol: rps(piuTender), pct: String(piuP.length)}, {label: 'Pembayaran diterima', vol: rps(piuRecv), pct: String(piuP.reduce((t, r) => t + r.pays.length, 0))}], go: go('invoice')};
     const attention = [
       ...riskyList.map(p => { const r = riskOf(p); return {label: pname(p), sub: `Tahap ${STAGES[p.stage]} · deadline ${fd(p.deadline)}`, chip: r, ...riskT(r), go: open(p.id)}; }),
       ...overdueList.map(i => ({label: `${i.no} · ${sch(i.schoolId).name}`, sub: `${rp(i.amount)} · lewat ${-dd(i.due)} hari`, chip: 'Jatuh tempo', ...T('red'), go: go('invoice')}))];
@@ -3111,6 +3139,11 @@ class Component extends DCLogic {
         this.setState({showAsset: false}); },
       deleteAsset: () => { if (!afs.id || !window.confirm('Hapus aset ' + afs.name + '?')) return; this.upd(dd2 => { dd2.assets = dd2.assets.filter(z => z.id !== afs.id); }, 'Aset dihapus'); this.setState({showAsset: false}); },
       ships, shipQueue, hasShipQueue: shipQueue.length > 0,
+      piuKpis: [{label: 'Total tender sesuai MoU', value: rps(piuTender), sub: `${piuP.length} proyek`}, {label: 'Pembayaran diterima', value: rps(piuRecv), sub: `${piuP.reduce((t, r) => t + r.pays.length, 0)} pembayaran`}, {label: 'Sisa piutang', value: rps(piuSisa), sub: `${piuOpenN} proyek belum lunas`, hi: true}, {label: 'Tertagih', value: (piuTender ? Math.round(piuRecv / piuTender * 100) : 0) + '%', sub: 'dari total tender'}].map(k => ({hi: false, ...k, fg: k.hi ? '#A23B28' : '#1C1B18'})),
+      piuRows: piuP.map(r => { const pct = r.tender ? Math.min(100, Math.round(r.recv / r.tender * 100)) : 0; const last = r.pays[r.pays.length - 1]; const st = r.sisa <= 0 ? ['Lunas', 'green'] : r.recv > 0 ? ['Sebagian', 'amber'] : ['Belum bayar', 'red']; const tn = T(st[1]);
+        return {name: pname(r.p), sub: (+r.p.copies > 1 ? (+r.p.copies).toLocaleString('id-ID') + ' eks × ' + rps(r.p.price) : 'Nilai kontrak') , tender: rps(r.tender), recv: rps(r.recv), sisa: rps(r.sisa), sisaC: r.sisa > 0 ? '#A23B28' : '#2F5D50', pct: pct + '%', w: pct + '%', cnt: r.pays.length ? r.pays.length + ' pembayaran · terakhir ' + fd(last.date, true) : 'Belum ada pembayaran tercatat', status: st[0], bg: tn.bg, fg: tn.fg,
+          pays: r.pays.map(x => ({dt: fd(x.date, true), desc: x.purpose || x.payee || '—', amt: rps(+x.in || 0)})), hasPays: r.pays.length > 0, noPays: !r.pays.length}; }),
+      piuEmpty: !piuP.length,
       invList, invKpis, inf: infv, infSchool: this.fset('inf', 'schoolId'), infDesc: this.fset('inf', 'desc'), infAmount: this.fset('inf', 'amount'),
       addInvoice: () => { const a = +s.inf.amount; if (!infv.schoolId) return this.flash('Tambahkan sekolah dulu di Sekolah & CRM'); if (!a || !s.inf.desc) return this.flash('Isi keterangan dan jumlah'); const no = 'INV/2026/' + String(101 + d.invoices.length).padStart(3, '0');
         this.upd(dd2 => dd2.invoices.push({id: 'i' + Date.now(), no, schoolId: infv.schoolId, desc: s.inf.desc, amount: a, due: iso(new Date(TODAY.getTime() + 14 * 864e5)), status: 'Belum'}), `${no} diterbitkan`); this.setState({inf: {...s.inf, desc: '', amount: ''}}); },
