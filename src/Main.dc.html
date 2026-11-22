@@ -505,7 +505,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
             <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Peran<select data-rkv="{{ usf.role }}" value="{{ usf.role }}" onChange="{{ usfRole }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"><sc-for list="{{ stRoleOpts }}" as="o" hint-placeholder-count="5"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
             <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Status<select data-rkv="{{ usf.active }}" value="{{ usf.active }}" onChange="{{ usfActive }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"><option value="1">Aktif</option><option value="0">Nonaktif</option></select></label>
           </div>
-          <div style="background:#F7F5F0;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:12px;color:#3A3832;line-height:1.45"><div><b>Peran {{ usf.role }}</b> — {{ usRole.desc }}</div><div><span style="color:#2F5D50;font-weight:600">Edit ({{ usRole.nEdit }}):</span> {{ usRole.edit }}</div><div><span style="color:#3B5A8A;font-weight:600">Lihat ({{ usRole.nView }}):</span> {{ usRole.view }}</div><div style="color:#6B675E">Ubah menu yang bisa dibuka di kartu “Hak akses per peran” di bawah.</div></div>
+          <div style="background:#F7F5F0;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:12px;color:#3A3832;line-height:1.45"><div><b>Peran {{ usf.role }}</b> — {{ usRole.desc }}</div><div><span style="color:#2F5D50;font-weight:600">YES ({{ usRole.nEdit }}):</span> {{ usRole.edit }}</div><div><span style="color:#8A867C;font-weight:600">NO ({{ usRole.nView }}):</span> {{ usRole.view }}</div><div style="color:#6B675E">Ubah menu yang bisa dibuka di kartu “Hak akses per peran” di bawah.</div></div>
           <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><div><sc-if value="{{ usEditing }}" hint-placeholder-val="{{ false }}"><button onClick="{{ deleteUs }}" style="white-space:nowrap;border:1px solid #E3B9AE;background:#fff;color:#A23B28;padding:9px 14px;border-radius:7px;font-size:13px">Hapus</button></sc-if></div><div style="display:flex;gap:8px"><button onClick="{{ closeUs }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:9px 14px;border-radius:7px;font-size:13px">Batal</button><button onClick="{{ saveUs }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:9px 16px;border-radius:7px;font-size:13px;font-weight:600">Simpan</button></div></div>
         </div>
         </sc-if>
@@ -562,10 +562,10 @@ input[type=range]{accent-color:#2F5D50;width:100%}
       </div>
       <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px 20px;min-width:0">
         <h2 style="margin:0;font-size:15px;font-weight:600">Hak akses per peran</h2>
-        <div style="font-size:12px;color:#6B675E;margin:2px 0 12px">Klik sel untuk mengganti: Tidak → Lihat → Edit. Berlaku untuk semua halaman di menu tersebut. Admin selalu akses penuh.</div>
+        <div style="font-size:12px;color:#6B675E;margin:2px 0 12px">Klik sel untuk mengganti YES / NO. YES berarti peran itu bisa membuka semua halaman di menu tersebut. Superadmin selalu YES.</div>
         <div style="overflow-x:auto"><div style="min-width:{{ stGridMin }}">
         <div style="display:grid;grid-template-columns:{{ stGridCols }};gap:0 8px;align-items:center;padding:6px 0;border-bottom:1.5px solid #1C1B18;font-size:11px;font-weight:600;color:#3A3832"><span>Menu</span><sc-for list="{{ stRoleHead }}" as="h" hint-placeholder-count="3"><span style="text-align:center">{{ h.role }} <span style="font-weight:400;color:#8A857A">({{ h.n }})</span></span></sc-for></div>
-        <sc-for list="{{ stMatrix }}" as="g" hint-placeholder-count="12"><div style="display:grid;grid-template-columns:{{ stGridCols }};gap:0 8px;align-items:center;padding:{{ g.pad }};border-bottom:1px solid #EFECE5;font-size:{{ g.fs }};background:{{ g.rowBg }}"><span style="font-weight:{{ g.fw }};padding-left:{{ g.indent }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ g.label }}</span><sc-for list="{{ g.cells }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.on }}" style="border:0;padding:5px 0;border-radius:6px;font-size:11.5px;font-weight:500;background:{{ c.bg }};color:{{ c.fg }};opacity:{{ c.op }}">{{ c.label }}</button></sc-for></div></sc-for>
+        <sc-for list="{{ stMatrix }}" as="g" hint-placeholder-count="12"><div style="display:grid;grid-template-columns:{{ stGridCols }};gap:0 8px;align-items:center;padding:{{ g.pad }};border-bottom:1px solid #EFECE5;font-size:{{ g.fs }};background:{{ g.rowBg }}"><span style="font-weight:{{ g.fw }};padding-left:{{ g.indent }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ g.label }}</span><sc-for list="{{ g.cells }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.on }}" aria-pressed="{{ c.yes }}" style="border:0;padding:5px 0;border-radius:6px;font-size:11.5px;font-weight:600;letter-spacing:.03em;background:{{ c.bg }};color:{{ c.fg }};opacity:{{ c.op }};display:flex;align-items:center;justify-content:center;gap:5px"><sc-if value="{{ c.yes }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#2F7A55"/><path d="M7.5 12.5l3 3 6-6.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></sc-if>{{ c.label }}</button></sc-for></div></sc-for>
         </div></div>
         <div style="font-size:11px;color:#6B675E;margin-top:10px">Tersimpan bersama data aplikasi di Supabase. Halaman Setting selalu khusus pemilik akun.</div>
       </div>
@@ -1671,15 +1671,18 @@ const catFix = d => { if (d && !d.catalog) d.catalog = CATALOG_SEED(); return d;
 const OWNER_EMAIL = 'firdaussahal@gmail.com'; // satu-satunya akun yang bisa membuka Setting
 const ST_ROLES = ['Admin', 'Manajer', 'Keuangan', 'Marketing', 'Operasional'], ST_GROUPS = ['Utama', 'Marketing', 'Operasional', 'Keuangan', 'Administrasi', 'Tim', 'Archive Project', 'Setting'], ST_LV = ['Tidak', 'Lihat', 'Edit'];
 const stDefAccess = () => ({Admin: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 2}, Manajer: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 0}, Keuangan: {Utama: 1, Marketing: 0, Operasional: 0, Keuangan: 2, Administrasi: 1, Tim: 0, 'Archive Project': 0, Setting: 0}, Marketing: {Utama: 1, Marketing: 2, Operasional: 1, Keuangan: 0, Administrasi: 0, Tim: 0, 'Archive Project': 1, Setting: 0}, Operasional: {Utama: 1, Marketing: 0, Operasional: 2, Keuangan: 0, Administrasi: 1, Tim: 0, 'Archive Project': 1, Setting: 0}});
+const SUPER = 'Superadmin';
 const ROLE_SEED = () => [
-  {name: 'Admin', desc: 'Akses penuh ke semua halaman. Tidak bisa dibatasi.'},
+  {name: SUPER, desc: 'Akses penuh ke semua halaman. Tidak bisa dibatasi.'},
   {name: 'Management', desc: 'Pimpinan & manajer: membuka dan mengelola semua menu kerja, termasuk Keuangan.'},
   {name: 'Staff', desc: 'Tim harian: membuka halaman sesuai tugasnya. Keuangan tertutup secara bawaan.'}];
 // Level bawaan bila belum diatur: 0 Tidak, 1 Lihat, 2 Edit
-const roleDefLvl = (role, g, id) => role === 'Admin' || role === 'Management' ? 2 : role !== 'Staff' ? 0
+const roleDefLvl = (role, g, id) => role === SUPER || role === 'Management' ? 2 : role !== 'Staff' ? 0
   : g === 'Keuangan' ? 0 : g === 'Utama' || g === 'Tim' || g === 'Archive Project' ? 1 : id === 'absrekap' || id === 'aset' ? 1 : 2;
-const ROLE_MAP_V1 = {Admin: 'Admin', Manajer: 'Management'};
-const rolesFix = d => { if (!d || d.rolesV2) return d; d.roles = ROLE_SEED(); d.pageAccess = {}; (d.users || []).forEach(u => { u.role = ROLE_MAP_V1[u.role] || 'Staff'; }); d.rolesV2 = true; return d; };
+const ROLE_MAP_V1 = {Admin: SUPER, Superadmin: SUPER, Manajer: 'Management'};
+const rolesFix = d => { if (!d) return d;
+  if (d.rolesV2 && !d.rolesV3) { (d.roles || []).forEach(r => { if (r.name === 'Admin') { r.name = SUPER; } }); (d.users || []).forEach(u => { if (u.role === 'Admin') u.role = SUPER; }); if (d.pageAccess && d.pageAccess.Admin) { d.pageAccess[SUPER] = d.pageAccess.Admin; delete d.pageAccess.Admin; } d.rolesV3 = true; return d; }
+  if (d.rolesV2) return d; d.roles = ROLE_SEED(); d.pageAccess = {}; (d.users || []).forEach(u => { u.role = ROLE_MAP_V1[u.role] || 'Staff'; }); d.rolesV2 = true; d.rolesV3 = true; return d; };
 const ST_AUTH = () => ({url: 'https://bfohwbaitznoqhfceqnh.supabase.co', key: 'sb_publishable_C-FM2kU1CFPhkHUjPpbLBQ_RTcKeMZX', required: false, google: false});
 const stSeedUsers = () => ['Thia', 'Tasya', 'Dhimas'].map(n => ({id: 'u-' + n.toLowerCase(), name: n, email: '', role: 'Marketing', active: true}));
 const DP_GROUPS = [['Deal / MOU','green'],['Interested','green'],['Meeting','blue'],['Harga terkirim','blue'],['Follow up','gray'],['Pending','amber'],['Cancelled','red'],['Tanpa status','gray']];
@@ -1875,11 +1878,11 @@ class Component extends DCLogic {
       const role = rr.data;
       const r = await c.from('app_state').select('data,version').eq('id', 'main').maybeSingle();
       if (r.error) throw r.error;
-      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1), needCat = !!(r.data && !(r.data.data || {}).catalog), needRoles = !!(r.data && !(r.data.data || {}).rolesV2);
+      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1), needCat = !!(r.data && !(r.data.data || {}).catalog), needRoles = !!(r.data && !(r.data.data || {}).rolesV3);
       if (r.data) this.cloudApply(r.data);
       else { const ins = await c.from('app_state').insert({id: 'main', data: this.cloudStrip(this.state.d), version: 1, updated_by: this._cloudBy}); if (ins.error) throw ins.error; this._cloudVer = 1; }
       this._cloudOn = true; this.setState({cloudState: 'ok', cloudRole: role});
-      if (needRoles) this.upd(dd => { rolesFix(dd); }, 'Peran diperbarui: Admin, Management, Staff');
+      if (needRoles) this.upd(dd => { rolesFix(dd); }, 'Peran diperbarui: Superadmin, Management, Staff');
       if (needCat) this.upd(dd => { catFix(dd); }, 'Katalog Product & Service dibuat');
       if (needDeal) this.upd(dd => { dealFix(dd); }, 'Sekolah berstatus Kontrak dipindah ke Deal (MoU)');
       this.cloudSyncUsers(); this.loadArchive(); this.loadRequests();
@@ -1894,7 +1897,7 @@ class Component extends DCLogic {
     try {
       const c = await this.sbClient(au.url, au.key, true), me = (this._cloudEmail || '').toLowerCase();
       const want = (this.state.d.users || []).filter(u => u.email && u.email.trim()).map(u => ({email: u.email.trim().toLowerCase(), role: u.role, active: !!u.active}));
-      if (me && !want.some(w => w.email === me)) want.push({email: me, role: 'Admin', active: true});
+      if (me && !want.some(w => w.email === me)) want.push({email: me, role: SUPER, active: true});
       const sig = JSON.stringify(want); if (sig === this._usersSig) return;
       if (want.length) { const up = await c.from('allowed_emails').upsert(want, {onConflict: 'email'}); if (up.error) throw up.error; }
       const cur = await c.from('allowed_emails').select('email'); if (cur.error) throw cur.error;
@@ -2204,7 +2207,7 @@ class Component extends DCLogic {
     const isOwner = authOn && !!me && String(me.email || '').toLowerCase() === OWNER_EMAIL;
     const roleList = (d.roles && d.roles.length ? d.roles : ROLE_SEED()), roleNames = roleList.map(r => r.name);
     const pageGrp = {}; NAV.forEach(g => g.items.forEach(([id]) => { pageGrp[id] = g.g; }));
-    const roleLvl = (role, id) => { if (role === 'Admin') return 2; const v = ((d.pageAccess || {})[role] || {})[id]; return v == null ? roleDefLvl(role, pageGrp[id], id) : v; };
+    const roleLvl = (role, id) => { if (role === SUPER) return 2; const v = ((d.pageAccess || {})[role] || {})[id]; return v == null ? roleDefLvl(role, pageGrp[id], id) : v; };
     const pageLvl = id => id === 'setting' ? (isOwner ? 2 : 0) : !authOn ? 2 : !me ? 0 : roleLvl(me.role, id);
     const grpLvl = g => g === 'Setting' ? (isOwner ? 2 : 0) : Math.max(0, ...((NAV.find(x => x.g === g) || {items: []}).items.map(([id]) => pageLvl(id))));
 
@@ -2453,16 +2456,16 @@ class Component extends DCLogic {
     const setLvl = (role, ids, lv) => this.upd(dd2 => { dd2.pageAccess = dd2.pageAccess || {}; const m = dd2.pageAccess[role] = dd2.pageAccess[role] || {}; ids.forEach(id => { m[id] = lv; }); }, 'Hak akses ' + role + ' diubah');
     const stMatrix = [];
     NAV.forEach(g => { const ids = g.items.map(([id]) => id);
-      stMatrix.push({head: true, pad: '7px 0', fs: '13px', fw: 500, indent: '0', rowBg: 'transparent', label: g.g, cells: roleNames.map(r => { const lvs = ids.map(id => roleLvl(r, id)), same = lvs.every(v => v === lvs[0]), mx = Math.max(...lvs), tn = T(LV_T[same ? lvs[0] : mx]);
-        return {label: same ? ST_LV[lvs[0]] : ST_LV[mx], bg: tn.bg, fg: tn.fg, op: r === 'Admin' ? 0.55 : 1, on: () => { if (r !== 'Admin') setLvl(r, ids, (mx + 1) % 3); }}; })});
+      stMatrix.push({head: true, pad: '7px 0', fs: '13px', fw: 500, indent: '0', rowBg: 'transparent', label: g.g, cells: roleNames.map(r => { const yes = ids.some(id => roleLvl(r, id) > 0);
+        return {label: yes ? 'YES' : 'NO', yes, no: !yes, bg: yes ? '#E3ECE7' : '#F1EFEA', fg: yes ? '#2F5D50' : '#8A867C', op: r === SUPER ? 0.55 : 1, on: () => { if (r !== SUPER) setLvl(r, ids, yes ? 0 : 2); }}; })});
     });
     const stGridCols = '150px repeat(' + roleNames.length + ', minmax(76px,1fr))', stGridMin = (150 + roleNames.length * 84) + 'px';
     const rlf = s.rlf || {};
-    const roleRows = roleList.map(r => ({name: r.name, desc: r.desc || '', n: String(stUsers.filter(u => u.role === r.name).length), locked: r.name === 'Admin', editable: r.name !== 'Admin',
+    const roleRows = roleList.map(r => ({name: r.name, desc: r.desc || '', n: String(stUsers.filter(u => u.role === r.name).length), locked: r.name === SUPER, editable: r.name !== SUPER,
       pages: String(NAV.filter(g => g.items.some(([id]) => roleLvl(r.name, id) > 0)).length),
       edit: () => this.setState({rlfOn: true, rlf: {orig: r.name, name: r.name, desc: r.desc || '', base: ''}})}));
     const roleInfo = nm => { const r = roleList.find(x => x.name === nm) || {name: nm, desc: ''}; const ed = [], vw = [];
-      NAV.forEach(g => { const lv = Math.max(0, ...g.items.map(([id]) => roleLvl(nm, id))); if (lv === 2) ed.push(g.g); else if (lv === 1) vw.push(g.g); });
+      NAV.forEach(g => { const lv = Math.max(0, ...g.items.map(([id]) => roleLvl(nm, id))); if (lv > 0) ed.push(g.g); else vw.push(g.g); });
       return {desc: r.desc || 'Belum ada keterangan.', edit: ed.length ? ed.join(', ') : '—', view: vw.length ? vw.join(', ') : '—', nEdit: String(ed.length), nView: String(vw.length)}; };
     const usRole = roleInfo(usf.role || 'Staff');
 
@@ -2846,16 +2849,16 @@ class Component extends DCLogic {
         this.upd(dd2 => { dd2.auth = {url, key, required: f.required === '1', google: f.google === '1'}; }, f.required === '1' ? 'Pengaturan login disimpan. Login diwajibkan' : 'Pengaturan login disimpan');
         this._sb = null; this.setState({authTest: '', authEmail: '', authReady: false}); setTimeout(() => this.authInit(), 50); },
       cloudText: !authOn ? 'Data hanya tersimpan di browser ini. Aktifkan Wajib login agar data tersimpan di Supabase.' : s.cloudState === 'denied' ? 'Akun ini belum disetujui admin' : s.cloudState === 'ok' ? 'Data tersimpan di Supabase' : s.cloudState === 'saving' ? 'Menyimpan ke Supabase…' : s.cloudState === 'loading' ? 'Memuat data dari Supabase…' : s.cloudState === 'error' ? (s.cloudErr || 'Gagal terhubung ke database') : 'Menunggu login', cloudOk: authOn && (s.cloudState === 'ok' || s.cloudState === 'saving'), cloudDot: s.cloudState === 'error' ? '#A23B28' : (authOn && (s.cloudState === 'ok' || s.cloudState === 'saving')) ? '#2F5D50' : '#B8B2A4', setupMode: false,
-      goSetting: go('setting'), setBg: is.setting ? '#FFFFFF' : 'transparent', stUserRows, stMatrix, stRoleHead, stRoleOpts: roleNames, stGridCols, stGridMin, roleRows, usRole, rlfOn: !!s.rlfOn, rlf, rlfEditing: !!rlf.orig, rlfNew: !rlf.orig, rlfTitle: rlf.orig ? 'Edit peran' : 'Peran baru', rlfBaseOpts: [{v: '', l: 'Mulai kosong (semua Tidak)'}, ...roleNames.filter(n => n !== 'Admin').map(n => ({v: n, l: 'Salin dari ' + n}))],
+      goSetting: go('setting'), setBg: is.setting ? '#FFFFFF' : 'transparent', stUserRows, stMatrix, stRoleHead, stRoleOpts: roleNames, stGridCols, stGridMin, roleRows, usRole, rlfOn: !!s.rlfOn, rlf, rlfEditing: !!rlf.orig, rlfNew: !rlf.orig, rlfTitle: rlf.orig ? 'Edit peran' : 'Peran baru', rlfBaseOpts: [{v: '', l: 'Mulai kosong (semua Tidak)'}, ...roleNames.filter(n => n !== SUPER).map(n => ({v: n, l: 'Salin dari ' + n}))],
       rlNew: () => this.setState({rlfOn: true, rlf: {orig: '', name: '', desc: '', base: 'Staff'}}), rlClose: () => this.setState({rlfOn: false}),
       rlfName: this.fset('rlf', 'name'), rlfDesc: this.fset('rlf', 'desc'), rlfBase: this.fset('rlf', 'base'),
-      rlSave: () => { const nm = String(rlf.name || '').trim(); if (!nm) return this.flash('Isi nama peran'); if (nm !== rlf.orig && roleNames.some(x => x.toLowerCase() === nm.toLowerCase())) return this.flash('Nama peran sudah dipakai'); if (rlf.orig === 'Admin' || nm === 'Admin' && rlf.orig !== 'Admin') return this.flash('Nama Admin dicadangkan');
+      rlSave: () => { const nm = String(rlf.name || '').trim(); if (!nm) return this.flash('Isi nama peran'); if (nm !== rlf.orig && roleNames.some(x => x.toLowerCase() === nm.toLowerCase())) return this.flash('Nama peran sudah dipakai'); if (rlf.orig === SUPER || nm === SUPER && rlf.orig !== SUPER) return this.flash('Nama ' + SUPER + ' dicadangkan');
         this.upd(dd2 => { dd2.roles = dd2.roles && dd2.roles.length ? dd2.roles : ROLE_SEED(); dd2.pageAccess = dd2.pageAccess || {};
           if (rlf.orig) { const r = dd2.roles.find(x => x.name === rlf.orig); r.name = nm; r.desc = String(rlf.desc || '').trim();
             if (nm !== rlf.orig) { const pa = {}; NAV.forEach(g => g.items.forEach(([id]) => { pa[id] = roleLvl(rlf.orig, id); })); dd2.pageAccess[nm] = pa; delete dd2.pageAccess[rlf.orig]; (dd2.users || []).forEach(u => { if (u.role === rlf.orig) u.role = nm; }); } }
           else { dd2.roles.push({name: nm, desc: String(rlf.desc || '').trim()}); const pa = {}; NAV.forEach(g => g.items.forEach(([id]) => { pa[id] = rlf.base ? roleLvl(rlf.base, id) : 0; })); dd2.pageAccess[nm] = pa; } },
           rlf.orig ? 'Peran ' + nm + ' diperbarui' : 'Peran ' + nm + ' ditambahkan'); this.setState({rlfOn: false}); },
-      rlDelete: () => { const nm = rlf.orig; if (!nm || nm === 'Admin') return; const used = stUsers.filter(u => u.role === nm).length; if (used) return this.flash(used + ' pengguna masih memakai peran ' + nm + '. Pindahkan dulu ke peran lain.');
+      rlDelete: () => { const nm = rlf.orig; if (!nm || nm === SUPER) return; const used = stUsers.filter(u => u.role === nm).length; if (used) return this.flash(used + ' pengguna masih memakai peran ' + nm + '. Pindahkan dulu ke peran lain.');
         if (!window.confirm('Hapus peran ' + nm + '?')) return; this.upd(dd2 => { dd2.roles = (dd2.roles || []).filter(x => x.name !== nm); if (dd2.pageAccess) delete dd2.pageAccess[nm]; }, 'Peran ' + nm + ' dihapus'); this.setState({rlfOn: false}); }, showUs: !!s.showUs, usf, usEditing: !!usf.id, usFormTitle: usf.id ? 'Edit pengguna' : 'Pengguna baru',
       newUs: () => this.setState({showUs: true, usf: {id: null, name: '', email: '', role: 'Staff', active: '1'}}), closeUs: () => this.setState({showUs: false}),
       usfName: this.fset('usf', 'name'), usfEmail: this.fset('usf', 'email'), usfRole: this.fset('usf', 'role'), usfActive: this.fset('usf', 'active'),
