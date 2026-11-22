@@ -134,18 +134,20 @@ input[type=range]{accent-color:#2F5D50;width:100%}
   </sc-if>
 
   <div style="flex:1;padding:clamp(16px,3vw,32px);display:flex;flex-direction:column;gap:20px;max-width:1360px;width:100%;margin:0 auto;box-sizing:border-box">
+    <sc-if value="{{ showHeader }}" hint-placeholder-val="{{ true }}">
     <header style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px">
       <div style="flex:1;min-width:0">
         <div style="font-size:13px;color:#6B675E;margin-bottom:4px;white-space:nowrap">{{ todayLabel }}</div>
         <h1 style="margin:0;font-size:clamp(22px,3vw,28px);font-weight:600;letter-spacing:-0.02em">{{ title }}</h1>
       </div>
     </header>
+    </sc-if>
 
     <!-- DASHBOARD A -->
     <sc-if value="{{ is.dashA }}" hint-placeholder-val="{{ true }}">
     <div class="nf-dash-gap" style="flex:1 1 0;min-height:12px"></div>
     <div style="display:flex;flex-direction:column;gap:12px">
-    <h2 style="margin:0;font-size:15px;font-weight:600">Progress client prospect · Navinus</h2>
+    <h2 style="margin:0;font-size:15px;font-weight:600;color:#FFFFFF;text-shadow:0 1px 2px rgba(0,0,0,.55),0 0 12px rgba(0,0,0,.4)">Progress client prospect · Navinus</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
       <div style="position:relative;grid-column:span 2;background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:14px 18px 12px;min-width:0">
         <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px;padding-right:36px"><h2 style="margin:0;font-size:14px;font-weight:600;white-space:nowrap">Progress kontak klien · Week to week</h2><span style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:12px;color:#6B675E"><span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:#2F5D50"></span>Offering</span><span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:#9DB8AE"></span>Konsultasi</span><span>{{ ctRange }} · total {{ ctTotal }} kontak</span></span></div>
@@ -2903,7 +2905,7 @@ class Component extends DCLogic {
         this.upd(dd2 => { dd2.users = dd2.users || []; if (usf.id) Object.assign(dd2.users.find(z => z.id === usf.id), rec); else dd2.users.push({id: 'u' + Date.now(), ...rec}); }, usf.id ? 'Pengguna diperbarui' : 'Pengguna ditambahkan'); this.setState({showUs: false}); },
       deleteUs: () => { if (!usf.id || !window.confirm('Hapus pengguna ' + usf.name + '?')) return; this.upd(dd2 => { dd2.users = dd2.users.filter(z => z.id !== usf.id); }, 'Pengguna dihapus'); this.setState({showUs: false}); },
       dpMonthChips, dpTypeChips, dpKpis, dpBars, dpStatus, dpPeople, dpTable, dpRange, dpCount: dpRows.length, stageCards, prKpis, prKpisDash: [], ctBars, ctTotal, ctRange, prStageStrip, goPr: go('pencarian'), goJournal: go('laporan'), goLaba: go('labarugi'),
-      mainCls: is.dashA ? 'nf-gridbg' : '', kpis, kpisRest: [...kpis.filter((k, i) => i > 0 && k.label !== 'Potensi keuntungan' && k.label !== 'Pembayaran diterima'), piutangCard], attention, pipeline, upcoming, gMonths, gRows, gToday, deadlines, months, finKpis, openInv, margins, projFin, pnl, finRange, lrKpis, lrRows, lrMonth: lrKey, lrMonthOpts, setLrMonth: e => this.setState({lrMonth: e.target.value}), lrCurLabel: lrMk(lrKey), lrPrevLabel: lrMk(lrPrevKey), lrPeriodText: 'Untuk periode 1 ' + lrMk(lrKey).replace(/ (\d{4})/, ' $1') + ' sampai dengan ' + fd(lrMonthEnd, true),
+      mainCls: is.dashA ? 'nf-gridbg' : '', showHeader: !is.dashA, kpis, kpisRest: [...kpis.filter((k, i) => i > 0 && k.label !== 'Potensi keuntungan' && k.label !== 'Pembayaran diterima'), piutangCard], attention, pipeline, upcoming, gMonths, gRows, gToday, deadlines, months, finKpis, openInv, margins, projFin, pnl, finRange, lrKpis, lrRows, lrMonth: lrKey, lrMonthOpts, setLrMonth: e => this.setState({lrMonth: e.target.value}), lrCurLabel: lrMk(lrKey), lrPrevLabel: lrMk(lrPrevKey), lrPeriodText: 'Untuk periode 1 ' + lrMk(lrKey).replace(/ (\d{4})/, ' $1') + ' sampai dengan ' + fd(lrMonthEnd, true),
       kanban, projSummary: `${active.length} proyek aktif · ${riskyList.length} berisiko · ${active.reduce((a, p) => a + p.copies, 0).toLocaleString('id-ID')} eksemplar`,
       hasDone: doneP.length > 0, doneNames: doneP.map(pname).join(', '),
       calc: {sell: rp(R.sell), total: rps(R.total)}, sliders, coverOpts, paperOpts, finOpts, calcRows, market, costBreak, tiers, volume,
