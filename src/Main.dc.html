@@ -831,6 +831,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
                 <div style="height:4px;background:#EFECE5;border-radius:99px;overflow:hidden"><div style="height:100%;border-radius:99px;background:{{ p.barC }};width:{{ p.bar }}"></div></div>
                 <div style="display:flex;justify-content:space-between;gap:4px;font-size:11px;min-width:0"><span style="color:#6B675E;white-space:nowrap">Nilai</span><span style="font-family:'IBM Plex Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.value }}</span></div>
                 <div style="display:flex;justify-content:space-between;gap:4px;font-size:11px;min-width:0"><span style="color:#6B675E;white-space:nowrap">Follow-up</span><span style="color:{{ p.fuC }};font-weight:{{ p.fuW }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.fuL }}</span></div>
+                <sc-if value="{{ p.hasAct }}" hint-placeholder-val="{{ false }}"><div title="{{ p.actT }}" style="display:flex;flex-direction:column;gap:1px;font-size:11px;min-width:0;border-top:1px dashed #E4E0D6;padding-top:4px"><span style="color:#2F5D50;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.actL }}</span><span style="color:#3A3832;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.actT }}</span></div></sc-if>
                 <sc-if value="{{ p.hasNote }}" hint-placeholder-val="{{ false }}"><div title="{{ p.note }}" style="font-size:11px;color:#3A3832;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">{{ p.note }}</div></sc-if>
                 <div style="display:flex;gap:4px;align-items:center">
                   <button onClick="{{ p.back }}" aria-label="Tahap sebelumnya" style="flex:none;border:1px solid #D8D3C7;background:#fff;width:26px;height:26px;padding:0;border-radius:6px;font-size:12px;opacity:{{ p.backO }}">←</button>
@@ -1744,6 +1745,13 @@ const BG_SEED = () => ({slots: [BG_DEFAULT, '', '', ''], mode: 'rotate', active:
 // Marketing report: data bisa diisi & diedit (sebelumnya MKT_LOG statis)
 const mktTipe = ak => /^(konsultasi\s*\/\s*)?offering/i.test(ak || '') ? 'Offering' : 'Konsultasi';
 const mktRaw = x => (x.tipe === 'Offering' ? 'OFFERING / ' : 'KONSULTASI / ') + [x.aktivitas, x.sekolah].filter(Boolean).join(' ');
+const mktStage = r => { const t = ((r.st || '') + ' ' + (r.aktivitas || '')).toLowerCase(); if (/deal|mou confirmed/.test(t)) return 4; if (/cancel|tidak jadi|gagal/.test(t)) return 5; if (/meeting|presentasi/.test(t)) return 2; if (r.tipe === 'Offering' || /harga|negosiasi|nego|offering|penawaran/.test(t)) return 3; return 1; };
+const mktSync = d => { if (!d || !d.mktLog) return 0; d.prospects = d.prospects || []; const have = new Set(d.prospects.map(p => String(p.school || '').trim().toLowerCase())); const by = new Map();
+  [...d.mktLog].sort((a, b) => (a.dt || '').localeCompare(b.dt || '')).forEach(r => { const nm = String(r.sekolah || '').trim(); if (!nm || nm === '—') return; const k = nm.toLowerCase(); if (have.has(k)) return; const g = by.get(k) || {name: nm, first: r.dt, last: r}; g.last = r; by.set(k, g); });
+  by.forEach(g => d.prospects.push({id: 'pr' + Math.random().toString(36).slice(2, 9), created: g.first || iso(TODAY), school: g.name, city: '', pic: '', phone: '', source: 'Marketing report', owner: g.last.nm || '', stage: mktStage(g.last), qty: '', price: '', follow: '', note: ''}));
+  return by.size; };
+const mktApply = (d, r) => { const k = String(r.sekolah || '').trim().toLowerCase(); if (!k || !d.prospects) return; const p = d.prospects.find(x => String(x.school || '').trim().toLowerCase() === k); if (!p) return; const ns = mktStage(r); const cur = +p.stage || 0;
+  p.stage = ns === 5 ? 5 : cur === 5 ? ns : Math.max(cur, ns); if (!p.owner) p.owner = r.nm || ''; };
 const mktFix = d => { if (!d || d.mktLog) return d; d.mktLog = MKT_LOG.map((r, i) => ({id: 'm' + i, dt: r[0], nm: r[1], kn: r[2], raw: r[3], tipe: mktTipe(r[3]), sekolah: (DP_SCH[i] || [])[0] || '', aktivitas: (DP_SCH[i] || [r[3], r[3]])[1] || r[3], st: r[4] || ''})); return d; };
 const OWNER_EMAIL = 'firdaussahal@gmail.com'; // satu-satunya akun yang bisa membuka Setting
 const ST_ROLES = ['Admin', 'Manajer', 'Keuangan', 'Marketing', 'Operasional'], ST_GROUPS = ['Utama', 'Marketing', 'Operasional', 'Keuangan', 'Administrasi', 'Tim', 'Archive Project', 'Setting'], ST_LV = ['Tidak', 'Lihat', 'Edit'];
@@ -1956,11 +1964,12 @@ class Component extends DCLogic {
       const role = rr.data;
       const r = await c.from('app_state').select('data,version').eq('id', 'main').maybeSingle();
       if (r.error) throw r.error;
-      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1), needCat = !!(r.data && !(r.data.data || {}).catalog), needRoles = !!(r.data && !(r.data.data || {}).rolesV3), needMkt = !!(r.data && !(r.data.data || {}).mktLog);
+      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1), needCat = !!(r.data && !(r.data.data || {}).catalog), needRoles = !!(r.data && !(r.data.data || {}).rolesV3), needMkt = !!(r.data && !(r.data.data || {}).mktLog); const needMkPr = !!(r.data && !(r.data.data || {}).mktProsV1);
       if (r.data) this.cloudApply(r.data);
       else { const ins = await c.from('app_state').insert({id: 'main', data: this.cloudStrip(this.state.d), version: 1, updated_by: this._cloudBy}); if (ins.error) throw ins.error; this._cloudVer = 1; }
       this._cloudOn = true; this.setState({cloudState: 'ok', cloudRole: role});
       if (needMkt) this.upd(dd => { mktFix(dd); }, 'Marketing report siap diisi');
+      if (needMkPr) this.upd(dd => { mktFix(dd); (dd.prospects || []).forEach(p => { const k = String(p.school || '').trim().toLowerCase(); const rs = (dd.mktLog || []).filter(r => String(r.sekolah || '').trim().toLowerCase() === k).sort((x, y) => (x.dt || '').localeCompare(y.dt || '')); const l = rs[rs.length - 1]; if (l && p.stage < 4) p.stage = Math.max(+p.stage || 0, Math.min(4, mktStage(l))); }); mktSync(dd); dd.mktProsV1 = true; }, 'Sekolah dari Marketing report masuk ke Client Prospect');
       if (needRoles) this.upd(dd => { rolesFix(dd); }, 'Peran diperbarui: Superadmin, Management, Staff');
       if (needCat) this.upd(dd => { catFix(dd); }, 'Katalog Product & Service dibuat');
       if (needDeal) this.upd(dd => { dealFix(dd); }, 'Sekolah berstatus Kontrak dipindah ke Deal (MoU)');
@@ -2512,11 +2521,13 @@ class Component extends DCLogic {
     const emptyPr = {id: null, school: '', city: '', pic: '', phone: '', source: '', owner: '', stage: 0, qty: '', price: '', follow: '', note: ''};
     const prVal = p => (+p.qty || 0) * (+p.price || 0);
     const move = (p, delta) => () => { const ns = p.stage + delta; if (ns < 0 || ns > 5) return; this.upd(dd2 => { dd2.prospects.find(z => z.id === p.id).stage = ns; (dd2.contactLog = dd2.contactLog || []).push(iso(TODAY)); }, ns === 4 ? p.school + ' deal, siap dibuatkan proyek' : p.school + ' dipindah ke ' + PR_STAGES[ns][0]); };
+    const prActs = new Map(); (d.mktLog || []).forEach(r => { const k = String(r.sekolah || '').trim().toLowerCase(); if (!k) return; const g = prActs.get(k) || []; g.push(r); prActs.set(k, g); });
+    const prAct = p => { const g = [...(prActs.get(String(p.school || '').trim().toLowerCase()) || [])].sort((x, y) => (x.dt || '').localeCompare(y.dt || '')); const l = g[g.length - 1]; return l ? {hasAct: true, actL: g.length + ' aktivitas · ' + fd(l.dt, true), actT: [l.aktivitas, l.st].filter(Boolean).join(' · ')} : {hasAct: false, actL: '', actT: ''}; };
     const prCols = PR_STAGES.map(([name, tone], si) => { const list = prs.filter(p => p.stage === si); const tt = T(tone);
       return {name, bg: tt.bg, fg: tt.fg, count: list.length, value: rps(list.reduce((a, p) => a + prVal(p), 0)), empty: list.length === 0,
         cards: [...list].sort((a, b) => (a.follow || '9999').localeCompare(b.follow || '9999')).map(p => { const late = p.follow && p.stage < 4 && dd(p.follow) < 0;
           return {school: p.school, sub: [p.city, p.pic].filter(Boolean).join(' · ') || '—', bar: Math.min(100, p.stage >= 4 ? 100 : p.stage / 4 * 100 + 8) + '%', barC: p.stage === 5 ? '#A23B28' : '#2F5D50', value: prVal(p) ? rps(prVal(p)) : '—',
-            fuL: p.follow ? fd(p.follow, true) + (late ? ' · terlambat' : '') : '—', fuC: late ? '#A23B28' : '#1C1B18', fuW: late ? 600 : 400, hasNote: !!p.note, note: p.note || '',
+            fuL: p.follow ? fd(p.follow, true) + (late ? ' · terlambat' : '') : '—', fuC: late ? '#A23B28' : '#1C1B18', fuW: late ? 600 : 400, hasNote: !!p.note, note: p.note || '', ...prAct(p),
             back: move(p, -1), next: move(p, 1), backO: p.stage === 0 ? 0.35 : 1, nextO: p.stage === 5 ? 0.35 : 1,
             edit: () => this.setState({showPr: true, prf: {id: p.id, school: p.school, city: p.city || '', pic: p.pic || '', phone: p.phone || '', source: p.source || '', owner: p.owner || '', stage: p.stage, qty: p.qty || '', price: p.price || '', follow: p.follow || '', note: p.note || ''}})}; })}; });
     const prActive = prs.filter(p => p.stage < 4), prWon = prs.filter(p => p.stage === 4), prLost = prs.filter(p => p.stage === 5);
@@ -2981,7 +2992,7 @@ class Component extends DCLogic {
       mkfDt: this.fset('mkf', 'dt'), mkfNm: this.fset('mkf', 'nm'), mkfKn: this.fset('mkf', 'kn'), mkfTipe: this.fset('mkf', 'tipe'), mkfSekolah: this.fset('mkf', 'sekolah'), mkfAktivitas: this.fset('mkf', 'aktivitas'), mkfSt: this.fset('mkf', 'st'),
       mkSave: () => { const f = s.mkf || {}, t = v => String(v || '').trim(); if (!/^\d{4}-\d{2}-\d{2}$/.test(f.dt || '')) return this.flash('Isi tanggal'); if (!t(f.nm)) return this.flash('Isi nama'); if (!t(f.aktivitas)) return this.flash('Isi aktivitas');
         const rec = {dt: f.dt, nm: t(f.nm), kn: t(f.kn), tipe: f.tipe === 'Offering' ? 'Offering' : 'Konsultasi', sekolah: t(f.sekolah), aktivitas: t(f.aktivitas), st: t(f.st)}; rec.raw = mktRaw(rec);
-        this.upd(dd2 => { mktFix(dd2); if (f.id) Object.assign(dd2.mktLog.find(z => z.id === f.id), rec); else dd2.mktLog.push({id: 'm' + Date.now(), ...rec}); }, f.id ? 'Aktivitas diperbarui' : 'Aktivitas ditambahkan'); this.setState({mkfOn: false}); },
+        this.upd(dd2 => { mktFix(dd2); if (f.id) Object.assign(dd2.mktLog.find(z => z.id === f.id), rec); else dd2.mktLog.push({id: 'm' + Date.now(), ...rec}); mktSync(dd2); mktApply(dd2, rec); }, f.id ? 'Aktivitas diperbarui' : 'Aktivitas ditambahkan'); this.setState({mkfOn: false}); },
       mkDelete: () => { const f = s.mkf || {}; if (!f.id || !window.confirm('Hapus aktivitas ini?')) return; this.upd(dd2 => { mktFix(dd2); dd2.mktLog = dd2.mktLog.filter(z => z.id !== f.id); }, 'Aktivitas dihapus'); this.setState({mkfOn: false}); },
       dpMonthChips, dpTypeChips, dpKpis, dpBars, dpStatus, dpPeople, dpTable, dpRange, dpCount: dpRows.length, stageCards, prKpis, prKpisDash: [], ctBars, ctTotal, ctRange, prStageStrip, goPr: go('pencarian'), goJournal: go('laporan'), goLaba: go('labarugi'),
       mainCls: is.dashA ? 'nf-gridbg' : '', showHeader: !is.dashA, mainBgImg: is.dashA ? bgCur : 'none',
