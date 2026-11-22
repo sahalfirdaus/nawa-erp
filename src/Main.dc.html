@@ -749,43 +749,6 @@ input[type=range]{accent-color:#2F5D50;width:100%}
     </div>
     </sc-if>
 
-    <!-- CLIENT PROSPECT: DATA SEKOLAH & CRM (dulu halaman Sekolah & CRM) -->
-    <sc-if value="{{ is.pencarian }}" hint-placeholder-val="{{ false }}">
-    <div style="border-top:1px solid #DDD8CC;padding-top:18px;margin-top:6px"><h2 style="margin:0;font-size:16px;font-weight:600">Data sekolah &amp; CRM</h2><div style="font-size:13px;color:#6B675E;margin-top:2px">Daftar sekolah, PIC, jumlah siswa, nilai, dan status hubungan.</div></div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center">
-      <div style="display:flex;flex-wrap:wrap;gap:6px">
-        <sc-for list="{{ crmFilters }}" as="f" hint-placeholder-count="4"><button onClick="{{ f.on }}" style="white-space:nowrap;border:1px solid {{ f.bd }};background:{{ f.bg }};color:{{ f.fg }};border-radius:99px;padding:7px 13px;font-size:13px">{{ f.label }} <span style="font-family:'IBM Plex Mono',monospace;font-size:12px">{{ f.count }}</span></button></sc-for>
-      </div>
-      <button onClick="{{ toggleNs }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:10px 16px;border-radius:7px;font-size:13px;font-weight:600">+ Sekolah baru</button>
-    </div>
-    <sc-if value="{{ showNs }}" hint-placeholder-val="{{ false }}">
-    <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;align-items:end">
-      <input placeholder="Nama sekolah" value="{{ ns.name }}" onChange="{{ nsName }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;min-width:0">
-      <input placeholder="Kota" value="{{ ns.city }}" onChange="{{ nsCity }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;min-width:0">
-      <input placeholder="PIC" value="{{ ns.pic }}" onChange="{{ nsPic }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;min-width:0">
-      <input placeholder="Jumlah siswa" type="number" value="{{ ns.students }}" onChange="{{ nsStudents }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;min-width:0">
-      <button onClick="{{ addSchool }}" style="white-space:nowrap;border:0;background:#2F5D50;color:#fff;padding:10px 16px;border-radius:7px;font-size:13px;font-weight:600">Simpan</button>
-    </div>
-    </sc-if>
-    <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;min-width:860px">
-        <thead><tr><th style="text-align:left;font-size:12px;font-weight:500;color:#6B675E;padding:12px 14px;border-bottom:1px solid #E4E0D6">Sekolah</th><th style="text-align:left;font-size:12px;font-weight:500;color:#6B675E;padding:12px 14px;border-bottom:1px solid #E4E0D6">PIC</th><th style="text-align:right;font-size:12px;font-weight:500;color:#6B675E;padding:12px 14px;border-bottom:1px solid #E4E0D6">Siswa</th><th style="text-align:right;font-size:12px;font-weight:500;color:#6B675E;padding:12px 14px;border-bottom:1px solid #E4E0D6">Nilai</th><th style="text-align:left;font-size:12px;font-weight:500;color:#6B675E;padding:12px 14px;border-bottom:1px solid #E4E0D6">Status</th><th style="padding:12px 14px;border-bottom:1px solid #E4E0D6"></th></tr></thead>
-        <tbody>
-          <sc-for list="{{ crmRows }}" as="r" hint-placeholder-count="8">
-            <tr>
-              <td style="padding:12px 14px;border-bottom:1px solid #EFECE5"><div style="font-size:14px;font-weight:500">{{ r.name }}</div><div style="font-size:12px;color:#6B675E">{{ r.city }}</div></td>
-              <td style="padding:12px 14px;border-bottom:1px solid #EFECE5"><div style="font-size:14px">{{ r.pic }}</div><div style="font-size:12px;color:#6B675E;font-family:'IBM Plex Mono',monospace">{{ r.phone }}</div></td>
-              <td style="padding:12px 14px;border-bottom:1px solid #EFECE5;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px">{{ r.students }}</td>
-              <td style="padding:12px 14px;border-bottom:1px solid #EFECE5;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px">{{ r.value }}</td>
-              <td style="padding:12px 14px;border-bottom:1px solid #EFECE5"><select value="{{ r.status }}" onChange="{{ r.setStatus }}" style="border:0;border-radius:99px;padding:4px 8px;font-size:12px;font-weight:600;background:{{ r.bg }};color:{{ r.fg }}"><option value="Prospek">Prospek</option><option value="Negosiasi">Negosiasi</option><option value="Kontrak">Kontrak</option></select></td>
-              <td style="padding:12px 14px;border-bottom:1px solid #EFECE5;text-align:right"><sc-if value="{{ r.canConvert }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.convert }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:6px 10px;border-radius:7px;font-size:12px;font-weight:600;white-space:nowrap">Jadikan proyek</button></sc-if><sc-if value="{{ r.hasProject }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.open }}" style="white-space:nowrap;border:0;background:transparent;color:#2F5D50;font-size:12px;font-weight:600;white-space:nowrap">Lihat proyek</button></sc-if></td>
-            </tr>
-          </sc-for>
-        </tbody>
-      </table>
-    </div>
-    </sc-if>
-
     <!-- FOTO -->
     <sc-if value="{{ is.foto }}" hint-placeholder-val="{{ false }}">
     <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;align-items:end">
@@ -1590,6 +1553,18 @@ const MKT_LOG = [
 ['2026-10-27','Thia','Tasya','OFFERING / Harga Jakarta Taipei School','Harga sudah terkirim, menunggu keputusan'],
 ['2026-10-30','Thia','Tasya','KONSULTASI / Call-an sama sekolah MTS 1 Bekasi','Interested']];
 const DP_SCH = [['SD Labshool','Harga terkirim, belum fix'],['TK Kinderfield Bekasi','Harga terkirim'],['TK Kinderfield','Fix harga'],['TK Raudha','Tidak jadi pakai jasa Nawa'],['SMPIT Nurul Fikri Depok','Harga terkirim'],['','Konsultasi awal'],['TKIT Citra Az-Zahra','Harga terkirim'],['','Follow-up offering & penawaran diskon'],['Pelita 2','Harga terkirim'],['','Hanya berdua soal sheet month line'],['SMPI Al Azhar 2 Pejaten','Undangan presentasi & meeting'],['SMA Pembangunan Jaya','Kasih offering'],['','Tanyain ada briefing atau tidak'],['','Follow up undangan presentasi / meeting'],['','Koordinasi data & materi desain'],['MHIS','Penerimaan & koordinasi konsep yearbook'],['','Rescheduling meeting & presentasi'],['','Follow-up project progress'],['','Calon klien mengajukan pemesanan 43 pcs. PIC menyampaikan minimum order 100 pcs dan menawarkan pengajuan khusus ke management. Budget maksimal Rp700.000.'],['','Follow up budget negotiation'],['','Revisian MOU'],['SMA Yasporbi Pancoran','Harga terkirim'],['','Follow up'],['SD Kharisma Bangsa Tangerang Selatan','Harga terkirim'],['SDS Marie Joseph Kelapa Gading','Harga terkirim'],['MtsN 1 Kota Bekasi','Harga'],['MTS 1 Kota Bekasi','Price offering & package coordination'],['SD Banjarsari Bandung','Harga'],['Yayasan Scientia International Indonesia','Harga'],['Scientia International Indonesia','Follow up'],['','Follow up undangan presentasi / meeting'],['SD Kharisma Bangsa Tangerang Selatan','Konsultasi'],['SMK Panca Bhakti Banjarnegara','Harga'],['Jakarta Taipei School','Harga'],['Jakarta Taipei School','Harga'],['MTS 1 Bekasi','Call-an']];
+// Sekali jalan: sekolah berstatus Kontrak dipindah ke kolom Deal (MoU) di Client Prospect
+const dealFix = d => {
+  if (!d || d.dealMouV1) return d;
+  d.prospects = d.prospects || [];
+  (d.schools || []).filter(x => x.status === 'Kontrak').forEach(x => {
+    const nm = String(x.name || '').trim().toLowerCase();
+    if (!nm || d.prospects.some(p => String(p.school || '').trim().toLowerCase() === nm)) return;
+    const pj = (d.projects || []).find(p => p.schoolId === x.id);
+    d.prospects.push({id: 'pr' + Math.random().toString(36).slice(2, 9), created: iso(TODAY), school: x.name, city: x.city || '', pic: x.pic || '', phone: x.phone || '', source: '', owner: '', stage: 4, qty: pj ? pj.copies : (x.students || 0), price: pj ? pj.price : 0, follow: '', note: 'Dipindahkan dari Data sekolah & CRM'});
+  });
+  d.dealMouV1 = true; return d;
+};
 const OWNER_EMAIL = 'firdaussahal@gmail.com'; // satu-satunya akun yang bisa membuka Setting
 const ST_ROLES = ['Admin', 'Manajer', 'Keuangan', 'Marketing', 'Operasional'], ST_GROUPS = ['Utama', 'Marketing', 'Operasional', 'Keuangan', 'Administrasi', 'Tim', 'Archive Project', 'Setting'], ST_LV = ['Tidak', 'Lihat', 'Edit'];
 const stDefAccess = () => ({Admin: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 2}, Manajer: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 0}, Keuangan: {Utama: 1, Marketing: 0, Operasional: 0, Keuangan: 2, Administrasi: 1, Tim: 0, 'Archive Project': 0, Setting: 0}, Marketing: {Utama: 1, Marketing: 2, Operasional: 1, Keuangan: 0, Administrasi: 0, Tim: 0, 'Archive Project': 1, Setting: 0}, Operasional: {Utama: 1, Marketing: 0, Operasional: 2, Keuangan: 0, Administrasi: 1, Tim: 0, 'Archive Project': 1, Setting: 0}});
@@ -1704,6 +1679,7 @@ class Component extends DCLogic {
     if (d && d.projects && !d.teamCleared) { d.employees = []; d.teamCleared = true; }
     if (d && d.projects && !d.assets) { d.assets = seed().assets; }
     if (d && d.projects && !d.prospects) { d.prospects = []; }
+    if (d && d.projects) dealFix(d);
     if (d && d.projects && !d.auth) { d.auth = ST_AUTH(); }
     if (d && d.projects && !d.users) { d.users = stSeedUsers(); d.access = stDefAccess(); }
     if (d && d.projects && !d.attendance) { d.attendance = {}; }
@@ -1787,9 +1763,11 @@ class Component extends DCLogic {
       const role = rr.data;
       const r = await c.from('app_state').select('data,version').eq('id', 'main').maybeSingle();
       if (r.error) throw r.error;
+      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1);
       if (r.data) this.cloudApply(r.data);
       else { const ins = await c.from('app_state').insert({id: 'main', data: this.cloudStrip(this.state.d), version: 1, updated_by: this._cloudBy}); if (ins.error) throw ins.error; this._cloudVer = 1; }
       this._cloudOn = true; this.setState({cloudState: 'ok', cloudRole: role});
+      if (needDeal) this.upd(dd => { dealFix(dd); }, 'Sekolah berstatus Kontrak dipindah ke Deal (MoU)');
       this.cloudSyncUsers(); this.loadArchive(); this.loadRequests();
       if (!this._cloudCh) this._cloudCh = c.channel('app_state_main').on('postgres_changes', {event: '*', schema: 'public', table: 'app_state'}, p => { const row = p.new; if (row && row.data && row.version > (this._cloudVer || 0) && row.updated_by !== this._cloudBy) { this.cloudApply(row); this.flash('Data diperbarui oleh pengguna lain'); } }).subscribe();
     } catch (e) { this.setState({cloudState: 'error', cloudErr: this.cloudMsg(e)}); }
