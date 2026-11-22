@@ -18,7 +18,7 @@ a{color:#2F5D50}a:hover{color:#1C1B18}
 button{font-family:inherit;cursor:pointer}
 input,select{font-family:inherit;font-size:14px}
 input[type=range]{accent-color:#2F5D50;width:100%}
-.nf-gridbg{background-color:#DDEBC4;background-image:url('./assets/dash-bg-2.webp');background-size:cover;background-position:center top;background-repeat:no-repeat}
+.nf-gridbg{background-color:#DDEBC4;background-size:cover;background-position:center top;background-repeat:no-repeat;transition:background-image .8s ease}
 @media (max-width:820px){.nf-att-grid{grid-template-columns:minmax(0,1fr)!important}}
 @media (max-width:1100px){.nf-pr-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.nf-pr-main{grid-column:1/-1}}
 @media (max-width:640px){.nf-pr-grid{grid-template-columns:minmax(0,1fr)!important}}
@@ -106,7 +106,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
 </aside>
 </sc-if>
 
-<main class="{{ mainCls }}" style="flex:1;min-width:0;display:flex;flex-direction:column">
+<main class="{{ mainCls }}" style="flex:1;min-width:0;display:flex;flex-direction:column;background-image:{{ mainBgImg }}">
   <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
   <div style="position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#EBE8E1;border-bottom:1px solid #DDD8CC">
     <div style="display:flex;align-items:baseline;gap:5px"><span style="font-size:17px;font-weight:700">navinus</span></div>
@@ -520,6 +520,25 @@ input[type=range]{accent-color:#2F5D50;width:100%}
         <sc-if value="{{ hasAuthTest }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;line-height:1.4;color:#3A3832">{{ authTest }}</div></sc-if>
         <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap"><button onClick="{{ testConn }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:9px 14px;border-radius:7px;font-size:13px">Tes koneksi</button><button onClick="{{ saveAuth }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:9px 16px;border-radius:7px;font-size:13px;font-weight:600">Simpan</button></div>
       </div>
+      <sc-if value="{{ isAdminCloud }}" hint-placeholder-val="{{ true }}"><div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px 20px;min-width:0;display:flex;flex-direction:column;gap:12px">
+        <div><h2 style="margin:0;font-size:15px;font-weight:600">Background Dashboard</h2><div style="font-size:12px;color:#6B675E;margin-top:2px">Sediakan sampai 4 gambar. Gambar diperkecil otomatis ke maks. 2560 px (WebP) lalu disimpan di Supabase.</div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px">
+          <button onClick="{{ bgSetRotate }}" aria-pressed="{{ bgRotate }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:7px 12px;border-radius:99px;font-size:12px;font-weight:600"><sc-if value="{{ bgRotate }}" hint-placeholder-val="{{ true }}"><span style="color:#2F7A55">● </span></sc-if>Berganti otomatis</button>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#6B675E">setiap<input type="number" min="5" max="600" value="{{ bgEvery }}" onChange="{{ bgSetEvery }}" style="width:64px;border:1px solid #D8D3C7;border-radius:6px;padding:5px 7px;font-size:12px">detik</label>
+          <span style="font-size:12px;color:#6B675E">· atau klik “Pakai” pada salah satu gambar untuk menetapkannya.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+          <sc-for list="{{ bgSlots }}" as="b" hint-placeholder-count="4"><div style="border:{{ b.bd }};border-radius:10px;overflow:hidden;display:flex;flex-direction:column;background:#FBFAF7">
+            <div style="aspect-ratio:16/9;background-color:#EEF1EC;background-image:{{ b.thumb }};background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8A867C"><sc-if value="{{ b.none }}" hint-placeholder-val="{{ false }}"><span>Belum ada gambar</span></sc-if></div>
+            <div style="padding:8px 10px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font-size:12px;font-weight:600">Gambar {{ b.n }}<sc-if value="{{ b.isDefault }}" hint-placeholder-val="{{ false }}"><span style="font-weight:400;color:#8A867C"> · bawaan</span></sc-if></span><sc-if value="{{ b.active }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:600;background:#E3ECE7;color:#2F5D50;border-radius:99px;padding:2px 7px">Dipakai</span></sc-if></div>
+              <label style="font-size:11px;color:#6B675E;display:flex;flex-direction:column;gap:3px">Unggah / ganti<input type="file" accept="image/*" onChange="{{ b.upload }}" style="font-size:11px"></label>
+              <div style="display:flex;gap:6px"><sc-if value="{{ b.has }}" hint-placeholder-val="{{ true }}"><button onClick="{{ b.pick }}" style="flex:1;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:5px 8px;border-radius:6px;font-size:11px;font-weight:600">Pakai</button><button onClick="{{ b.clear }}" style="border:1px solid #E3B9AE;background:#fff;color:#A23B28;padding:5px 8px;border-radius:6px;font-size:11px">Kosongkan</button></sc-if></div>
+            </div>
+          </div></sc-for>
+        </div>
+        <sc-if value="{{ hasBgMsg }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#3A3832">{{ bgMsg }}</div></sc-if>
+      </div></sc-if>
       <sc-if value="{{ isAdminCloud }}" hint-placeholder-val="{{ false }}"><div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px 20px;min-width:0;display:flex;flex-direction:column;gap:10px">
         <h2 style="margin:0;font-size:15px;font-weight:600">Data arsip</h2>
         <div style="font-size:12px;color:#6B675E;line-height:1.5">Arsip proyek disimpan di Supabase dan hanya terbuka setelah login. Saat ini {{ arcCount }} baris dimuat. Pilih file arsip.json untuk mengimpor atau memperbarui.</div>
@@ -1703,6 +1722,8 @@ const CATALOG_SEED = () => [
      .map(([n, t, it], i) => ({id: 'cat-nv-' + i, brand: 'navinus', name: n, tagline: t, price: '', items: it, example: true}))
 ];
 const catFix = d => { if (d && !d.catalog) d.catalog = CATALOG_SEED(); return d; };
+const BG_DEFAULT = './assets/dash-bg-2.webp';
+const BG_SEED = () => ({slots: [BG_DEFAULT, '', '', ''], mode: 'rotate', active: 0, every: 30});
 const OWNER_EMAIL = 'firdaussahal@gmail.com'; // satu-satunya akun yang bisa membuka Setting
 const ST_ROLES = ['Admin', 'Manajer', 'Keuangan', 'Marketing', 'Operasional'], ST_GROUPS = ['Utama', 'Marketing', 'Operasional', 'Keuangan', 'Administrasi', 'Tim', 'Archive Project', 'Setting'], ST_LV = ['Tidak', 'Lihat', 'Edit'];
 const stDefAccess = () => ({Admin: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 2}, Manajer: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 0}, Keuangan: {Utama: 1, Marketing: 0, Operasional: 0, Keuangan: 2, Administrasi: 1, Tim: 0, 'Archive Project': 0, Setting: 0}, Marketing: {Utama: 1, Marketing: 2, Operasional: 1, Keuangan: 0, Administrasi: 0, Tim: 0, 'Archive Project': 1, Setting: 0}, Operasional: {Utama: 1, Marketing: 0, Operasional: 2, Keuangan: 0, Administrasi: 1, Tim: 0, 'Archive Project': 1, Setting: 0}});
@@ -1873,6 +1894,7 @@ class Component extends DCLogic {
     this.authInit();
     fetch('/_blob/b80ebe0a61d2cfedb9088a43ef50dde6').then(r => r.json()).then(rkData => this.setState({rkData, rkLoading: false})).catch(() => this.setState({rkLoading: false}));
     window.addEventListener('resize', this.onResize);
+    this._bgT = setInterval(() => { const st = this.state, b = {...BG_SEED(), ...((st.d || {}).dashBg || {})}; if ((st.view || 'dashboard') === 'dashboard' && b.mode !== 'fixed' && b.slots.filter(Boolean).length > 1) { const k = Math.floor(Date.now() / 1000 / (b.every || 30)); if (k !== this._bgK) { this._bgK = k; this.setState({bgK: k}); } } }, 1000);
   }
   componentDidUpdate() { this.syncSelects(); }
   async sbClient(url, key, persist) {
@@ -2028,6 +2050,25 @@ class Component extends DCLogic {
       if (!ok) this.flash('Permintaan ' + q.name + ' ditolak');
     } catch (e) { this.flash('Gagal memperbarui permintaan: ' + ((e && e.message) || e)); }
     this.loadRequests();
+  }
+  async bgUpload(i, ev) {
+    const f = ev.target.files && ev.target.files[0]; ev.target.value = '';
+    if (!f) return; if (!/^image\//.test(f.type)) return this.flash('Pilih file gambar (JPG, PNG, atau WebP)');
+    this.setState({bgBusy: i, bgMsg: 'Memproses gambar ' + (i + 1) + '…'});
+    try {
+      const url = URL.createObjectURL(f), img = await new Promise((res, rej) => { const m = new Image(); m.onload = () => res(m); m.onerror = rej; m.src = url; });
+      const W = Math.min(2560, img.width), H = Math.round(img.height * W / img.width), c = document.createElement('canvas'); c.width = W; c.height = H;
+      const g = c.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(img, 0, 0, W, H); URL.revokeObjectURL(url);
+      const blob = await new Promise(res => c.toBlob(res, 'image/webp', 0.86)) || await new Promise(res => c.toBlob(res, 'image/jpeg', 0.88));
+      const ext = blob.type === 'image/webp' ? 'webp' : 'jpg', path = 'slot' + (i + 1) + '-' + Date.now() + '.' + ext;
+      const au = this.state.d.auth || {}; const sb = await this.sbClient(au.url, au.key, true);
+      const up = await sb.storage.from('dashboard-bg').upload(path, blob, {contentType: blob.type, cacheControl: '31536000', upsert: false});
+      if (up.error) throw up.error;
+      const pub = sb.storage.from('dashboard-bg').getPublicUrl(path).data.publicUrl;
+      this.upd(d => { d.dashBg = d.dashBg || BG_SEED(); d.dashBg.slots[i] = pub; }, 'Gambar ' + (i + 1) + ' disimpan');
+      this.setState({bgMsg: 'Gambar ' + (i + 1) + ' tersimpan (' + Math.round(blob.size / 1024) + ' KB, ' + W + '×' + H + ').'});
+    } catch (e) { this.setState({bgMsg: 'Gagal mengunggah: ' + ((e && e.message) || e)}); }
+    this.setState({bgBusy: null});
   }
   async doLogout() {
     const au = this.state.d.auth || {};
@@ -2240,6 +2281,9 @@ class Component extends DCLogic {
     const cloudDone = ['denied', 'error'].includes(s.cloudState);
     const accOf = d.access || stDefAccess();
     const isOwner = authOn && !!me && String(me.email || '').toLowerCase() === OWNER_EMAIL;
+    const bgCfg = {...BG_SEED(), ...(d.dashBg || {})}, bgList = bgCfg.slots.filter(Boolean);
+    const bgSel = bgCfg.mode === 'fixed' ? (bgCfg.slots[bgCfg.active] || bgList[0] || BG_DEFAULT) : (bgList.length ? bgList[Math.floor(Date.now() / 1000 / (bgCfg.every || 30)) % bgList.length] : BG_DEFAULT);
+    const bgCur = 'url(' + bgSel + ')';
     const roleList = (d.roles && d.roles.length ? d.roles : ROLE_SEED()), roleNames = roleList.map(r => r.name);
     const pageGrp = {}; NAV.forEach(g => g.items.forEach(([id]) => { pageGrp[id] = g.g; }));
     const roleLvl = (role, id) => { if (role === SUPER) return 2; const v = ((d.pageAccess || {})[role] || {})[id]; return v == null ? roleDefLvl(role, pageGrp[id], id) : v; };
@@ -2904,7 +2948,14 @@ class Component extends DCLogic {
         this.upd(dd2 => { dd2.users = dd2.users || []; if (usf.id) Object.assign(dd2.users.find(z => z.id === usf.id), rec); else dd2.users.push({id: 'u' + Date.now(), ...rec}); }, usf.id ? 'Pengguna diperbarui' : 'Pengguna ditambahkan'); this.setState({showUs: false}); },
       deleteUs: () => { if (!usf.id || !window.confirm('Hapus pengguna ' + usf.name + '?')) return; this.upd(dd2 => { dd2.users = dd2.users.filter(z => z.id !== usf.id); }, 'Pengguna dihapus'); this.setState({showUs: false}); },
       dpMonthChips, dpTypeChips, dpKpis, dpBars, dpStatus, dpPeople, dpTable, dpRange, dpCount: dpRows.length, stageCards, prKpis, prKpisDash: [], ctBars, ctTotal, ctRange, prStageStrip, goPr: go('pencarian'), goJournal: go('laporan'), goLaba: go('labarugi'),
-      mainCls: is.dashA ? 'nf-gridbg' : '', showHeader: !is.dashA, kpis, kpisRest: [...kpis.filter((k, i) => i > 0 && k.label !== 'Potensi keuntungan' && k.label !== 'Pembayaran diterima'), piutangCard], attention, pipeline, upcoming, gMonths, gRows, gToday, deadlines, months, finKpis, openInv, margins, projFin, pnl, finRange, lrKpis, lrRows, lrMonth: lrKey, lrMonthOpts, setLrMonth: e => this.setState({lrMonth: e.target.value}), lrCurLabel: lrMk(lrKey), lrPrevLabel: lrMk(lrPrevKey), lrPeriodText: 'Untuk periode 1 ' + lrMk(lrKey).replace(/ (\d{4})/, ' $1') + ' sampai dengan ' + fd(lrMonthEnd, true),
+      mainCls: is.dashA ? 'nf-gridbg' : '', showHeader: !is.dashA, mainBgImg: is.dashA ? bgCur : 'none',
+      bgSlots: bgCfg.slots.map((u, i) => ({n: String(i + 1), url: u || '', has: !!u, none: !u, isDefault: u === BG_DEFAULT, active: bgCfg.mode === 'fixed' && bgCfg.active === i, busy: s.bgBusy === i, upload: ev => this.bgUpload(i, ev),
+        bd: bgCfg.mode === 'fixed' && bgCfg.active === i ? '2px solid #2F5D50' : '1px solid #E4E0D6', thumb: u ? 'url(' + u + ')' : 'none',
+        pick: () => { if (!u) return this.flash('Unggah gambar dulu'); this.upd(d => { d.dashBg = d.dashBg || BG_SEED(); d.dashBg.mode = 'fixed'; d.dashBg.active = i; }, 'Gambar ' + (i + 1) + ' dipakai'); },
+        clear: () => { if (!window.confirm('Kosongkan gambar ' + (i + 1) + '?')) return; this.upd(d => { d.dashBg = d.dashBg || BG_SEED(); d.dashBg.slots[i] = ''; if (d.dashBg.active === i) d.dashBg.active = 0; }, 'Gambar ' + (i + 1) + ' dikosongkan'); }})),
+      bgRotate: bgCfg.mode !== 'fixed', bgFixed: bgCfg.mode === 'fixed', bgEvery: String(bgCfg.every || 30), bgMsg: s.bgMsg || '', hasBgMsg: !!s.bgMsg, bgCount: String(bgList.length),
+      bgSetRotate: () => this.upd(d => { d.dashBg = d.dashBg || BG_SEED(); d.dashBg.mode = 'rotate'; }, 'Background berganti otomatis'),
+      bgSetEvery: ev => { const v = Math.max(5, Math.min(600, +ev.target.value || 30)); this.upd(d => { d.dashBg = d.dashBg || BG_SEED(); d.dashBg.every = v; }); }, kpis, kpisRest: [...kpis.filter((k, i) => i > 0 && k.label !== 'Potensi keuntungan' && k.label !== 'Pembayaran diterima'), piutangCard], attention, pipeline, upcoming, gMonths, gRows, gToday, deadlines, months, finKpis, openInv, margins, projFin, pnl, finRange, lrKpis, lrRows, lrMonth: lrKey, lrMonthOpts, setLrMonth: e => this.setState({lrMonth: e.target.value}), lrCurLabel: lrMk(lrKey), lrPrevLabel: lrMk(lrPrevKey), lrPeriodText: 'Untuk periode 1 ' + lrMk(lrKey).replace(/ (\d{4})/, ' $1') + ' sampai dengan ' + fd(lrMonthEnd, true),
       kanban, projSummary: `${active.length} proyek aktif · ${riskyList.length} berisiko · ${active.reduce((a, p) => a + p.copies, 0).toLocaleString('id-ID')} eksemplar`,
       hasDone: doneP.length > 0, doneNames: doneP.map(pname).join(', '),
       calc: {sell: rp(R.sell), total: rps(R.total)}, sliders, coverOpts, paperOpts, finOpts, calcRows, market, costBreak, tiers, volume,
