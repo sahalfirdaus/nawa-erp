@@ -618,9 +618,26 @@ input[type=range]{accent-color:#2F5D50;width:100%}
         </div>
       </div>
       <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px 20px;min-width:0">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px"><h2 style="margin:0;font-size:15px;font-weight:600">Marketing report</h2><span style="font-size:12px;color:#6B675E">{{ dpCount }} aktivitas · tanggal terlama di atas</span></div>
-        <div style="display:grid;grid-template-columns:92px 56px 72px 92px minmax(120px,0.8fr) minmax(0,1.3fr) 190px;gap:0 10px;align-items:center;padding:6px 0;border-bottom:1.5px solid #1C1B18;font-size:11px;font-weight:600;color:#3A3832"><span>Tanggal</span><span>Nama</span><span>Konsultasi</span><span>Jenis</span><span>Sekolah</span><span>Aktivitas</span><span>Status</span></div>
-        <sc-for list="{{ dpTable }}" as="r" hint-placeholder-count="10"><div style="display:grid;grid-template-columns:92px 56px 72px 92px minmax(120px,0.8fr) minmax(0,1.3fr) 190px;gap:0 10px;align-items:center;padding:6px 0;border-bottom:1px solid #EFECE5;font-size:12px"><span style="white-space:nowrap;color:#6B675E">{{ r.dt }}</span><span>{{ r.nm }}</span><span>{{ r.kn }}</span><span><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;background:{{ r.tbg }};color:{{ r.tfg }}">{{ r.tipe }}</span></span><span style="line-height:1.4;font-weight:500">{{ r.sk }}</span><span style="line-height:1.4">{{ r.ak }}</span><span><span style="display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:500;background:{{ r.sbg }};color:{{ r.sfg }}">{{ r.st }}</span></span></div></sc-for>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px"><h2 style="margin:0;font-size:15px;font-weight:600">Marketing report</h2><span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-size:12px;color:#6B675E">{{ dpCount }} aktivitas · tanggal terlama di atas</span><button onClick="{{ mkNew }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:7px 12px;border-radius:7px;font-size:12px;font-weight:600">+ Tambah aktivitas</button></span></div>
+        <sc-if value="{{ mkfOn }}" hint-placeholder-val="{{ false }}"><div style="border:1px solid #E4E0D6;border-radius:10px;padding:14px;margin-bottom:12px;background:#FBFAF7;display:flex;flex-direction:column;gap:10px">
+          <h3 style="margin:0;font-size:14px;font-weight:600">{{ mkfTitle }}</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Tanggal<input type="date" value="{{ mkf.dt }}" onChange="{{ mkfDt }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:8px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Nama<input list="nf-mk-people" value="{{ mkf.nm }}" onChange="{{ mkfNm }}" placeholder="mis. Thia" style="border:1px solid #D8D3C7;border-radius:7px;padding:8px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Konsultasi (pendamping)<input list="nf-mk-people" value="{{ mkf.kn }}" onChange="{{ mkfKn }}" placeholder="mis. Tasya" style="border:1px solid #D8D3C7;border-radius:7px;padding:8px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Jenis<select data-rkv="{{ mkf.tipe }}" value="{{ mkf.tipe }}" onChange="{{ mkfTipe }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:8px 10px;color:#1C1B18;background:#fff;min-width:0"><option value="Konsultasi">Konsultasi</option><option value="Offering">Offering</option></select></label>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Sekolah<input value="{{ mkf.sekolah }}" onChange="{{ mkfSekolah }}" placeholder="Nama sekolah (opsional)" style="border:1px solid #D8D3C7;border-radius:7px;padding:8px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Aktivitas<input value="{{ mkf.aktivitas }}" onChange="{{ mkfAktivitas }}" placeholder="mis. Harga terkirim, Follow up, Meeting" style="border:1px solid #D8D3C7;border-radius:7px;padding:8px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Status<input list="nf-mk-status" value="{{ mkf.st }}" onChange="{{ mkfSt }}" placeholder="Pilih atau ketik status" style="border:1px solid #D8D3C7;border-radius:7px;padding:8px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+          </div>
+          <datalist id="nf-mk-people"><sc-for list="{{ mkPeople }}" as="o" hint-placeholder-count="3"><option value="{{ o }}"></option></sc-for></datalist>
+          <datalist id="nf-mk-status"><sc-for list="{{ mkStatusOpts }}" as="o" hint-placeholder-count="5"><option value="{{ o }}"></option></sc-for></datalist>
+          <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><div><sc-if value="{{ mkfEditing }}" hint-placeholder-val="{{ false }}"><button onClick="{{ mkDelete }}" style="white-space:nowrap;border:1px solid #E3B9AE;background:#fff;color:#A23B28;padding:8px 12px;border-radius:7px;font-size:13px">Hapus</button></sc-if></div><div style="display:flex;gap:8px"><button onClick="{{ mkClose }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:8px 12px;border-radius:7px;font-size:13px">Batal</button><button onClick="{{ mkSave }}" style="white-space:nowrap;border:0;background:#2F5D50;color:#fff;padding:8px 14px;border-radius:7px;font-size:13px;font-weight:600">Simpan</button></div></div>
+        </div></sc-if>
+        <div style="display:grid;grid-template-columns:92px 56px 72px 92px minmax(120px,0.8fr) minmax(0,1.3fr) 190px 44px;gap:0 10px;align-items:center;padding:6px 0;border-bottom:1.5px solid #1C1B18;font-size:11px;font-weight:600;color:#3A3832"><span>Tanggal</span><span>Nama</span><span>Konsultasi</span><span>Jenis</span><span>Sekolah</span><span>Aktivitas</span><span>Status</span><span></span></div>
+        <sc-for list="{{ dpTable }}" as="r" hint-placeholder-count="10"><div style="display:grid;grid-template-columns:92px 56px 72px 92px minmax(120px,0.8fr) minmax(0,1.3fr) 190px 44px;gap:0 10px;align-items:center;padding:6px 0;border-bottom:1px solid #EFECE5;font-size:12px"><span style="white-space:nowrap;color:#6B675E">{{ r.dt }}</span><span>{{ r.nm }}</span><span>{{ r.kn }}</span><span><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;background:{{ r.tbg }};color:{{ r.tfg }}">{{ r.tipe }}</span></span><span style="line-height:1.4;font-weight:500">{{ r.sk }}</span><span style="line-height:1.4">{{ r.ak }}</span><span><span style="display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:500;background:{{ r.sbg }};color:{{ r.sfg }}">{{ r.st }}</span></span><button onClick="{{ r.edit }}" style="border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:3px 0;border-radius:6px;font-size:11px">Edit</button></div></sc-for>
       </div>
     </div>
     </sc-if>
@@ -1723,6 +1740,10 @@ const CATALOG_SEED = () => [
 const catFix = d => { if (d && !d.catalog) d.catalog = CATALOG_SEED(); return d; };
 const BG_DEFAULT = './assets/dash-bg-2.webp';
 const BG_SEED = () => ({slots: [BG_DEFAULT, '', '', ''], mode: 'rotate', active: 0, every: 30});
+// Marketing report: data bisa diisi & diedit (sebelumnya MKT_LOG statis)
+const mktTipe = ak => /^(konsultasi\s*\/\s*)?offering/i.test(ak || '') ? 'Offering' : 'Konsultasi';
+const mktRaw = x => (x.tipe === 'Offering' ? 'OFFERING / ' : 'KONSULTASI / ') + [x.aktivitas, x.sekolah].filter(Boolean).join(' ');
+const mktFix = d => { if (!d || d.mktLog) return d; d.mktLog = MKT_LOG.map((r, i) => ({id: 'm' + i, dt: r[0], nm: r[1], kn: r[2], raw: r[3], tipe: mktTipe(r[3]), sekolah: (DP_SCH[i] || [])[0] || '', aktivitas: (DP_SCH[i] || [r[3], r[3]])[1] || r[3], st: r[4] || ''})); return d; };
 const OWNER_EMAIL = 'firdaussahal@gmail.com'; // satu-satunya akun yang bisa membuka Setting
 const ST_ROLES = ['Admin', 'Manajer', 'Keuangan', 'Marketing', 'Operasional'], ST_GROUPS = ['Utama', 'Marketing', 'Operasional', 'Keuangan', 'Administrasi', 'Tim', 'Archive Project', 'Setting'], ST_LV = ['Tidak', 'Lihat', 'Edit'];
 const stDefAccess = () => ({Admin: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 2}, Manajer: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 0}, Keuangan: {Utama: 1, Marketing: 0, Operasional: 0, Keuangan: 2, Administrasi: 1, Tim: 0, 'Archive Project': 0, Setting: 0}, Marketing: {Utama: 1, Marketing: 2, Operasional: 1, Keuangan: 0, Administrasi: 0, Tim: 0, 'Archive Project': 1, Setting: 0}, Operasional: {Utama: 1, Marketing: 0, Operasional: 2, Keuangan: 0, Administrasi: 1, Tim: 0, 'Archive Project': 1, Setting: 0}});
@@ -1849,7 +1870,7 @@ class Component extends DCLogic {
     if (d && d.projects && !d.teamCleared) { d.employees = []; d.teamCleared = true; }
     if (d && d.projects && !d.assets) { d.assets = seed().assets; }
     if (d && d.projects && !d.prospects) { d.prospects = []; }
-    if (d && d.projects) { dealFix(d); catFix(d); rolesFix(d); }
+    if (d && d.projects) { dealFix(d); catFix(d); rolesFix(d); mktFix(d); }
     if (d && d.projects && !d.auth) { d.auth = ST_AUTH(); }
     if (d && d.projects && !d.users) { d.users = stSeedUsers(); d.access = stDefAccess(); }
     if (d && d.projects && !d.attendance) { d.attendance = {}; }
@@ -1934,10 +1955,11 @@ class Component extends DCLogic {
       const role = rr.data;
       const r = await c.from('app_state').select('data,version').eq('id', 'main').maybeSingle();
       if (r.error) throw r.error;
-      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1), needCat = !!(r.data && !(r.data.data || {}).catalog), needRoles = !!(r.data && !(r.data.data || {}).rolesV3);
+      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1), needCat = !!(r.data && !(r.data.data || {}).catalog), needRoles = !!(r.data && !(r.data.data || {}).rolesV3), needMkt = !!(r.data && !(r.data.data || {}).mktLog);
       if (r.data) this.cloudApply(r.data);
       else { const ins = await c.from('app_state').insert({id: 'main', data: this.cloudStrip(this.state.d), version: 1, updated_by: this._cloudBy}); if (ins.error) throw ins.error; this._cloudVer = 1; }
       this._cloudOn = true; this.setState({cloudState: 'ok', cloudRole: role});
+      if (needMkt) this.upd(dd => { mktFix(dd); }, 'Marketing report siap diisi');
       if (needRoles) this.upd(dd => { rolesFix(dd); }, 'Peran diperbarui: Superadmin, Management, Staff');
       if (needCat) this.upd(dd => { catFix(dd); }, 'Katalog Product & Service dibuat');
       if (needDeal) this.upd(dd => { dealFix(dd); }, 'Sekolah berstatus Kontrak dipindah ke Deal (MoU)');
@@ -2505,22 +2527,23 @@ class Component extends DCLogic {
       {label: 'Tindak lanjut terlambat', value: String(prActive.filter(p => p.follow && dd(p.follow) < 0).length), sub: 'Perlu dihubungi lagi'}];
 
     // Progress pencarian klien: dari Marketing report + kontak yang dicatat di Pencarian Klien
+    const mlog = (d.mktLog || mktFix({}).mktLog).map(x => [x.dt, x.nm, x.kn, x.raw || mktRaw(x), x.st || '']);
     const ctOff = r => /^(konsultasi\s*\/\s*)?offering/i.test(r[3]);
     const ctLog = d.contactLog || [];
     const ctLast = iso(TODAY);
     const ctLd = new Date(ctLast + 'T00:00:00Z'); ctLd.setUTCDate(ctLd.getUTCDate() - ((ctLd.getUTCDay() + 6) % 7));
     const ctWeeks = []; for (let i = 11; i >= 0; i--) { const w0 = new Date(ctLd); w0.setUTCDate(w0.getUTCDate() - 7 * i); const w1 = new Date(w0); w1.setUTCDate(w1.getUTCDate() + 6); ctWeeks.push([w0.toISOString().slice(0, 10), w1.toISOString().slice(0, 10)]); }
-    const ctCnt = ctWeeks.map(([a0, a1]) => ({o: MKT_LOG.filter(r => r[0] >= a0 && r[0] <= a1 && ctOff(r)).length, k: MKT_LOG.filter(r => r[0] >= a0 && r[0] <= a1 && !ctOff(r)).length + ctLog.filter(y => y >= a0 && y <= a1).length}));
+    const ctCnt = ctWeeks.map(([a0, a1]) => ({o: mlog.filter(r => r[0] >= a0 && r[0] <= a1 && ctOff(r)).length, k: mlog.filter(r => r[0] >= a0 && r[0] <= a1 && !ctOff(r)).length + ctLog.filter(y => y >= a0 && y <= a1).length}));
     const ctMax = Math.max(1, ...ctCnt.map(c => c.o + c.k));
     const ctBars = ctWeeks.map(([a0, a1], i) => ({n: (ctCnt[i].o + ctCnt[i].k) || '', ho: (ctCnt[i].o / ctMax * 100) + '%', hk: (ctCnt[i].k / ctMax * 100) + '%', d: fd(a0) + ' –', d2: fd(a1), tip: `${fd(a0)} – ${fd(a1, true)} · ${ctCnt[i].o} offering, ${ctCnt[i].k} konsultasi`}));
     const ctTotal = ctCnt.reduce((a, c) => a + c.o + c.k, 0), ctRange = fd(ctWeeks[0][0]) + ' – ' + fd(ctWeeks[11][1], true);
-    const ctAll = MKT_LOG.length;
-    const ctDeal = 2, ctCancel = MKT_LOG.filter(r => /cancel/i.test(r[4])).length;
+    const ctAll = mlog.length;
+    const ctDeal = 2, ctCancel = mlog.filter(r => /cancel/i.test(r[4])).length;
     const stageRaw = [
-      {label: 'Offers', value: MKT_LOG.filter(ctOff).length, sub: 'Harga dan penawaran terkirim', of: ctAll, ofl: 'dari aktivitas', tone: 'green', icon: 'M5 4h14v16H5zM9 9h6M9 13h6'},
-      {label: 'Present', value: MKT_LOG.filter(r => /meeting|reschedul/i.test(r[4])).length, sub: 'Meeting dan presentasi', of: ctAll, ofl: 'dari aktivitas', tone: 'blue', icon: 'M3 4h18v12H3zM12 16v4M8 20h8'},
-      {label: 'Negotiation', value: MKT_LOG.filter(r => /negotiat|budget|diskon|price|mou|revisi/i.test(r[3])).length, sub: 'Budget, diskon, dan MOU', of: ctAll, ofl: 'dari aktivitas', tone: 'amber', icon: 'M4 5h16v11H9l-5 4z'},
-      {label: 'Deal', value: ctDeal, sub: 'Deal (MoU)', of: MKT_LOG.filter(ctOff).length, ofl: 'dari offers', tone: 'green', icon: 'M5 4h14v16H5zM9 12l2 2 4-4'}];
+      {label: 'Offers', value: mlog.filter(ctOff).length, sub: 'Harga dan penawaran terkirim', of: ctAll, ofl: 'dari aktivitas', tone: 'green', icon: 'M5 4h14v16H5zM9 9h6M9 13h6'},
+      {label: 'Present', value: mlog.filter(r => /meeting|reschedul/i.test(r[4])).length, sub: 'Meeting dan presentasi', of: ctAll, ofl: 'dari aktivitas', tone: 'blue', icon: 'M3 4h18v12H3zM12 16v4M8 20h8'},
+      {label: 'Negotiation', value: mlog.filter(r => /negotiat|budget|diskon|price|mou|revisi/i.test(r[3])).length, sub: 'Budget, diskon, dan MOU', of: ctAll, ofl: 'dari aktivitas', tone: 'amber', icon: 'M4 5h16v11H9l-5 4z'},
+      {label: 'Deal', value: ctDeal, sub: 'Deal (MoU)', of: mlog.filter(ctOff).length, ofl: 'dari offers', tone: 'green', icon: 'M5 4h14v16H5zM9 12l2 2 4-4'}];
     const stageCards = stageRaw.map(c => { const pc = c.of ? Math.round(c.value / c.of * 100) : 0; return {...c, ibg: T(c.tone).bg, ifg: T(c.tone).fg, w: Math.min(100, pc) + '%', pct: pc + '% ' + c.ofl}; });
     const ctConv = [{label: 'Tingkat konversi', value: Math.round(ctDeal / (ctDeal + ctCancel) * 100) + '%', sub: `${ctDeal} deal · ${ctCancel} cancelled`}];
     const prStageStrip = PR_STAGES.map(([name, tone], si) => { const tt = T(tone); return {name, n: prs.filter(p => p.stage === si).length, bg: tt.bg, fg: tt.fg}; });
@@ -2552,10 +2575,12 @@ class Component extends DCLogic {
 
     // Daily performance (Marketing report)
     const dpMonth = s.dpMonth || 'all', dpType = s.dpType || 'all';
-    const dpAll = MKT_LOG.map(([dt, nm, kn, ak, st], i) => ({dt, nm, kn, ak, st, i, mk: dt.slice(0, 7), tipe: /^(konsultasi\s*\/\s*)?offering/i.test(ak) ? 'Offering' : 'Konsultasi', grp: dpGroup(st)}));
+    const mrec = d.mktLog || mktFix({}).mktLog;
+    const dpAll = mrec.map((x, i) => ({dt: x.dt, nm: x.nm, kn: x.kn, ak: x.raw || mktRaw(x), st: x.st || '', i, rec: x, mk: String(x.dt).slice(0, 7), tipe: x.tipe || mktTipe(x.raw), grp: dpGroup(x.st)}));
     const dpRows = dpAll.filter(r => (dpMonth === 'all' || r.mk === dpMonth) && (dpType === 'all' || r.tipe === dpType));
     const dpChip = (cur, v, l, key) => ({label: l, on: () => this.setState({[key]: v}), bg: cur === v ? '#1C1B18' : '#FFFFFF', fg: cur === v ? '#FFFFFF' : '#3A3832', bd: cur === v ? '#1C1B18' : '#D8D3C7'});
-    const dpMonthChips = [['all', 'Semua bulan'], ['2026-09', 'September 2026'], ['2026-10', 'Oktober 2026']].map(([v, l]) => dpChip(dpMonth, v, l, 'dpMonth'));
+    const dpMonthsAll = [...new Set(dpAll.map(r => r.mk))].sort();
+    const dpMonthChips = [['all', 'Semua bulan'], ...dpMonthsAll.map(m => [m, new Date(m + '-01T00:00:00').toLocaleDateString('id-ID', {month: 'long', year: 'numeric'})])].map(([v, l]) => dpChip(dpMonth, v, l, 'dpMonth'));
     const dpTypeChips = [['all', 'Semua'], ['Offering', 'Offering'], ['Konsultasi', 'Konsultasi']].map(([v, l]) => dpChip(dpType, v, l, 'dpType'));
     const dpDaysAct = new Set(dpRows.map(r => r.dt)).size, dpOff = dpRows.filter(r => r.tipe === 'Offering').length;
     const dpKpis = [
@@ -2564,7 +2589,8 @@ class Component extends DCLogic {
       {label: 'Konsultasi', value: String(dpRows.length - dpOff), sub: 'Follow up, meeting, koordinasi'},
       {label: 'Deal / MOU', value: String(dpRows.filter(r => r.grp === 'Deal / MOU').length), sub: `${dpRows.filter(r => r.grp === 'Interested').length} sekolah tertarik`},
       {label: 'Cancelled', value: String(dpRows.filter(r => r.grp === 'Cancelled').length), sub: 'Sekolah batal memakai jasa'}];
-    const dpFrom = dpMonth === 'all' ? '2026-09-01' : dpMonth + '-01', dpTo = dpMonth === 'all' ? '2026-10-31' : (dpMonth === '2026-09' ? '2026-09-30' : '2026-10-31');
+    const dpEom = m => { const [y, mo] = m.split('-').map(Number); return m + '-' + String(new Date(y, mo, 0).getDate()).padStart(2, '0'); };
+    const dpFrom = dpMonth === 'all' ? (dpMonthsAll[0] || iso(TODAY).slice(0, 7)) + '-01' : dpMonth + '-01', dpTo = dpMonth === 'all' ? dpEom(dpMonthsAll[dpMonthsAll.length - 1] || iso(TODAY).slice(0, 7)) : dpEom(dpMonth);
     const dpDays = []; for (let t = Date.parse(dpFrom + 'T00:00:00Z'); t <= Date.parse(dpTo + 'T00:00:00Z'); t += 86400000) dpDays.push(new Date(t).toISOString().slice(0, 10));
     const dpCnt = dpDays.map(x => ({o: dpRows.filter(r => r.dt === x && r.tipe === 'Offering').length, k: dpRows.filter(r => r.dt === x && r.tipe === 'Konsultasi').length}));
     const dpMax = Math.max(1, ...dpCnt.map(c => c.o + c.k));
@@ -2573,8 +2599,8 @@ class Component extends DCLogic {
     const dpStMax = Math.max(1, ...dpStatus.map(x => x.n));
     dpStatus.forEach(x => { x.w = (x.n / dpStMax * 100) + '%'; x.pct = (dpRows.length ? Math.round(x.n / dpRows.length * 100) : 0) + '%'; });
     const dpPeople = ['Thia', 'Tasya', 'Dhimas'].map(n => ({name: n, a: dpRows.filter(r => r.nm === n).length, b: dpRows.filter(r => r.kn === n).length, off: dpRows.filter(r => r.nm === n && r.tipe === 'Offering').length, all: dpRows.filter(r => r.nm === n || r.kn === n).length}));
-    const dpTable = [...dpRows].sort((a, b) => a.dt.localeCompare(b.dt) || a.i - b.i).map(r => { const tt = T(DP_GROUPS.find(g => g[0] === r.grp)[1]), ty = T(r.tipe === 'Offering' ? 'green' : 'blue'); return {dt: fd(r.dt, true), nm: r.nm, kn: r.kn, tipe: r.tipe, tbg: ty.bg, tfg: ty.fg, sk: (DP_SCH[r.i] || [])[0] || '—', ak: (DP_SCH[r.i] || [r.ak, r.ak])[1], st: r.st || 'Tanpa status', sbg: tt.bg, sfg: tt.fg}; });
-    const dpRange = dpMonth === 'all' ? '1 Sep – 30 Okt 2026' : (dpMonth === '2026-09' ? 'September 2026' : 'Oktober 2026');
+    const dpTable = [...dpRows].sort((a, b) => a.dt.localeCompare(b.dt) || a.i - b.i).map(r => { const tt = T(DP_GROUPS.find(g => g[0] === r.grp)[1]), ty = T(r.tipe === 'Offering' ? 'green' : 'blue'); return {dt: fd(r.dt, true), nm: r.nm, kn: r.kn, tipe: r.tipe, tbg: ty.bg, tfg: ty.fg, sk: r.rec.sekolah || '—', ak: r.rec.aktivitas || r.ak, st: r.st || 'Tanpa status', sbg: tt.bg, sfg: tt.fg, edit: () => this.setState({mkfOn: true, mkf: {id: r.rec.id, dt: r.rec.dt, nm: r.rec.nm, kn: r.rec.kn, tipe: r.tipe, sekolah: r.rec.sekolah || '', aktivitas: r.rec.aktivitas || '', st: r.rec.st || ''}})}; });
+    const dpRange = dpMonth === 'all' ? fd(dpFrom, true) + ' – ' + fd(dpTo, true) : new Date(dpMonth + '-01T00:00:00').toLocaleDateString('id-ID', {month: 'long', year: 'numeric'});
 
     // Absensi
     const AT_STATUS = [['', 'Belum diisi', 'gray'], ['Hadir', 'Hadir', 'green'], ['Lapangan', 'Lapangan', 'blue'], ['Izin', 'Izin', 'amber'], ['Sakit', 'Sakit', 'amber'], ['Cuti', 'Cuti', 'gray'], ['Alpha', 'Alpha', 'red']];
@@ -2946,6 +2972,15 @@ class Component extends DCLogic {
       saveUs: () => { if (!usf.name || !usf.name.trim()) return this.flash('Isi nama pengguna'); const rec = {name: usf.name.trim(), email: (usf.email || '').trim(), role: usf.role || 'Staff', active: usf.active !== '0'};
         this.upd(dd2 => { dd2.users = dd2.users || []; if (usf.id) Object.assign(dd2.users.find(z => z.id === usf.id), rec); else dd2.users.push({id: 'u' + Date.now(), ...rec}); }, usf.id ? 'Pengguna diperbarui' : 'Pengguna ditambahkan'); this.setState({showUs: false}); },
       deleteUs: () => { if (!usf.id || !window.confirm('Hapus pengguna ' + usf.name + '?')) return; this.upd(dd2 => { dd2.users = dd2.users.filter(z => z.id !== usf.id); }, 'Pengguna dihapus'); this.setState({showUs: false}); },
+      mkfOn: !!s.mkfOn, mkf: s.mkf || {}, mkfEditing: !!(s.mkf || {}).id, mkfTitle: (s.mkf || {}).id ? 'Edit aktivitas' : 'Aktivitas baru',
+      mkPeople: [...new Set(['Thia', 'Tasya', 'Dhimas', ...(d.employees || []).map(e => String(e.name || '').split(' ')[0]), ...mrec.map(x => x.nm), ...mrec.map(x => x.kn)].filter(Boolean))],
+      mkStatusOpts: [...new Set(['Follow up', 'Harga sudah terkirim, menunggu keputusan', 'Meeting', 'Interested', 'Pending', 'Deal / MOU Confirmed', 'Cancelled', ...mrec.map(x => x.st)].filter(Boolean))],
+      mkNew: () => this.setState({mkfOn: true, mkf: {id: null, dt: iso(TODAY), nm: '', kn: '', tipe: 'Konsultasi', sekolah: '', aktivitas: '', st: ''}}), mkClose: () => this.setState({mkfOn: false}),
+      mkfDt: this.fset('mkf', 'dt'), mkfNm: this.fset('mkf', 'nm'), mkfKn: this.fset('mkf', 'kn'), mkfTipe: this.fset('mkf', 'tipe'), mkfSekolah: this.fset('mkf', 'sekolah'), mkfAktivitas: this.fset('mkf', 'aktivitas'), mkfSt: this.fset('mkf', 'st'),
+      mkSave: () => { const f = s.mkf || {}, t = v => String(v || '').trim(); if (!/^\d{4}-\d{2}-\d{2}$/.test(f.dt || '')) return this.flash('Isi tanggal'); if (!t(f.nm)) return this.flash('Isi nama'); if (!t(f.aktivitas)) return this.flash('Isi aktivitas');
+        const rec = {dt: f.dt, nm: t(f.nm), kn: t(f.kn), tipe: f.tipe === 'Offering' ? 'Offering' : 'Konsultasi', sekolah: t(f.sekolah), aktivitas: t(f.aktivitas), st: t(f.st)}; rec.raw = mktRaw(rec);
+        this.upd(dd2 => { mktFix(dd2); if (f.id) Object.assign(dd2.mktLog.find(z => z.id === f.id), rec); else dd2.mktLog.push({id: 'm' + Date.now(), ...rec}); }, f.id ? 'Aktivitas diperbarui' : 'Aktivitas ditambahkan'); this.setState({mkfOn: false}); },
+      mkDelete: () => { const f = s.mkf || {}; if (!f.id || !window.confirm('Hapus aktivitas ini?')) return; this.upd(dd2 => { mktFix(dd2); dd2.mktLog = dd2.mktLog.filter(z => z.id !== f.id); }, 'Aktivitas dihapus'); this.setState({mkfOn: false}); },
       dpMonthChips, dpTypeChips, dpKpis, dpBars, dpStatus, dpPeople, dpTable, dpRange, dpCount: dpRows.length, stageCards, prKpis, prKpisDash: [], ctBars, ctTotal, ctRange, prStageStrip, goPr: go('pencarian'), goJournal: go('laporan'), goLaba: go('labarugi'),
       mainCls: is.dashA ? 'nf-gridbg' : '', showHeader: !is.dashA, mainBgImg: is.dashA ? bgCur : 'none',
       bgSlots: bgCfg.slots.map((u, i) => ({n: String(i + 1), url: u || '', has: !!u, none: !u, isDefault: u === BG_DEFAULT, active: bgCfg.mode === 'fixed' && bgCfg.active === i, busy: s.bgBusy === i, upload: ev => this.bgUpload(i, ev),
