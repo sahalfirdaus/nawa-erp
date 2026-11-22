@@ -1538,6 +1538,62 @@ input[type=range]{accent-color:#2F5D50;width:100%}
     </sc-if>
 
     <!-- REKAP ABSENSI -->
+    <!-- TIM · DAILY CHECKLIST -->
+    <sc-if value="{{ is.checklist }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <h2 style="margin:0;font-size:18px;font-weight:600">Daily checklist</h2>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><button onClick="{{ clPrev }}" aria-label="Hari sebelumnya" style="width:34px;height:34px;border:1px solid #D8D3C7;background:#fff;border-radius:8px;font-size:15px">‹</button><div style="font-size:16px;font-weight:600;min-width:0">{{ clDateLabel }}</div><button onClick="{{ clNext }}" aria-label="Hari berikutnya" style="width:34px;height:34px;border:1px solid #D8D3C7;background:#fff;border-radius:8px;font-size:15px">›</button><sc-if value="{{ clNotToday }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clToday }}" style="border:1px solid #D8D3C7;background:#fff;border-radius:8px;padding:7px 12px;font-size:12.5px">Hari ini</button></sc-if></div>
+        <div style="display:flex;gap:8px;align-items:center"><input type="date" value="{{ clDate }}" onChange="{{ clPick }}" style="border:1px solid #D8D3C7;border-radius:8px;padding:7px 10px;background:#fff"><button onClick="{{ clTplToggle }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500">{{ clTplBtn }}</button></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+        <sc-for list="{{ clKpis }}" as="k" hint-placeholder-count="3"><div style="background:#fff;border:1px solid #E4E0D6;border-radius:10px;padding:14px 18px;display:flex;flex-direction:column;gap:3px"><span style="font-size:13px;color:#6B675E">{{ k.label }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px">{{ k.value }}</span><span style="font-size:12px;color:#6B675E">{{ k.sub }}</span></div></sc-for>
+      </div>
+      <sc-if value="{{ clTplOpen }}" hint-placeholder-val="{{ false }}"><div style="background:#FBFAF7;border:1px solid #E4E0D6;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px">
+        <div><h3 style="margin:0;font-size:14.5px;font-weight:600">Template checklist harian</h3><div style="font-size:12px;color:#6B675E;margin-top:2px">Tugas ini muncul otomatis setiap hari untuk anggota yang dipilih.</div></div>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ clTpl }}" as="t" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #EFECE5;font-size:13px"><span style="flex:1;min-width:0">{{ t.text }}</span><span style="font-size:12px;color:#6B675E;white-space:nowrap">{{ t.who }}</span><button onClick="{{ t.del }}" aria-label="Hapus" style="border:1px solid #E3B9AE;background:#fff;color:#A23B28;padding:3px 9px;border-radius:6px;font-size:12px">Hapus</button></div></sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 190px auto;gap:8px"><input placeholder="Tugas baru, mis. Posting konten Instagram" value="{{ clTf.text }}" onChange="{{ clTfText }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;background:#fff;min-width:0"><select data-v="{{ clTf.who }}" value="{{ clTf.who }}" onChange="{{ clTfWho }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;background:#fff;min-width:0"><sc-for list="{{ clWhoOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select><button onClick="{{ clTfAdd }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:9px 14px;border-radius:7px;font-size:13px;font-weight:600">+ Tambah</button></div>
+      </div></sc-if>
+      <sc-if value="{{ clNoEmp }}" hint-placeholder-val="{{ false }}"><div style="background:#fff;border:1px dashed #CFC9BC;border-radius:12px;padding:20px;font-size:13px;color:#6B675E;text-align:center">Belum ada anggota. Tambahkan dulu di Our Team.</div></sc-if>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;align-items:start">
+        <sc-for list="{{ clCards }}" as="c" hint-placeholder-count="3"><div style="background:#fff;border:1px solid #E4E0D6;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0">
+          <div style="display:flex;align-items:center;gap:10px"><sc-if value="{{ c.hasPhoto }}" hint-placeholder-val="{{ false }}"><img src="{{ c.photo }}" alt="" style="width:32px;height:32px;border-radius:99px;object-fit:cover;flex:none"></sc-if><sc-if value="{{ c.noPhoto }}" hint-placeholder-val="{{ true }}"><span style="width:32px;height:32px;border-radius:99px;background:#E3ECE7;color:#2F5D50;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">{{ c.ini }}</span></sc-if><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.name }}</div><div style="font-size:12px;color:#6B675E">{{ c.role }}</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:{{ c.pcol }}">{{ c.prog }}</span></div>
+          <div style="height:6px;background:#F1EEE7;border-radius:99px;overflow:hidden"><div style="height:100%;background:{{ c.pcol }};width:{{ c.w }}"></div></div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <sc-for list="{{ c.items }}" as="it" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:9px;padding:5px 2px"><button onClick="{{ it.toggle }}" aria-label="Centang" aria-pressed="{{ it.on }}" style="width:20px;height:20px;flex:none;border-radius:5px;border:1.5px solid {{ it.bd }};background:{{ it.bg }};display:flex;align-items:center;justify-content:center;padding:0"><sc-if value="{{ it.on }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></sc-if></button><span onClick="{{ it.toggle }}" style="flex:1;min-width:0;font-size:13px;cursor:pointer;color:{{ it.col }};text-decoration:{{ it.deco }}">{{ it.text }}</span><sc-if value="{{ it.isExtra }}" hint-placeholder-val="{{ false }}"><button onClick="{{ it.del }}" aria-label="Hapus tugas" style="border:0;background:transparent;color:#A23B28;font-size:15px;line-height:1;padding:0 4px">×</button></sc-if></div></sc-for>
+            <sc-if value="{{ c.empty }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:#8A857A;padding:4px 2px">Belum ada tugas untuk hari ini.</div></sc-if>
+          </div>
+          <div style="display:flex;gap:6px;border-top:1px dashed #E4E0D6;padding-top:9px"><input placeholder="Tugas tambahan hari ini…" value="{{ c.draft }}" onChange="{{ c.setDraft }}" style="flex:1;min-width:0;border:1px solid #D8D3C7;border-radius:7px;padding:7px 9px;font-size:12.5px;background:#fff"><button onClick="{{ c.add }}" style="border:1px solid #BFD3CB;background:#EEF4F1;color:#2F5D50;padding:6px 11px;border-radius:7px;font-size:12.5px;font-weight:600;white-space:nowrap">+ Tambah</button></div>
+        </div></sc-for>
+      </div>
+    </div>
+
+    <!-- TIM · TARGET (satu halaman dengan checklist) -->
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0;margin-top:22px;padding-top:20px;border-top:1px solid #E4E0D6">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><h2 style="margin:0;font-size:18px;font-weight:600">Target bulanan</h2><div style="font-size:13px;color:#6B675E;margin-top:3px">Isi target bulanan tiap anggota. Pencapaian dihitung otomatis dari Daily Activity dan Absensi.</div></div>
+        <div style="display:flex;gap:8px;align-items:center"><button onClick="{{ tgCopy }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:8px 12px;border-radius:8px;font-size:12.5px">Salin dari bulan lalu</button><select data-v="{{ tgMonth }}" value="{{ tgMonth }}" onChange="{{ tgSetMonth }}" style="border:1px solid #D8D3C7;border-radius:8px;padding:8px 10px;background:#fff;color:#1C1B18;min-width:170px"><sc-for list="{{ tgMonthOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+        <sc-for list="{{ tgKpis }}" as="k" hint-placeholder-count="3"><div style="background:#fff;border:1px solid #E4E0D6;border-radius:10px;padding:14px 18px;display:flex;flex-direction:column;gap:3px"><span style="font-size:13px;color:#6B675E">{{ k.label }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px">{{ k.value }}</span><span style="font-size:12px;color:#6B675E">{{ k.sub }}</span></div></sc-for>
+      </div>
+      <div style="background:#fff;border:1px solid #E4E0D6;border-radius:12px;overflow-x:auto">
+        <sc-if value="{{ tgEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:18px 16px;font-size:13px;color:#6B675E">Belum ada anggota. Tambahkan di Our Team.</div></sc-if>
+        <div style="min-width:900px">
+          <div style="display:grid;grid-template-columns:minmax(170px,1.2fr) repeat(5,minmax(120px,1fr));gap:12px;padding:10px 16px;font-size:12px;color:#6B675E;border-bottom:1px solid #E4E0D6"><span>Anggota</span><sc-for list="{{ tgHead }}" as="h" hint-placeholder-count="5"><span>{{ h.l }}</span></sc-for></div>
+          <sc-for list="{{ tgRows }}" as="r" hint-placeholder-count="3"><div style="display:grid;grid-template-columns:minmax(170px,1.2fr) repeat(5,minmax(120px,1fr));gap:12px;padding:11px 16px;border-bottom:1px solid #EFECE5;align-items:center">
+            <div style="display:flex;align-items:center;gap:9px;min-width:0"><sc-if value="{{ r.hasPhoto }}" hint-placeholder-val="{{ false }}"><img src="{{ r.photo }}" alt="" style="width:32px;height:32px;border-radius:99px;object-fit:cover;flex:none"></sc-if><sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ true }}"><span style="width:32px;height:32px;border-radius:99px;background:#E3ECE7;color:#2F5D50;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">{{ r.ini }}</span></sc-if><div style="min-width:0"><div style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</div><div style="font-size:11.5px;color:#6B675E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.role }}</div></div></div>
+            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+              <div style="display:flex;align-items:center;gap:6px"><span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:{{ c.col }};min-width:28px">{{ c.act }}</span><span style="font-size:12px;color:#8A857A">/</span><input type="number" min="0" placeholder="{{ c.ph }}" value="{{ c.tv }}" onChange="{{ c.set }}" aria-label="{{ c.label }}" style="width:70px;border:1px solid #D8D3C7;border-radius:6px;padding:4px 6px;font-size:12.5px;background:#fff"></div>
+              <div style="display:flex;align-items:center;gap:6px"><div style="flex:1;height:5px;background:#F1EEE7;border-radius:99px;overflow:hidden"><div style="height:100%;background:{{ c.col }};width:{{ c.w }}"></div></div><span style="font-size:11px;color:#6B675E;width:32px;text-align:right">{{ c.pct }}</span></div>
+            </div></sc-for>
+          </div></sc-for>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#6B675E;line-height:1.6">Angka besar = pencapaian bulan ini, kotak = target. Aktivitas, Offering, Sekolah dan Deal dari Daily Activity; Kehadiran = Hadir + Lapangan dari hari yang sudah diisi di Absensi. Kosongkan kotak untuk menghapus target.</div>
+    </div>
+    </sc-if>
+
     <!-- ANALYST · TEAM PERFORMANCE -->
     <sc-if value="{{ is.teamperf }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
@@ -1817,6 +1873,8 @@ const mktApply = (d, r) => { const k = String(r.sekolah || '').trim().toLowerCas
 const addDays = (ds, n) => { const t = new Date((ds || '') + 'T00:00:00'); if (isNaN(t)) return ''; t.setDate(t.getDate() + n); return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0'); };
 const FU_DAYS = 3;
 const prDealLog = (d, p, who) => { d.mktLog = d.mktLog || []; const n = new Date(), today = n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0'); d.mktLog.push({id: 'm' + Date.now() + Math.random().toString(36).slice(2, 5), dt: today, nm: p.owner || who || 'Marketing', kn: '', tipe: 'Offering', sekolah: p.school, aktivitas: 'Deal / MoU (dari Client Prospect)', st: 'Deal / MOU Confirmed', raw: 'OFFERING / Deal / MoU ' + p.school}); };
+const CL_SEED = {items: [{id: 'c1', text: 'Cek & balas chat / email klien', who: 'all'}, {id: 'c2', text: 'Isi Daily Activity hari ini', who: 'all'}, {id: 'c3', text: 'Follow up prospek yang jatuh tempo', who: 'all'}, {id: 'c4', text: 'Update progres proyek berjalan', who: 'all'}, {id: 'c5', text: 'Rapikan & backup file kerja', who: 'all'}], done: {}, extra: {}};
+const TG_METRICS = [['act', 'Aktivitas', ''], ['offer', 'Offering', ''], ['schools', 'Sekolah dihubungi', ''], ['deal', 'Deal / MoU', ''], ['att', 'Kehadiran', '%']];
 const mktFix = d => { if (!d || d.mktLog) return d; d.mktLog = MKT_LOG.map((r, i) => ({id: 'm' + i, dt: r[0], nm: r[1], kn: r[2], raw: r[3], tipe: mktTipe(r[3]), sekolah: (DP_SCH[i] || [])[0] || '', aktivitas: (DP_SCH[i] || [r[3], r[3]])[1] || r[3], st: r[4] || ''})); return d; };
 const OWNER_EMAIL = 'firdaussahal@gmail.com'; // satu-satunya akun yang bisa membuka Setting
 const ST_ROLES = ['Admin', 'Manajer', 'Keuangan', 'Marketing', 'Operasional'], ST_GROUPS = ['Utama', 'Marketing', 'Operasional', 'Keuangan', 'Administrasi', 'Tim', 'Archive Project', 'Setting'], ST_LV = ['Tidak', 'Lihat', 'Edit'];
@@ -1828,7 +1886,7 @@ const ROLE_SEED = () => [
   {name: 'Staff', desc: 'Tim harian: membuka halaman sesuai tugasnya. Keuangan tertutup secara bawaan.'}];
 // Level bawaan bila belum diatur: 0 Tidak, 1 Lihat, 2 Edit
 const roleDefLvl = (role, g, id) => role === SUPER || role === 'Management' ? 2 : role !== 'Staff' ? 0
-  : g === 'Keuangan' || g === 'Analyst' ? 0 : g === 'Utama' || g === 'Tim' || g === 'Archive Project' ? 1 : id === 'absrekap' || id === 'aset' ? 1 : 2;
+  : g === 'Keuangan' || g === 'Analyst' ? 0 : id === 'checklist' ? 2 : g === 'Utama' || g === 'Tim' || g === 'Archive Project' ? 1 : id === 'absrekap' || id === 'aset' ? 1 : 2;
 const ROLE_MAP_V1 = {Admin: SUPER, Superadmin: SUPER, Manajer: 'Management'};
 const rolesFix = d => { if (!d) return d;
   if (d.rolesV2 && !d.rolesV3) { (d.roles || []).forEach(r => { if (r.name === 'Admin') { r.name = SUPER; } }); (d.users || []).forEach(u => { if (u.role === 'Admin') u.role = SUPER; }); if (d.pageAccess && d.pageAccess.Admin) { d.pageAccess[SUPER] = d.pageAccess.Admin; delete d.pageAccess.Admin; } d.rolesV3 = true; return d; }
@@ -2361,7 +2419,7 @@ class Component extends DCLogic {
       {g:'Operasional', items:[['invoice','Piutang Client',overdueList.length],['proyek','Proyek Berjalan',riskyList.length],['foto','Sesi Foto'],['produksi','Produksi & Cetak']]},
       {g:'Keuangan', items:[['findash','Dashboard Keuangan'],['labarugi','Laba Rugi'],['neraca','Laporan Neraca'],['modal','Laporan Perubahan Modal'],['jurnal','Laporan Jurnal'],['akun','No. Akun'],['laporan','Journal']]},
       {g:'Administrasi', items:[['absensi','Absensi'],['absrekap','Rekap Absensi'],['pengajuan','Daftar Pengajuan'],['aset','Aset']]},
-      {g:'Tim', items:[['karyawan','Our Team']]},
+      {g:'Tim', items:[['karyawan','Our Team'],['checklist','Daily Checklist & Target']]},
       {g:'Analyst', items:[['teamperf','Team Performance']]},
       {g:'Archive Project', items: RK_SECTIONS.map(([id, l]) => ['arc_' + id, l])}];
     const titles = {}; NAV.forEach(g => g.items.forEach(([id, l]) => titles[id] = l));
@@ -2371,6 +2429,7 @@ class Component extends DCLogic {
     titles.produk = 'Marketing · Product & Service';
     titles.dailyperf = 'Marketing · Daily Activity';
     titles.teamperf = 'Analyst · Team Performance';
+    titles.checklist = 'Tim · Daily Checklist & Target';
     titles.setting = 'Setting · Pengguna & Akses';
     titles.absensi = 'Administrasi · Absensi';
     titles.absrekap = 'Administrasi · Rekap Absensi';
@@ -2720,6 +2779,58 @@ class Component extends DCLogic {
         n: String(x.n), assist: String(x.assist), offer: String(x.offer), deal: String(x.deal), schools: String(x.schools), pros: String(x.prosActive), late: x.prosLate ? x.prosLate + ' terlambat' : '', hasLate: x.prosLate > 0,
         conv: x.conv < 0 ? '—' : x.conv + '%', att: x.attTxt, attC: x.attPct < 0 ? '#8A857A' : x.attPct >= 90 ? '#2F5D50' : x.attPct >= 75 ? '#8A5A12' : '#A23B28',
         last: x.last ? fd(x.last, true) : '—', w1: (x.n / tpMax * 100) + '%', w2: (x.assist / tpMax * 100) + '%'})),
+    };
+    // Tim · Daily Checklist
+    const CL = d.checklist || CL_SEED;
+    const clD = /^\d{4}-\d{2}-\d{2}$/.test(s.clDate || '') ? s.clDate : iso(TODAY);
+    const clShift = n => { const x = new Date(clD + 'T00:00:00'); x.setDate(x.getDate() + n); return iso(x); };
+    const clUpd = (fn, msg) => this.upd(dd2 => { dd2.checklist = dd2.checklist || JSON.parse(JSON.stringify(CL_SEED)); dd2.checklist.done = dd2.checklist.done || {}; dd2.checklist.extra = dd2.checklist.extra || {}; fn(dd2.checklist); }, msg);
+    const clEmps = d.employees || [];
+    const clIni = n => String(n || '?').split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const clCards = clEmps.map(e => { const xk = clD + '|' + e.id; const base = CL.items.filter(it => it.who === 'all' || it.who === e.id).map(it => ({...it, extra: false})); const ex = ((CL.extra || {})[xk] || []).map(it => ({...it, extra: true}));
+      const items = [...base, ...ex].map(it => { const dk = clD + '|' + e.id + '|' + it.id; const on = !!(CL.done || {})[dk];
+        return {text: it.text, on, off: !on, isExtra: it.extra, deco: on ? 'line-through' : 'none', col: on ? '#8A857A' : '#1C1B18', bg: on ? '#2F5D50' : '#fff', bd: on ? '#2F5D50' : '#CFC9BC',
+          toggle: () => clUpd(c => { if (c.done[dk]) delete c.done[dk]; else c.done[dk] = true; }), del: () => clUpd(c => { c.extra[xk] = (c.extra[xk] || []).filter(z => z.id !== it.id); delete c.done[dk]; })}; });
+      const nDone = items.filter(x => x.on).length, pct = items.length ? Math.round(nDone / items.length * 100) : 0; const draft = (s.clDraft || {})[e.id] || '';
+      return {name: e.name, role: e.role || '', photo: e.photo || '', hasPhoto: !!e.photo, noPhoto: !e.photo, ini: clIni(e.name), items, prog: nDone + '/' + items.length, pct: pct + '%', w: pct + '%', pcol: pct === 100 ? '#2F5D50' : pct >= 50 ? '#C9A24D' : '#A23B28', empty: !items.length, draft,
+        setDraft: ev => this.setState({clDraft: {...(s.clDraft || {}), [e.id]: ev.target.value}}),
+        addKey: ev => { if (ev.key === 'Enter') ev.target.blur(); },
+        add: () => { const t = String(((this.state.clDraft || {})[e.id]) || '').trim(); if (!t) return; clUpd(c => { c.extra[xk] = [...(c.extra[xk] || []), {id: 'x' + Date.now(), text: t}]; }, 'Tugas ditambahkan'); this.setState({clDraft: {...(this.state.clDraft || {}), [e.id]: ''}}); }}; });
+    const clAll = clCards.reduce((t, c) => t + c.items.length, 0), clDoneAll = clCards.reduce((t, c) => t + c.items.filter(x => x.on).length, 0);
+    const clWhoOpts = [{v: 'all', l: 'Semua anggota'}, ...clEmps.map(e => ({v: e.id, l: e.name}))];
+    const clTf = s.clTf || {text: '', who: 'all'};
+    const clVals = {
+      clDateLabel: new Date(clD + 'T00:00:00').toLocaleDateString('id-ID', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}), clDate: clD, clIsToday: clD === iso(TODAY), clNotToday: clD !== iso(TODAY),
+      clPrev: () => this.setState({clDate: clShift(-1)}), clNext: () => this.setState({clDate: clShift(1)}), clToday: () => this.setState({clDate: iso(TODAY)}), clPick: ev => ev.target.value && this.setState({clDate: ev.target.value}),
+      clKpis: [{label: 'Selesai hari ini', value: clDoneAll + '/' + clAll, sub: clAll ? Math.round(clDoneAll / clAll * 100) + '% dari semua tugas' : 'Belum ada tugas'}, {label: 'Anggota tuntas', value: String(clCards.filter(c => c.items.length && c.items.every(x => x.on)).length) + '/' + clCards.length, sub: 'semua checklist selesai'}, {label: 'Belum dimulai', value: String(clCards.filter(c => c.items.length && !c.items.some(x => x.on)).length), sub: 'anggota tanpa centang'}],
+      clCards, clNoEmp: !clEmps.length,
+      clTpl: CL.items.map(it => ({text: it.text, who: it.who === 'all' ? 'Semua anggota' : ((clEmps.find(e => e.id === it.who) || {}).name || '—'), del: () => { if (!window.confirm('Hapus "' + it.text + '" dari template?')) return; clUpd(c => { c.items = c.items.filter(z => z.id !== it.id); }, 'Template dihapus'); }})),
+      clTplOpen: !!s.clTplOpen, clTplToggle: () => this.setState({clTplOpen: !s.clTplOpen}), clTplBtn: s.clTplOpen ? 'Tutup template' : 'Kelola template',
+      clWhoOpts, clTf, clTfText: ev => this.setState({clTf: {...clTf, text: ev.target.value}}), clTfWho: ev => this.setState({clTf: {...clTf, who: ev.target.value}}),
+      clTfAdd: () => { const t = String((this.state.clTf || {}).text || '').trim(); if (!t) return this.flash('Isi nama tugas'); const w = (this.state.clTf || {}).who || 'all'; clUpd(c => { c.items.push({id: 'c' + Date.now(), text: t, who: w}); }, 'Tugas harian ditambahkan'); this.setState({clTf: {text: '', who: w}}); },
+    };
+
+    // Tim · Target
+    const tgMonths = (() => { const out = [], n = new Date(TODAY); for (let i = -2; i <= 3; i++) { const x = new Date(n.getFullYear(), n.getMonth() - i, 1); out.push(x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0')); } return out; })();
+    const tgM = /^\d{4}-\d{2}$/.test(s.tgMonth || '') ? s.tgMonth : iso(TODAY).slice(0, 7);
+    const tgPrevM = (() => { const [y, m] = tgM.split('-').map(Number), x = new Date(y, m - 2, 1); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0'); })();
+    const TG = d.targets || {};
+    const tgStats = (pp, mo) => { const keys = new Set([tpNorm(pp.name), ...(pp.aka || [])]); const is2 = x => keys.has(tpNorm(x)); const mine = tpLog.filter(r => (r.dt || '').startsWith(mo) && is2(r.nm));
+      let att = null; if (pp.emp) { const A = d.attendance || {}; const ks = Object.keys(A).filter(x => x.startsWith(mo) && x.endsWith('|' + pp.emp.id) && A[x] && A[x].status); if (ks.length) att = Math.round(ks.filter(x => ['Hadir', 'Lapangan'].includes(A[x].status)).length / ks.length * 100); }
+      return {act: mine.length, offer: mine.filter(r => r.tipe === 'Offering').length, schools: new Set(mine.map(r => tpNorm(r.sekolah)).filter(Boolean)).size, deal: mine.filter(r => mktStage(r) === 4).length, att}; };
+    const tgMembers = tpPeople.filter(pp => pp.emp || tpLog.some(r => [r.nm, r.kn].some(n => tpNorm(n) === tpNorm(pp.name))));
+    const tgSet = (mk, key) => ev => { const v = ev.target.value; this.upd(dd2 => { dd2.targets = dd2.targets || {}; const kk = tgM + '|' + mk; const o = {...(dd2.targets[kk] || {})}; if (v === '' || isNaN(+v)) delete o[key]; else o[key] = Math.max(0, +v); dd2.targets[kk] = o; }); };
+    let tgHit = 0, tgCnt = 0;
+    const tgRows = tgMembers.map(pp => { const mk = tpNorm(pp.name), tg = TG[tgM + '|' + mk] || {}, st = tgStats(pp, tgM);
+      const cells = TG_METRICS.map(([key, label, unit]) => { const t = tg[key], a = st[key]; const has = t != null && t !== ''; const av = a == null ? null : a; const pct = has && +t > 0 && av != null ? Math.min(100, Math.round(av / +t * 100)) : has && +t === 0 ? 100 : 0;
+        if (has) { tgCnt++; if (pct >= 100) tgHit++; }
+        return {key, label, tv: has ? String(t) : '', act: av == null ? '—' : av + unit, w: pct + '%', pct: has ? pct + '%' : '', col: !has ? '#CFC9BC' : pct >= 100 ? '#2F5D50' : pct >= 60 ? '#C9A24D' : '#A23B28', set: tgSet(mk, key), ph: 'target'}; });
+      return {name: pp.name, role: pp.role || '—', photo: pp.photo || '', hasPhoto: !!pp.photo, noPhoto: !pp.photo, ini: clIni(pp.name), cells}; });
+    const tgVals = {
+      tgMonth: tgM, tgMonthOpts: tgMonths.map(m2 => ({v: m2, l: new Date(m2 + '-01T00:00:00').toLocaleDateString('id-ID', {month: 'long', year: 'numeric'})})), tgSetMonth: ev => this.setState({tgMonth: ev.target.value}),
+      tgHead: TG_METRICS.map(([, l, u]) => ({l: l + (u ? ' (' + u + ')' : '')})), tgRows, tgEmpty: !tgRows.length,
+      tgKpis: [{label: 'Target diisi', value: String(tgCnt), sub: 'target untuk ' + tgMembers.length + ' anggota'}, {label: 'Tercapai', value: tgHit + '/' + tgCnt, sub: tgCnt ? Math.round(tgHit / tgCnt * 100) + '% target sudah 100%' : 'Isi target di tabel'}, {label: 'Aktivitas tim', value: String(tgMembers.reduce((t, pp) => t + tgStats(pp, tgM).act, 0)), sub: 'dari target ' + tgMembers.reduce((t, pp) => t + (+((TG[tgM + '|' + tpNorm(pp.name)] || {}).act) || 0), 0)}],
+      tgCopy: () => { const src = Object.keys(TG).filter(k => k.startsWith(tgPrevM + '|')); if (!src.length) return this.flash('Bulan lalu belum ada target'); this.upd(dd2 => { dd2.targets = dd2.targets || {}; src.forEach(k => { const nk = tgM + '|' + k.slice(8); dd2.targets[nk] = {...dd2.targets[k], ...(dd2.targets[nk] || {})}; }); }, 'Target bulan lalu disalin'); },
     };
     // Absensi
     const AT_STATUS = [['', 'Belum diisi', 'gray'], ['Hadir', 'Hadir', 'green'], ['Lapangan', 'Lapangan', 'blue'], ['Izin', 'Izin', 'amber'], ['Sakit', 'Sakit', 'amber'], ['Cuti', 'Cuti', 'gray'], ['Alpha', 'Alpha', 'red']];
@@ -3205,7 +3316,7 @@ class Component extends DCLogic {
         return {name: pname(r.p), sub: (+r.p.copies > 1 ? (+r.p.copies).toLocaleString('id-ID') + ' eks × ' + rps(r.p.price) : 'Nilai kontrak') , tender: rps(r.tender), recv: rps(r.recv), sisa: rps(r.sisa), sisaC: r.sisa > 0 ? '#A23B28' : '#2F5D50', pct: pct + '%', w: pct + '%', cnt: r.pays.length ? r.pays.length + ' pembayaran · terakhir ' + fd(last.date, true) : 'Belum ada pembayaran tercatat', status: st[0], bg: tn.bg, fg: tn.fg,
           pays: r.pays.map(x => ({dt: fd(x.date, true), desc: x.purpose || x.payee || '—', amt: rps(+x.in || 0)})), hasPays: r.pays.length > 0, noPays: !r.pays.length}; }),
       piuEmpty: !piuP.length,
-      ...tpVals,
+      ...tpVals, ...clVals, ...tgVals,
       invList, invKpis, inf: infv, infSchool: this.fset('inf', 'schoolId'), infDesc: this.fset('inf', 'desc'), infAmount: this.fset('inf', 'amount'),
       addInvoice: () => { const a = +s.inf.amount; if (!infv.schoolId) return this.flash('Tambahkan sekolah dulu di Sekolah & CRM'); if (!a || !s.inf.desc) return this.flash('Isi keterangan dan jumlah'); const no = 'INV/2026/' + String(101 + d.invoices.length).padStart(3, '0');
         this.upd(dd2 => dd2.invoices.push({id: 'i' + Date.now(), no, schoolId: infv.schoolId, desc: s.inf.desc, amount: a, due: iso(new Date(TODAY.getTime() + 14 * 864e5)), status: 'Belum'}), `${no} diterbitkan`); this.setState({inf: {...s.inf, desc: '', amount: ''}}); },
