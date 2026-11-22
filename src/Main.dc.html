@@ -18,6 +18,7 @@ a{color:#2F5D50}a:hover{color:#1C1B18}
 button{font-family:inherit;cursor:pointer}
 input,select{font-family:inherit;font-size:14px}
 input[type=range]{accent-color:#2F5D50;width:100%}
+.nf-gridbg{background-color:#F3F3F1;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2280%22%20height%3D%2280%22%3E%3Cpath%20d%3D%22M0%20-4V4M-4%200H4M80%2076V84M76%2080H84M0%2076V84M-4%2080H4M80%20-4V4M76%200H84%22%20stroke%3D%22%238C8C88%22%20stroke-width%3D%221%22/%3E%3C/svg%3E"),linear-gradient(to right,rgba(60,60,55,.10) 1px,transparent 1px),linear-gradient(to bottom,rgba(60,60,55,.10) 1px,transparent 1px),linear-gradient(to right,rgba(60,60,55,.045) 1px,transparent 1px),linear-gradient(to bottom,rgba(60,60,55,.045) 1px,transparent 1px);background-size:80px 80px,80px 80px,80px 80px,8px 8px,8px 8px;background-position:-1px -1px;background-attachment:local}
 @media (max-width:820px){.nf-att-grid{grid-template-columns:minmax(0,1fr)!important}}
 @media (max-width:1100px){.nf-pr-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.nf-pr-main{grid-column:1/-1}}
 @media (max-width:640px){.nf-pr-grid{grid-template-columns:minmax(0,1fr)!important}}
@@ -105,7 +106,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
 </aside>
 </sc-if>
 
-<main style="flex:1;min-width:0;display:flex;flex-direction:column">
+<main class="{{ mainCls }}" style="flex:1;min-width:0;display:flex;flex-direction:column">
   <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
   <div style="position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#EBE8E1;border-bottom:1px solid #DDD8CC">
     <div style="display:flex;align-items:baseline;gap:5px"><span style="font-size:17px;font-weight:700">navinus</span></div>
@@ -132,7 +133,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
   </div>
   </sc-if>
 
-  <div style="padding:clamp(16px,3vw,32px);display:flex;flex-direction:column;gap:20px;max-width:1360px;width:100%;margin:0 auto;box-sizing:border-box">
+  <div style="flex:1;padding:clamp(16px,3vw,32px);display:flex;flex-direction:column;gap:20px;max-width:1360px;width:100%;margin:0 auto;box-sizing:border-box">
     <header style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px">
       <div style="flex:1;min-width:0">
         <div style="font-size:13px;color:#6B675E;margin-bottom:4px;white-space:nowrap">{{ todayLabel }}</div>
@@ -142,6 +143,8 @@ input[type=range]{accent-color:#2F5D50;width:100%}
 
     <!-- DASHBOARD A -->
     <sc-if value="{{ is.dashA }}" hint-placeholder-val="{{ true }}">
+    <div class="nf-dash-gap" style="flex:1 1 0;min-height:12px"></div>
+    <div style="display:flex;flex-direction:column;gap:12px">
     <h2 style="margin:0;font-size:15px;font-weight:600">Progress client prospect · Navinus</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
       <div style="position:relative;grid-column:span 2;background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:14px 18px 12px;min-width:0">
@@ -172,6 +175,8 @@ input[type=range]{accent-color:#2F5D50;width:100%}
         </div>
       </sc-for>
     </div>
+    </div>
+    <div class="nf-dash-gap" style="flex:1 1 0;min-height:8px"></div>
     <div style="display:grid;grid-template-columns:minmax(0,1.8fr) repeat(3,minmax(0,1fr));gap:12px;align-items:stretch" class="nf-pr-grid">
       <div style="position:relative;background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px 20px 48px;min-width:0" class="nf-pr-main">
         <div style="min-width:0">
@@ -2899,7 +2904,7 @@ class Component extends DCLogic {
         this.upd(dd2 => { dd2.users = dd2.users || []; if (usf.id) Object.assign(dd2.users.find(z => z.id === usf.id), rec); else dd2.users.push({id: 'u' + Date.now(), ...rec}); }, usf.id ? 'Pengguna diperbarui' : 'Pengguna ditambahkan'); this.setState({showUs: false}); },
       deleteUs: () => { if (!usf.id || !window.confirm('Hapus pengguna ' + usf.name + '?')) return; this.upd(dd2 => { dd2.users = dd2.users.filter(z => z.id !== usf.id); }, 'Pengguna dihapus'); this.setState({showUs: false}); },
       dpMonthChips, dpTypeChips, dpKpis, dpBars, dpStatus, dpPeople, dpTable, dpRange, dpCount: dpRows.length, stageCards, prKpis, prKpisDash: [], ctBars, ctTotal, ctRange, prStageStrip, goPr: go('pencarian'), goJournal: go('laporan'), goLaba: go('labarugi'),
-      kpis, kpisRest: [...kpis.filter((k, i) => i > 0 && k.label !== 'Potensi keuntungan' && k.label !== 'Pembayaran diterima'), piutangCard], attention, pipeline, upcoming, gMonths, gRows, gToday, deadlines, months, finKpis, openInv, margins, projFin, pnl, finRange, lrKpis, lrRows, lrMonth: lrKey, lrMonthOpts, setLrMonth: e => this.setState({lrMonth: e.target.value}), lrCurLabel: lrMk(lrKey), lrPrevLabel: lrMk(lrPrevKey), lrPeriodText: 'Untuk periode 1 ' + lrMk(lrKey).replace(/ (\d{4})/, ' $1') + ' sampai dengan ' + fd(lrMonthEnd, true),
+      mainCls: is.dashA ? 'nf-gridbg' : '', kpis, kpisRest: [...kpis.filter((k, i) => i > 0 && k.label !== 'Potensi keuntungan' && k.label !== 'Pembayaran diterima'), piutangCard], attention, pipeline, upcoming, gMonths, gRows, gToday, deadlines, months, finKpis, openInv, margins, projFin, pnl, finRange, lrKpis, lrRows, lrMonth: lrKey, lrMonthOpts, setLrMonth: e => this.setState({lrMonth: e.target.value}), lrCurLabel: lrMk(lrKey), lrPrevLabel: lrMk(lrPrevKey), lrPeriodText: 'Untuk periode 1 ' + lrMk(lrKey).replace(/ (\d{4})/, ' $1') + ' sampai dengan ' + fd(lrMonthEnd, true),
       kanban, projSummary: `${active.length} proyek aktif · ${riskyList.length} berisiko · ${active.reduce((a, p) => a + p.copies, 0).toLocaleString('id-ID')} eksemplar`,
       hasDone: doneP.length > 0, doneNames: doneP.map(pname).join(', '),
       calc: {sell: rp(R.sell), total: rps(R.total)}, sliders, coverOpts, paperOpts, finOpts, calcRows, market, costBreak, tiers, volume,
