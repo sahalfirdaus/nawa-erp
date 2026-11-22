@@ -387,19 +387,19 @@ input[type=range]{accent-color:#2F5D50;width:100%}
     </div>
     <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;overflow-x:auto">
       <table style="width:100%;border-collapse:collapse;min-width:1040px">
-        <thead><tr><sc-for list="{{ rk.dbCols }}" as="h" hint-placeholder-count="9"><th onClick="{{ h.sort }}" style="font-size:12px;font-weight:500;color:{{ h.c }};padding:12px 14px;border-bottom:1px solid #E4E0D6;white-space:nowrap;cursor:pointer;user-select:none;text-align:{{ h.al }}">{{ h.l }}{{ h.arrow }}</th></sc-for></tr></thead>
+        <thead><tr><sc-for list="{{ rk.dbCols }}" as="h" hint-placeholder-count="9"><th onClick="{{ h.sort }}" style="font-size:11.5px;font-weight:500;color:{{ h.c }};padding:9px 12px;border-bottom:1px solid #E4E0D6;white-space:nowrap;cursor:pointer;user-select:none;text-align:{{ h.al }}">{{ h.l }}{{ h.arrow }}</th></sc-for></tr></thead>
         <tbody>
           <sc-for list="{{ rk.dbRows }}" as="r" hint-placeholder-count="12">
             <tr onClick="{{ r.open }}" style="cursor:pointer" style-hover="background:#FAF8F3">
-              <td style="padding:10px 14px;border-bottom:1px solid #EFECE5;font-family:'IBM Plex Mono',monospace;font-size:12px;white-space:nowrap;color:#3A3832">{{ r.date }}</td>
-              <td style="padding:10px 14px;border-bottom:1px solid #EFECE5"><div style="font-size:14px;font-weight:500">{{ r.school }}</div><div style="font-size:12px;color:#6B675E;font-family:'IBM Plex Mono',monospace">{{ r.mou }}</div></td>
-              <td style="padding:10px 14px;border-bottom:1px solid #EFECE5;font-size:13px;white-space:nowrap">{{ r.period }}</td>
-              <td style="padding:10px 14px;border-bottom:1px solid #EFECE5;font-size:13px;white-space:nowrap">{{ r.perf }}</td>
-              <td style="padding:10px 14px;border-bottom:1px solid #EFECE5;font-size:13px;white-space:nowrap">{{ r.range }}</td>
-              <td style="padding:10px 14px;border-bottom:1px solid #EFECE5;font-family:'IBM Plex Mono',monospace;font-size:13px;text-align:right">{{ r.qty }}</td>
-              <td style="padding:10px 14px;border-bottom:1px solid #EFECE5;font-family:'IBM Plex Mono',monospace;font-size:13px;text-align:right;white-space:nowrap">{{ r.price }}</td>
-              <td style="padding:10px 14px;border-bottom:1px solid #EFECE5;font-family:'IBM Plex Mono',monospace;font-size:13px;text-align:right;white-space:nowrap">{{ r.tender }}</td>
-              <td style="padding:10px 14px;border-bottom:1px solid #EFECE5"><span style="padding:3px 9px;border-radius:99px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.bg }};color:{{ r.fg }}">{{ r.status }}</span></td>
+              <td style="padding:6px 12px;border-bottom:1px solid #EFECE5;font-family:'IBM Plex Mono',monospace;font-size:12px;white-space:nowrap;color:#3A3832">{{ r.date }}</td>
+              <td title="{{ r.school }} · {{ r.mou }}" style="padding:6px 12px;border-bottom:1px solid #EFECE5;white-space:nowrap;max-width:340px;overflow:hidden;text-overflow:ellipsis;font-size:12.5px"><span style="font-weight:500">{{ r.school }}</span> <span style="color:#8A867C;font-family:'IBM Plex Mono',monospace;font-size:11px">· {{ r.mou }}</span></td>
+              <td style="padding:6px 12px;border-bottom:1px solid #EFECE5;font-size:12px;white-space:nowrap">{{ r.period }}</td>
+              <td style="padding:6px 12px;border-bottom:1px solid #EFECE5;font-size:12px;white-space:nowrap">{{ r.perf }}</td>
+              <td style="padding:6px 12px;border-bottom:1px solid #EFECE5;font-size:12px;white-space:nowrap">{{ r.range }}</td>
+              <td style="padding:6px 12px;border-bottom:1px solid #EFECE5;font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:right;white-space:nowrap">{{ r.qty }}</td>
+              <td style="padding:6px 12px;border-bottom:1px solid #EFECE5;font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:right;white-space:nowrap">{{ r.price }}</td>
+              <td style="padding:6px 12px;border-bottom:1px solid #EFECE5;font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:right;white-space:nowrap">{{ r.tender }}</td>
+              <td style="padding:6px 12px;border-bottom:1px solid #EFECE5"><span style="padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500;white-space:nowrap;background:{{ r.bg }};color:{{ r.fg }}">{{ r.status }}</span></td>
             </tr>
           </sc-for>
         </tbody>
