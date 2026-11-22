@@ -689,6 +689,50 @@ input[type=range]{accent-color:#2F5D50;width:100%}
     </div>
     </sc-if>
 
+    <!-- PRODUCT & SERVICE -->
+    <sc-if value="{{ is.produk }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+      <sc-for list="{{ catBrands }}" as="b" hint-placeholder-count="2">
+        <button onClick="{{ b.pick }}" aria-pressed="{{ b.pressed }}" style="text-align:left;border:{{ b.bd }};background:{{ b.bg }};color:{{ b.fg }};border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:6px;cursor:pointer">
+          <span style="font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;opacity:.75">{{ b.kicker }}</span>
+          <span style="font-size:20px;font-weight:700;letter-spacing:-0.01em">{{ b.name }}</span>
+          <span style="font-size:13px;opacity:.8">{{ b.desc }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;opacity:.8">{{ b.count }} paket</span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <div><h2 style="margin:0;font-size:16px;font-weight:600">{{ catTitle }}</h2><div style="font-size:13px;color:#6B675E;margin-top:2px">{{ catSub }}</div></div>
+      <sc-if value="{{ catCanEdit }}" hint-placeholder-val="{{ true }}"><button onClick="{{ catNew }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:10px 16px;border-radius:7px;font-size:13px;font-weight:600">+ Tambah paket</button></sc-if>
+    </div>
+    <sc-if value="{{ catFormOn }}" hint-placeholder-val="{{ false }}">
+    <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px">
+      <h3 style="margin:0;font-size:14px;font-weight:600">{{ catFormTitle }}</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Nama paket<input value="{{ catf.name }}" onChange="{{ catfName }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Ringkasan singkat<input value="{{ catf.tagline }}" onChange="{{ catfTagline }}" placeholder="mis. Hardcover 80 halaman" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Harga<input value="{{ catf.price }}" onChange="{{ catfPrice }}" placeholder="mis. Rp 250.000 / eks atau mulai Rp 3 jt / bulan" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Brand<select data-rkv="{{ catf.brand }}" value="{{ catf.brand }}" onChange="{{ catfBrand }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"><option value="nawa">Nawa Factory</option><option value="navinus">Navinus</option></select></label>
+      </div>
+      <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Isi paket / spesifikasi (satu per baris)<textarea rows="5" value="{{ catf.items }}" onChange="{{ catfItems }}" placeholder="Hardcover&#10;80 halaman full color&#10;Foto kelas & individu" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0;font-family:inherit;font-size:14px;resize:vertical"></textarea></label>
+      <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><div><sc-if value="{{ catEditing }}" hint-placeholder-val="{{ false }}"><button onClick="{{ catDelete }}" style="white-space:nowrap;border:1px solid #E3B9AE;background:#fff;color:#A23B28;padding:9px 14px;border-radius:7px;font-size:13px">Hapus paket</button></sc-if></div><div style="display:flex;gap:8px"><button onClick="{{ catClose }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:9px 14px;border-radius:7px;font-size:13px">Batal</button><button onClick="{{ catSave }}" style="white-space:nowrap;border:0;background:#2F5D50;color:#fff;padding:9px 16px;border-radius:7px;font-size:13px;font-weight:600">Simpan</button></div></div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ catEmpty }}" hint-placeholder-val="{{ false }}"><div style="background:#FFFFFF;border:1px dashed #CFC9BC;border-radius:10px;padding:24px;text-align:center;font-size:13px;color:#6B675E">Belum ada paket untuk brand ini.</div></sc-if>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">
+      <sc-for list="{{ catCards }}" as="k" hint-placeholder-count="4">
+        <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px"><div style="min-width:0"><div style="font-size:15px;font-weight:600">{{ k.name }}</div><sc-if value="{{ k.hasTag }}" hint-placeholder-val="{{ true }}"><div style="font-size:12px;color:#6B675E;margin-top:2px">{{ k.tagline }}</div></sc-if></div><sc-if value="{{ k.example }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-size:10px;font-weight:600;background:#F7ECD9;color:#8A5A12;border-radius:99px;padding:2px 8px">Contoh</span></sc-if></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;color:{{ k.priceC }}">{{ k.price }}</div>
+          <sc-if value="{{ k.hasItems }}" hint-placeholder-val="{{ true }}"><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:13px;color:#3A3832"><sc-for list="{{ k.items }}" as="it" hint-placeholder-count="3"><li>{{ it }}</li></sc-for></ul></sc-if>
+          <sc-if value="{{ k.noItems }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#8A867C;font-style:italic">Rincian paket belum diisi.</div></sc-if>
+          <sc-if value="{{ k.hasStat }}" hint-placeholder-val="{{ false }}"><div style="background:#F7F5F0;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:3px;font-size:12px;color:#3A3832"><span style="font-weight:600;color:#6B675E">Dari arsip · {{ k.statN }} proyek</span><span>{{ k.statQty }}</span><span>{{ k.statPrice }}</span><sc-if value="{{ k.hasStatPages }}" hint-placeholder-val="{{ false }}"><span>{{ k.statPages }}</span></sc-if></div></sc-if>
+          <sc-if value="{{ catCanEdit }}" hint-placeholder-val="{{ true }}"><button onClick="{{ k.edit }}" style="margin-top:auto;align-self:flex-start;white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600">Edit</button></sc-if>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
     <!-- PENCARIAN KLIEN -->
     <sc-if value="{{ is.pencarian }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between">
@@ -1565,6 +1609,17 @@ const dealFix = d => {
   });
   d.dealMouV1 = true; return d;
 };
+// Katalog paket (Product & Service)
+const CATALOG_SEED = () => [
+  ...['Basic Book', 'Low Book', 'Middle Book', 'High Book', 'Super Book', 'Ultra Book', 'Extreme Book'].map((n, i) => ({id: 'cat-nf-' + i, brand: 'nawa', name: n, tagline: '', price: '', items: '', example: false})),
+  ...[['Social Media Management', 'Kelola akun media sosial bulanan', 'Perencanaan konten bulanan\nDesain feed & story\nCopywriting & caption\nPenjadwalan posting\nLaporan performa bulanan'],
+      ['Ads Management', 'Iklan berbayar Meta / Google', 'Riset target audiens\nSetup & optimasi campaign\nDesain materi iklan\nLaporan hasil iklan'],
+      ['Branding & Identitas', 'Logo dan identitas visual', 'Logo & variasinya\nPalet warna & tipografi\nBrand guideline singkat\nAplikasi ke materi promosi'],
+      ['Foto & Video Produk', 'Konten visual untuk promosi', 'Sesi foto produk\nVideo pendek (reels/TikTok)\nEditing & color grading'],
+      ['Website', 'Website profil / landing page', 'Desain & pembuatan website\nDomain & hosting (opsional)\nSetup SEO dasar']]
+     .map(([n, t, it], i) => ({id: 'cat-nv-' + i, brand: 'navinus', name: n, tagline: t, price: '', items: it, example: true}))
+];
+const catFix = d => { if (d && !d.catalog) d.catalog = CATALOG_SEED(); return d; };
 const OWNER_EMAIL = 'firdaussahal@gmail.com'; // satu-satunya akun yang bisa membuka Setting
 const ST_ROLES = ['Admin', 'Manajer', 'Keuangan', 'Marketing', 'Operasional'], ST_GROUPS = ['Utama', 'Marketing', 'Operasional', 'Keuangan', 'Administrasi', 'Tim', 'Archive Project', 'Setting'], ST_LV = ['Tidak', 'Lihat', 'Edit'];
 const stDefAccess = () => ({Admin: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 2}, Manajer: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 0}, Keuangan: {Utama: 1, Marketing: 0, Operasional: 0, Keuangan: 2, Administrasi: 1, Tim: 0, 'Archive Project': 0, Setting: 0}, Marketing: {Utama: 1, Marketing: 2, Operasional: 1, Keuangan: 0, Administrasi: 0, Tim: 0, 'Archive Project': 1, Setting: 0}, Operasional: {Utama: 1, Marketing: 0, Operasional: 2, Keuangan: 0, Administrasi: 1, Tim: 0, 'Archive Project': 1, Setting: 0}});
@@ -1657,7 +1712,7 @@ function seed() {
     {projectId:'p1',student:'Alya Kirana (XII IPA 2)',amount:385000,date:'2026-11-20'},
     {projectId:'p6',student:'Bima Pratama (XII IPS 1)',amount:180000,date:'2026-11-20'},
     {projectId:'p4',student:'Christian Wijaya (XII-B)',amount:520000,date:'2026-11-19'}];
-  return projFix({auth: ST_AUTH(), users: stSeedUsers(), access: stDefAccess(), schools, projects: [], sessions, jobs: [], assets, prospects: [], requests: [], hppPct: 40, equity: [], balances: [], attendance: {}, ledger: agreyaFix(LEDGER_SEED.map(x => ({...x}))), ledgerV2: true, agreyaV1: true, invoices, shipments: [], employees, payments: [], quotes: [], teamCleared: true, samplesCleared: true});
+  return projFix({auth: ST_AUTH(), users: stSeedUsers(), access: stDefAccess(), schools, projects: [], sessions, jobs: [], assets, prospects: [], catalog: CATALOG_SEED(), requests: [], hppPct: 40, equity: [], balances: [], attendance: {}, ledger: agreyaFix(LEDGER_SEED.map(x => ({...x}))), ledgerV2: true, agreyaV1: true, invoices, shipments: [], employees, payments: [], quotes: [], teamCleared: true, samplesCleared: true});
 }
 
 
@@ -1679,7 +1734,7 @@ class Component extends DCLogic {
     if (d && d.projects && !d.teamCleared) { d.employees = []; d.teamCleared = true; }
     if (d && d.projects && !d.assets) { d.assets = seed().assets; }
     if (d && d.projects && !d.prospects) { d.prospects = []; }
-    if (d && d.projects) dealFix(d);
+    if (d && d.projects) { dealFix(d); catFix(d); }
     if (d && d.projects && !d.auth) { d.auth = ST_AUTH(); }
     if (d && d.projects && !d.users) { d.users = stSeedUsers(); d.access = stDefAccess(); }
     if (d && d.projects && !d.attendance) { d.attendance = {}; }
@@ -1763,10 +1818,11 @@ class Component extends DCLogic {
       const role = rr.data;
       const r = await c.from('app_state').select('data,version').eq('id', 'main').maybeSingle();
       if (r.error) throw r.error;
-      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1);
+      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1), needCat = !!(r.data && !(r.data.data || {}).catalog);
       if (r.data) this.cloudApply(r.data);
       else { const ins = await c.from('app_state').insert({id: 'main', data: this.cloudStrip(this.state.d), version: 1, updated_by: this._cloudBy}); if (ins.error) throw ins.error; this._cloudVer = 1; }
       this._cloudOn = true; this.setState({cloudState: 'ok', cloudRole: role});
+      if (needCat) this.upd(dd => { catFix(dd); }, 'Katalog Product & Service dibuat');
       if (needDeal) this.upd(dd => { dealFix(dd); }, 'Sekolah berstatus Kontrak dipindah ke Deal (MoU)');
       this.cloudSyncUsers(); this.loadArchive(); this.loadRequests();
       if (!this._cloudCh) this._cloudCh = c.channel('app_state_main').on('postgres_changes', {event: '*', schema: 'public', table: 'app_state'}, p => { const row = p.new; if (row && row.data && row.version > (this._cloudVer || 0) && row.updated_by !== this._cloudBy) { this.cloudApply(row); this.flash('Data diperbarui oleh pengguna lain'); } }).subscribe();
@@ -2067,7 +2123,7 @@ class Component extends DCLogic {
 
     const NAV = [
       {g:'Utama', items:[['dashboard','Dashboard']]},
-      {g:'Marketing', items:[['dailyperf','Daily Performance'],['pencarian','Client Prospect'],['harga','Strategi Harga']]},
+      {g:'Marketing', items:[['dailyperf','Daily Performance'],['pencarian','Client Prospect'],['harga','Pricing Strategy'],['produk','Product & Service']]},
       {g:'Operasional', items:[['invoice','Piutang Client',overdueList.length],['proyek','Proyek Berjalan',riskyList.length],['foto','Sesi Foto'],['produksi','Produksi & Cetak']]},
       {g:'Keuangan', items:[['findash','Dashboard Keuangan'],['pengajuan','Daftar Pengajuan'],['labarugi','Laba Rugi'],['neraca','Laporan Neraca'],['modal','Laporan Perubahan Modal'],['jurnal','Laporan Jurnal'],['akun','No. Akun'],['laporan','Journal']]},
       {g:'Administrasi', items:[['absensi','Absensi'],['aset','Aset']]},
@@ -2076,6 +2132,8 @@ class Component extends DCLogic {
     const titles = {}; NAV.forEach(g => g.items.forEach(([id, l]) => titles[id] = l));
     RK_SECTIONS.forEach(([id, l]) => titles['arc_' + id] = 'Archive Project · ' + l);
     titles.pencarian = 'Marketing · Client Prospect';
+    titles.harga = 'Marketing · Pricing Strategy';
+    titles.produk = 'Marketing · Product & Service';
     titles.dailyperf = 'Marketing · Daily Performance';
     titles.setting = 'Setting · Pengguna & Akses';
     titles.absensi = 'Administrasi · Absensi';
@@ -2086,6 +2144,18 @@ class Component extends DCLogic {
     const accOf = d.access || stDefAccess();
     const isOwner = authOn && !!me && String(me.email || '').toLowerCase() === OWNER_EMAIL;
     const grpLvl = g => g === 'Setting' ? (isOwner ? 2 : 0) : !authOn ? 2 : !me ? 0 : me.role === 'Admin' ? 2 : ((accOf[me.role] || {})[g] || 0);
+
+    // Product & Service
+    const catAll = d.catalog || [], catBrand = s.catBrand === 'navinus' ? 'navinus' : 'nawa', catCanEdit = grpLvl('Marketing') === 2;
+    const catf = s.catf || {}, catStat = {};
+    (s.rkData || []).forEach(o => { if (!o.range) return; const x = catStat[o.range] = catStat[o.range] || {n: 0, q: [], tot: 0, qty: 0, pg: []}; x.n++; if (o.qty) { x.q.push(o.qty); x.qty += o.qty; x.tot += (o.total || o.price * o.qty || 0); } if (o.pages) x.pg.push(o.pages); });
+    const med = a => { const b = [...a].sort((m, n) => m - n); return b.length ? b[Math.floor(b.length / 2)] : 0; };
+    const catBrands = [['nawa', 'Nawa Factory', 'Paket buku tahunan', 'Buku tahunan sekolah, dari Basic sampai Extreme'], ['navinus', 'Navinus', 'Paket agency', 'Layanan digital & kreatif untuk bisnis']].map(([id, name, kicker, desc]) => { const on = catBrand === id;
+      return {name, kicker, desc, count: String(catAll.filter(c => c.brand === id).length), pressed: on ? 'true' : 'false', bg: on ? '#1C1B18' : '#FFFFFF', fg: on ? '#FFFFFF' : '#1C1B18', bd: on ? '1px solid #1C1B18' : '1px solid #E4E0D6', pick: () => this.setState({catBrand: id, catFormOn: false})}; });
+    const catCards = catAll.filter(c => c.brand === catBrand).map(c => { const st = catBrand === 'nawa' ? catStat[c.name] : null, items = String(c.items || '').split('\n').map(t => t.trim()).filter(Boolean);
+      return {name: c.name, tagline: c.tagline || '', hasTag: !!c.tagline, price: c.price || 'Harga belum diisi', priceC: c.price ? '#1C1B18' : '#8A867C', items, hasItems: items.length > 0, noItems: !items.length, example: !!c.example,
+        hasStat: !!(st && st.n), statN: st ? String(st.n) : '', statQty: st && st.q.length ? 'Eksemplar ' + Math.min(...st.q) + '–' + Math.max(...st.q) + ' (median ' + med(st.q) + ')' : '', statPrice: st && st.qty ? 'Rata-rata ' + rps(st.tot / st.qty) + ' / eks' : '', statPages: st && st.pg.length ? 'Median ' + med(st.pg) + ' halaman' : '', hasStatPages: !!(st && st.pg.length),
+        edit: () => this.setState({catFormOn: true, catf: {id: c.id, brand: c.brand, name: c.name, tagline: c.tagline || '', price: c.price || '', items: c.items || ''}})}; });
     const viewGrp = view === 'setting' ? 'Setting' : ((NAV.find(g => g.items.some(it => it[0] === view)) || {}).g || 'Utama');
     const blocked = authOn && !!me && grpLvl(viewGrp) === 0;
     const gateOn = authOn && (!s.authReady || !s.authEmail || !me);
@@ -2663,6 +2733,13 @@ class Component extends DCLogic {
       regWaitText: s.regState === 'approved' ? 'Membuka aplikasi… Jika tidak terbuka otomatis, klik Cek status.' : s.regState === 'rejected' ? 'Admin tidak menyetujui pendaftaran akun ' + (s.authEmail || '') + '. Hubungi admin bila ini keliru.' : 'Data Anda sudah diterima. Admin akan meninjau pendaftaran akun ' + (s.authEmail || '') + '. Halaman ini akan terbuka otomatis setelah disetujui, atau klik Cek status nanti.', authEmail: s.authEmail || '', lgf: s.lgf || {}, lgEmail: this.fset('lgf', 'email'), lgPass: this.fset('lgf', 'password'),
       authErr: s.authErr || '', hasAuthErr: !!s.authErr, authInfo: s.authInfo || '', hasAuthInfo: !!s.authInfo, authOpacity: s.authBusy ? 0.6 : 1, authGoogle: !!au.google && !(typeof location !== 'undefined' && /^about:/.test(location.href)), authMagic: !(typeof location !== 'undefined' && /^about:/.test(location.href)),
       isAdminCloud: isOwner, xferOn: !authOn || isOwner, xfer: s.xfer || '', xferSet: e => this.setState({xfer: e.target.value}), xferExport: () => this.exportData(), xferImport: () => this.importData(this.state.xfer || ''), xferFile: e => this.importDataFile(e), xferMsg: s.xferMsg || '', hasXferMsg: !!s.xferMsg, arcImport: e => this.importArchive(e), arcStatus: s.arcStatus || '', hasArcStatus: !!s.arcStatus, arcCount: String((s.rkData || []).length), doLogin: () => this.doLogin(), doMagic: () => this.doMagic(), doGoogle: () => this.doGoogle(), doLogout: () => this.doLogout(), testConn: () => this.testConn(),
+      catBrands, catCards, catCanEdit, catEmpty: !catCards.length, catTitle: catBrand === 'nawa' ? 'Paket buku tahunan · Nawa Factory' : 'Paket agency · Navinus', catSub: catBrand === 'nawa' ? 'Paket diurutkan dari yang paling ringan. Ringkasan arsip dihitung otomatis dari data proyek lama.' : 'Paket bertanda Contoh adalah isian awal — sesuaikan atau hapus.',
+      catFormOn: !!s.catFormOn, catf, catEditing: !!catf.id, catFormTitle: catf.id ? 'Edit paket' : 'Paket baru',
+      catNew: () => this.setState({catFormOn: true, catf: {id: null, brand: catBrand, name: '', tagline: '', price: '', items: ''}}), catClose: () => this.setState({catFormOn: false}),
+      catfName: this.fset('catf', 'name'), catfTagline: this.fset('catf', 'tagline'), catfPrice: this.fset('catf', 'price'), catfBrand: this.fset('catf', 'brand'), catfItems: this.fset('catf', 'items'),
+      catSave: () => { if (!catf.name || !catf.name.trim()) return this.flash('Isi nama paket'); const rec = {brand: catf.brand === 'navinus' ? 'navinus' : 'nawa', name: catf.name.trim(), tagline: (catf.tagline || '').trim(), price: (catf.price || '').trim(), items: (catf.items || '').trim(), example: false};
+        this.upd(dd2 => { dd2.catalog = dd2.catalog || []; if (catf.id) Object.assign(dd2.catalog.find(z => z.id === catf.id), rec); else dd2.catalog.push({id: 'cat' + Date.now(), ...rec}); }, catf.id ? 'Paket diperbarui' : 'Paket ditambahkan'); this.setState({catFormOn: false, catBrand: rec.brand}); },
+      catDelete: () => { if (!catf.id || !window.confirm('Hapus paket ' + catf.name + '?')) return; this.upd(dd2 => { dd2.catalog = (dd2.catalog || []).filter(z => z.id !== catf.id); }, 'Paket dihapus'); this.setState({catFormOn: false}); },
       showSetBtn: grpLvl('Setting') > 0, reqCount: String((s.reqs || []).length), hasReqBadge: isOwner && (s.reqs || []).length > 0, noReqs: !(s.reqs || []).length, reqReload: () => this.loadRequests(),
       reqRows: (s.reqs || []).map(q => ({name: q.name, email: q.email, phone: q.phone || '—', jabatan: q.jabatan || '—', divisi: q.divisi || '—', note: q.note || '', hasNote: !!q.note, date: q.created_at ? new Date(q.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) : '', role: (s.reqRole || {})[q.id] || 'Marketing',
         setRole: e => { const v = e.target.value; this.setState(st => ({reqRole: {...st.reqRole, [q.id]: v}})); }, approve: () => this.decideReq(q, true), reject: () => { if (window.confirm('Tolak pendaftaran ' + q.name + '?')) this.decideReq(q, false); }})), hasAuthMe: !!(authOn && s.authEmail), authTest: s.authTest || '', hasAuthTest: !!s.authTest, authRedirect: (typeof location !== 'undefined' && !/^about:/.test(location.href)) ? location.href.split('#')[0] : 'Alamat belum terdeteksi karena aplikasi sedang dibuka di dalam bingkai pratinjau. Buka aplikasi di tab sendiri dari halaman utamanya, lalu alamat yang benar akan tampil di sini. Login dengan email dan kata sandi tidak membutuhkan alamat ini.',
