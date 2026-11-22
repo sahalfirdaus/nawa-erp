@@ -17,7 +17,7 @@ open(os.path.join(ROOT, 'index.html'), 'w', encoding='utf-8').write(f'''<!doctyp
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nawa Factory ERP</title>
+<title>Navinus ERP</title>
 <meta name="robots" content="noindex">
 </head>
 <body>

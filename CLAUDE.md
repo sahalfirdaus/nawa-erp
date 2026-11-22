@@ -1,4 +1,4 @@
-# Nawa Factory ERP
+# Navinus ERP
 
 Live: https://app.navinus.id (Hostinger, auto-deploy dari branch `main`). Cadangan: https://sahalfirdaus.github.io/nawa-erp/
 
