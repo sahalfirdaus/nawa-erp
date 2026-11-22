@@ -1411,13 +1411,24 @@ input[type=range]{accent-color:#2F5D50;width:100%}
     </sc-if>
       </div>
     </div>
+    </sc-if>
+
+    <!-- REKAP ABSENSI -->
+    <sc-if value="{{ is.absrekap }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button onClick="{{ arPrev }}" aria-label="Bulan sebelumnya" style="border:1px solid #D8D3C7;background:#fff;width:36px;height:36px;border-radius:7px;font-size:15px">‹</button>
+      <span style="font-size:16px;font-weight:600;min-width:150px;text-align:center">{{ arMonthLabel }}</span>
+      <button onClick="{{ arNext }}" aria-label="Bulan berikutnya" style="border:1px solid #D8D3C7;background:#fff;width:36px;height:36px;border-radius:7px;font-size:15px">›</button>
+      <button onClick="{{ arThis }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:8px 12px;border-radius:7px;font-size:12px;font-weight:600">Bulan ini</button>
+    </div>
+    <sc-if value="{{ noAttEmps }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #CFC9BC;border-radius:8px;padding:22px;text-align:center;font-size:14px;color:#6B675E">Belum ada anggota tim. Tambahkan anggota di halaman Our Team.</div></sc-if>
     <sc-if value="{{ hasAttEmps }}" hint-placeholder-val="{{ true }}">
     <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;overflow-x:auto">
-      <div style="padding:16px 20px 4px"><h2 style="margin:0;font-size:15px;font-weight:600">Rekap {{ attMonthLabel }}</h2></div>
+      <div style="padding:16px 20px 4px"><h2 style="margin:0;font-size:15px;font-weight:600">Rekap {{ arMonthLabel }}</h2></div>
       <table style="width:100%;border-collapse:collapse;min-width:640px">
         <thead><tr><th style="text-align:left;font-size:12px;font-weight:500;color:#6B675E;padding:12px 14px;border-bottom:1px solid #E4E0D6;white-space:nowrap">Nama</th><sc-for list="{{ attRecapCols }}" as="h" hint-placeholder-count="6"><th style="text-align:right;font-size:12px;font-weight:500;color:#6B675E;padding:12px 14px;border-bottom:1px solid #E4E0D6;white-space:nowrap">{{ h }}</th></sc-for></tr></thead>
         <tbody>
-          <sc-for list="{{ attRecap }}" as="r" hint-placeholder-count="6">
+          <sc-for list="{{ arRecap }}" as="r" hint-placeholder-count="6">
             <tr><td style="padding:10px 14px;border-bottom:1px solid #EFECE5;font-size:14px">{{ r.name }}</td><sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="6"><td style="padding:10px 14px;border-bottom:1px solid #EFECE5;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px">{{ c }}</td></sc-for></tr>
           </sc-for>
         </tbody>
@@ -2140,7 +2151,7 @@ class Component extends DCLogic {
       {g:'Marketing', items:[['dailyperf','Daily Performance'],['pencarian','Client Prospect'],['harga','Pricing Strategy'],['produk','Product & Service']]},
       {g:'Operasional', items:[['invoice','Piutang Client',overdueList.length],['proyek','Proyek Berjalan',riskyList.length],['foto','Sesi Foto'],['produksi','Produksi & Cetak']]},
       {g:'Keuangan', items:[['findash','Dashboard Keuangan'],['pengajuan','Daftar Pengajuan'],['labarugi','Laba Rugi'],['neraca','Laporan Neraca'],['modal','Laporan Perubahan Modal'],['jurnal','Laporan Jurnal'],['akun','No. Akun'],['laporan','Journal']]},
-      {g:'Administrasi', items:[['absensi','Absensi'],['aset','Aset']]},
+      {g:'Administrasi', items:[['absensi','Absensi'],['absrekap','Rekap Absensi'],['aset','Aset']]},
       {g:'Tim', items:[['karyawan','Our Team']]},
       {g:'Archive Project', items: RK_SECTIONS.map(([id, l]) => ['arc_' + id, l])}];
     const titles = {}; NAV.forEach(g => g.items.forEach(([id, l]) => titles[id] = l));
@@ -2151,6 +2162,7 @@ class Component extends DCLogic {
     titles.dailyperf = 'Marketing · Daily Performance';
     titles.setting = 'Setting · Pengguna & Akses';
     titles.absensi = 'Administrasi · Absensi';
+    titles.absrekap = 'Administrasi · Rekap Absensi';
     const NAV_ICONS = {'Utama': 'M3 11.5 12 4l9 7.5M5 10v10h5v-6h4v6h5V10', 'Marketing': 'M3 11v3a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11', 'Operasional': 'M3 21V11l6 4v-4l6 4V5h4v16H3z', 'Keuangan': 'M3 7h15a3 3 0 0 1 3 3v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 7l12-3v3M16 14h2', 'Administrasi': 'M9 4h6v3H9zM7 5H5v16h14V5h-2M9 12h6M9 16h4', 'Tim': 'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5.2a3 3 0 0 1 0 5.6M18 14.3c1.8.8 3 2.6 3 4.7', 'Archive Project': 'M3 5h18v4H3zM5 9v10h14V9M10 13h4'};
     const au = d.auth || {}, authOn = !!(au.required && au.url && au.key);
     const me = authOn && s.cloudRole ? {name: s.authEmail, role: s.cloudRole, email: s.authEmail, active: true} : null;
@@ -2443,6 +2455,9 @@ class Component extends DCLogic {
     const attKpis = AT_STATUS.map(([v, l]) => ({label: l, value: String(attCount(v))}));
     const attMonth = attD.slice(0, 7);
     const attRecapCols = ['Hadir', 'Lapangan', 'Izin', 'Sakit', 'Cuti', 'Alpha'];
+    const arM = /^\d{4}-\d{2}$/.test(s.arMonth || '') ? s.arMonth : iso(TODAY).slice(0, 7);
+    const arShift = n => { const [y, m] = arM.split('-').map(Number), x = new Date(y, m - 1 + n, 1); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0'); };
+    const arRecap = attEmps.map(e => ({name: e.name, cells: attRecapCols.map(c => String(Object.keys(att).filter(k => k.startsWith(arM) && k.endsWith('|' + e.id) && att[k].status === c).length))}));
     const attRecap = attEmps.map(e => ({name: e.name, cells: attRecapCols.map(c => String(Object.keys(att).filter(k => k.startsWith(attMonth) && k.endsWith('|' + e.id) && att[k].status === c).length))}));
     const attDateObj = new Date(attD + 'T00:00:00');
     const attCalM = /^\d{4}-\d{2}$/.test(s.attCalM || '') ? s.attCalM : attD.slice(0, 7);
@@ -2811,6 +2826,7 @@ class Component extends DCLogic {
       deletePr: () => { if (!prf.id || !window.confirm('Hapus prospek ' + prf.school + '?')) return; this.upd(dd2 => { dd2.prospects = dd2.prospects.filter(z => z.id !== prf.id); }, 'Prospek dihapus'); this.setState({showPr: false}); },
       attDate: attD, attDateLabel: attDateObj.toLocaleDateString('id-ID', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}), attMonthLabel: attDateObj.toLocaleDateString('id-ID', {month: 'long', year: 'numeric'}),
       attCalHead: ['MIN', 'SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB'], attCalDays, attCalLabel: new Date(attCalM + '-01T00:00:00').toLocaleDateString('id-ID', {month: 'long', year: 'numeric'}), attCalFilled: String([...attFilled].filter(k => k.startsWith(attCalM)).length),
+      arRecap, arMonthLabel: new Date(arM + '-01T00:00:00').toLocaleDateString('id-ID', {month: 'long', year: 'numeric'}), arPrev: () => this.setState({arMonth: arShift(-1)}), arNext: () => this.setState({arMonth: arShift(1)}), arThis: () => this.setState({arMonth: iso(TODAY).slice(0, 7)}),
       attCalPrev: () => this.setState({attCalM: attCalShift(-1)}), attCalNext: () => this.setState({attCalM: attCalShift(1)}),
       attPrev: () => this.setState({attDate: shiftDay(-1)}), attNext: () => this.setState({attDate: shiftDay(1)}), attToday: () => this.setState({attDate: iso(TODAY), attCalM: iso(TODAY).slice(0, 7)}), attSetDate: ev => { if (ev.target.value) this.setState({attDate: ev.target.value}); },
       attAllPresent: () => { if (!attEmps.length) return this.flash('Belum ada anggota tim'); this.upd(dd2 => { dd2.attendance = dd2.attendance || {}; attEmps.forEach(e => { const k = aKey(e.id); const cur = dd2.attendance[k] || {}; if (!cur.status) dd2.attendance[k] = {...cur, status: 'Hadir', in: cur.in || '08:00'}; }); }, 'Semua yang belum diisi ditandai hadir'); },
