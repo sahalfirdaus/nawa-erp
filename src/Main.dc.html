@@ -1538,6 +1538,38 @@ input[type=range]{accent-color:#2F5D50;width:100%}
     </sc-if>
 
     <!-- REKAP ABSENSI -->
+    <!-- ANALYST · TEAM PERFORMANCE -->
+    <sc-if value="{{ is.teamperf }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div style="font-size:13px;color:#6B675E">Kinerja tim dari Daily Activity, Client Prospect dan Absensi · <b style="color:#1C1B18;font-weight:600">{{ tpPeriod }}</b></div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#6B675E">Periode<select data-v="{{ tpMonth }}" value="{{ tpMonth }}" onChange="{{ tpSetMonth }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:8px 10px;background:#fff;color:#1C1B18;min-width:170px"><sc-for list="{{ tpMonthOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select></label></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+        <sc-for list="{{ tpKpis }}" as="k" hint-placeholder-count="4"><div style="background:#fff;border:1px solid #E4E0D6;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-size:13px;color:#6B675E">{{ k.label }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:{{ k.fs }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ k.value }}</span><span style="font-size:12px;color:#6B675E">{{ k.sub }}</span></div></sc-for>
+      </div>
+      <div style="background:#fff;border:1px solid #E4E0D6;border-radius:12px;min-width:0;overflow-x:auto">
+        <div style="padding:14px 16px;border-bottom:1px solid #E4E0D6;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2 style="margin:0;font-size:15px;font-weight:600">Team Performance</h2><div style="display:flex;gap:14px;font-size:12px;color:#6B675E;align-items:center"><span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:#2F5D50"></span>Aktivitas sendiri</span><span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:#A9C4B9"></span>Sebagai pendamping</span></div></div>
+        <sc-if value="{{ tpEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:18px 16px;font-size:13px;color:#6B675E">Belum ada data tim. Tambahkan anggota di Our Team atau catat aktivitas di Daily Activity.</div></sc-if>
+        <div style="min-width:980px">
+          <div style="display:grid;grid-template-columns:28px minmax(170px,1.2fr) minmax(150px,1fr) 70px 70px 70px 70px 90px 80px 130px 90px;gap:10px;padding:9px 16px;font-size:11.5px;color:#6B675E;border-bottom:1px solid #EFECE5;align-items:end"><span>#</span><span>Anggota</span><span>Aktivitas</span><span style="text-align:right">Offering</span><span style="text-align:right">Sekolah</span><span style="text-align:right">Deal</span><span style="text-align:right">Konversi</span><span style="text-align:right">Prospek aktif</span><span style="text-align:right">Pendamping</span><span>Kehadiran</span><span>Terakhir</span></div>
+          <sc-for list="{{ tpRows }}" as="r" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:28px minmax(170px,1.2fr) minmax(150px,1fr) 70px 70px 70px 70px 90px 80px 130px 90px;gap:10px;padding:9px 16px;border-bottom:1px solid #EFECE5;align-items:center;font-size:13px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8A857A">{{ r.rank }}</span>
+            <div style="display:flex;align-items:center;gap:9px;min-width:0"><sc-if value="{{ r.hasPhoto }}" hint-placeholder-val="{{ false }}"><img src="{{ r.photo }}" alt="" style="width:28px;height:28px;border-radius:99px;object-fit:cover;flex:none"></sc-if><sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ true }}"><span style="width:28px;height:28px;border-radius:99px;background:#E3ECE7;color:#2F5D50;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">{{ r.ini }}</span></sc-if><div style="min-width:0"><div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</div><div style="font-size:11.5px;color:#6B675E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.role }}</div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;min-width:0"><div style="flex:1;height:8px;background:#F1EEE7;border-radius:99px;overflow:hidden;display:flex"><div style="height:100%;background:#2F5D50;width:{{ r.w1 }}"></div><div style="height:100%;background:#A9C4B9;width:{{ r.w2 }}"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;width:26px;text-align:right">{{ r.n }}</span></div>
+            <span style="text-align:right;font-family:'IBM Plex Mono',monospace">{{ r.offer }}</span>
+            <span style="text-align:right;font-family:'IBM Plex Mono',monospace">{{ r.schools }}</span>
+            <span style="text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:600;color:#2F5D50">{{ r.deal }}</span>
+            <span style="text-align:right;font-family:'IBM Plex Mono',monospace">{{ r.conv }}</span>
+            <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end"><span style="font-family:'IBM Plex Mono',monospace">{{ r.pros }}</span><sc-if value="{{ r.hasLate }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px;color:#A23B28;white-space:nowrap">{{ r.late }}</span></sc-if></div>
+            <span style="text-align:right;font-family:'IBM Plex Mono',monospace;color:#6B675E">{{ r.assist }}</span>
+            <span style="font-size:12px;color:{{ r.attC }};white-space:nowrap">{{ r.att }}</span>
+            <span style="font-size:12px;color:#6B675E;white-space:nowrap">{{ r.last }}</span>
+          </div></sc-for>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#6B675E;line-height:1.6">Aktivitas = baris Daily Activity dengan anggota sebagai Nama; Pendamping = muncul di kolom Konsultasi. Deal dan konversi dihitung dari status aktivitas (Deal ÷ Deal + Gagal). Prospek aktif = prospek Client Prospect yang dipegang dan belum Deal/Gagal. Kehadiran = Hadir + Lapangan dari hari yang sudah diisi di Absensi.</div>
+    </div>
+    </sc-if>
+
     <sc-if value="{{ is.absrekap }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <button onClick="{{ arPrev }}" aria-label="Bulan sebelumnya" style="border:1px solid #D8D3C7;background:#fff;width:36px;height:36px;border-radius:7px;font-size:15px">‹</button>
@@ -1796,7 +1828,7 @@ const ROLE_SEED = () => [
   {name: 'Staff', desc: 'Tim harian: membuka halaman sesuai tugasnya. Keuangan tertutup secara bawaan.'}];
 // Level bawaan bila belum diatur: 0 Tidak, 1 Lihat, 2 Edit
 const roleDefLvl = (role, g, id) => role === SUPER || role === 'Management' ? 2 : role !== 'Staff' ? 0
-  : g === 'Keuangan' ? 0 : g === 'Utama' || g === 'Tim' || g === 'Archive Project' ? 1 : id === 'absrekap' || id === 'aset' ? 1 : 2;
+  : g === 'Keuangan' || g === 'Analyst' ? 0 : g === 'Utama' || g === 'Tim' || g === 'Archive Project' ? 1 : id === 'absrekap' || id === 'aset' ? 1 : 2;
 const ROLE_MAP_V1 = {Admin: SUPER, Superadmin: SUPER, Manajer: 'Management'};
 const rolesFix = d => { if (!d) return d;
   if (d.rolesV2 && !d.rolesV3) { (d.roles || []).forEach(r => { if (r.name === 'Admin') { r.name = SUPER; } }); (d.users || []).forEach(u => { if (u.role === 'Admin') u.role = SUPER; }); if (d.pageAccess && d.pageAccess.Admin) { d.pageAccess[SUPER] = d.pageAccess.Admin; delete d.pageAccess.Admin; } d.rolesV3 = true; return d; }
@@ -2330,6 +2362,7 @@ class Component extends DCLogic {
       {g:'Keuangan', items:[['findash','Dashboard Keuangan'],['labarugi','Laba Rugi'],['neraca','Laporan Neraca'],['modal','Laporan Perubahan Modal'],['jurnal','Laporan Jurnal'],['akun','No. Akun'],['laporan','Journal']]},
       {g:'Administrasi', items:[['absensi','Absensi'],['absrekap','Rekap Absensi'],['pengajuan','Daftar Pengajuan'],['aset','Aset']]},
       {g:'Tim', items:[['karyawan','Our Team']]},
+      {g:'Analyst', items:[['teamperf','Team Performance']]},
       {g:'Archive Project', items: RK_SECTIONS.map(([id, l]) => ['arc_' + id, l])}];
     const titles = {}; NAV.forEach(g => g.items.forEach(([id, l]) => titles[id] = l));
     RK_SECTIONS.forEach(([id, l]) => titles['arc_' + id] = 'Archive Project · ' + l);
@@ -2337,10 +2370,11 @@ class Component extends DCLogic {
     titles.harga = 'Marketing · Pricing Strategy';
     titles.produk = 'Marketing · Product & Service';
     titles.dailyperf = 'Marketing · Daily Activity';
+    titles.teamperf = 'Analyst · Team Performance';
     titles.setting = 'Setting · Pengguna & Akses';
     titles.absensi = 'Administrasi · Absensi';
     titles.absrekap = 'Administrasi · Rekap Absensi';
-    const NAV_ICONS = {'Utama': 'M3 11.5 12 4l9 7.5M5 10v10h5v-6h4v6h5V10', 'Marketing': 'M3 11v3a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11', 'Operasional': 'M3 21V11l6 4v-4l6 4V5h4v16H3z', 'Keuangan': 'M3 7h15a3 3 0 0 1 3 3v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 7l12-3v3M16 14h2', 'Administrasi': 'M9 4h6v3H9zM7 5H5v16h14V5h-2M9 12h6M9 16h4', 'Tim': 'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5.2a3 3 0 0 1 0 5.6M18 14.3c1.8.8 3 2.6 3 4.7', 'Archive Project': 'M3 5h18v4H3zM5 9v10h14V9M10 13h4'};
+    const NAV_ICONS = {'Analyst': 'M4 20V10M10 20V4M16 20v-7M22 20H2', 'Utama': 'M3 11.5 12 4l9 7.5M5 10v10h5v-6h4v6h5V10', 'Marketing': 'M3 11v3a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11', 'Operasional': 'M3 21V11l6 4v-4l6 4V5h4v16H3z', 'Keuangan': 'M3 7h15a3 3 0 0 1 3 3v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 7l12-3v3M16 14h2', 'Administrasi': 'M9 4h6v3H9zM7 5H5v16h14V5h-2M9 12h6M9 16h4', 'Tim': 'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5.2a3 3 0 0 1 0 5.6M18 14.3c1.8.8 3 2.6 3 4.7', 'Archive Project': 'M3 5h18v4H3zM5 9v10h14V9M10 13h4'};
     const au = d.auth || {}, authOn = !!(au.required && au.url && au.key);
     const me = authOn && s.cloudRole ? {name: s.authEmail, role: String(s.authEmail || '').toLowerCase() === OWNER_EMAIL || s.cloudRole === 'Admin' ? SUPER : s.cloudRole, email: s.authEmail, active: true} : null;
     const cloudDone = ['denied', 'error'].includes(s.cloudState);
@@ -2652,6 +2686,39 @@ class Component extends DCLogic {
     const dpTable = [...dpRows].sort((a, b) => a.dt.localeCompare(b.dt) || a.i - b.i).map(r => { const tt = T(DP_GROUPS.find(g => g[0] === r.grp)[1]), ty = T(r.tipe === 'Offering' ? 'green' : 'blue'); return {dt: fd(r.dt, true), nm: r.nm, kn: r.kn, tipe: r.tipe, tbg: ty.bg, tfg: ty.fg, sk: r.rec.sekolah || '—', ak: r.rec.aktivitas || r.ak, st: r.st || 'Tanpa status', sbg: tt.bg, sfg: tt.fg, edit: () => this.setState({mkfOn: true, mkf: {id: r.rec.id, dt: r.rec.dt, nm: r.rec.nm, kn: r.rec.kn, tipe: r.tipe, sekolah: r.rec.sekolah || '', aktivitas: r.rec.aktivitas || '', st: r.rec.st || ''}})}; });
     const dpRange = dpMonth === 'all' ? fd(dpFrom, true) + ' – ' + fd(dpTo, true) : new Date(dpMonth + '-01T00:00:00').toLocaleDateString('id-ID', {month: 'long', year: 'numeric'});
 
+    // Analyst · Team Performance
+    const tpLog = d.mktLog || [];
+    const tpMonths = [...new Set(tpLog.map(r => (r.dt || '').slice(0, 7)).filter(Boolean))].sort().reverse();
+    const tpM = s.tpMonth === 'all' ? 'all' : (tpMonths.includes(s.tpMonth) ? s.tpMonth : (tpMonths[0] || 'all'));
+    const tpIn = r => tpM === 'all' || (r.dt || '').startsWith(tpM);
+    const tpNorm = x => String(x || '').trim().toLowerCase();
+    const tpPeople = (() => { const m = new Map(); (d.employees || []).forEach(e => { const k = tpNorm(e.name); if (k) m.set(k, {name: e.name, role: e.role || '', photo: e.photo || '', emp: e}); });
+      tpLog.forEach(r => [r.nm, r.kn].forEach(n => { const k = tpNorm(n); if (k && k !== '—' && !m.has(k)) m.set(k, {name: String(n).trim(), role: 'Marketing', photo: '', emp: null}); }));
+      (d.prospects || []).forEach(p => { const k = tpNorm(p.owner); if (k && !m.has(k)) m.set(k, {name: String(p.owner).trim(), role: 'Marketing', photo: '', emp: null}); }); return [...m.values()]; })();
+    const tpData = tpPeople.map(pp => { const k = tpNorm(pp.name); const mine = tpLog.filter(r => tpIn(r) && tpNorm(r.nm) === k), assist = tpLog.filter(r => tpIn(r) && tpNorm(r.kn) === k && tpNorm(r.nm) !== k);
+      const offer = mine.filter(r => r.tipe === 'Offering').length, deal = mine.filter(r => mktStage(r) === 4).length, lost = mine.filter(r => mktStage(r) === 5).length;
+      const schools = new Set(mine.map(r => tpNorm(r.sekolah)).filter(Boolean)).size;
+      const pros = (d.prospects || []).filter(p => tpNorm(p.owner) === k), prosActive = pros.filter(p => p.stage < 4).length, prosLate = pros.filter(p => p.stage < 4 && p.follow && dd(p.follow) < 0).length;
+      const last = [...mine, ...assist].reduce((m2, r) => (r.dt || '') > m2 ? r.dt : m2, '');
+      let attTxt = '—', attPct = -1; if (pp.emp) { const ks = Object.keys(att).filter(x => x.endsWith('|' + pp.emp.id) && (tpM === 'all' || x.startsWith(tpM)) && att[x] && att[x].status); if (ks.length) { const ok = ks.filter(x => ['Hadir', 'Lapangan'].includes(att[x].status)).length; attPct = Math.round(ok / ks.length * 100); attTxt = attPct + '% · ' + ok + '/' + ks.length + ' hari'; } }
+      return {pp, n: mine.length, assist: assist.length, offer, deal, lost, schools, prosActive, prosLate, last, attTxt, attPct, conv: deal + lost ? Math.round(deal / (deal + lost) * 100) : -1}; })
+      .filter(x => x.n || x.assist || x.prosActive || x.pp.emp).sort((a2, b2) => b2.n - a2.n || b2.assist - a2.assist || a2.pp.name.localeCompare(b2.pp.name));
+    const tpMax = Math.max(1, ...tpData.map(x => x.n + x.assist));
+    const tpSum = f => tpData.reduce((t, x) => t + f(x), 0);
+    const tpInLog = tpLog.filter(tpIn);
+    const tpDealAll = tpInLog.filter(r => mktStage(r) === 4).length, tpLostAll = tpInLog.filter(r => mktStage(r) === 5).length;
+    const tpTop = tpData.find(x => x.n > 0);
+    const tpVals = {
+      tpKpis: [{label: 'Anggota aktif', value: String(tpData.filter(x => x.n || x.assist).length), sub: 'punya aktivitas di periode ini'}, {label: 'Total aktivitas', value: String(tpInLog.length), sub: tpInLog.filter(r => r.tipe === 'Offering').length + ' offering · ' + tpInLog.filter(r => r.tipe !== 'Offering').length + ' konsultasi'}, {label: 'Deal / MoU', value: String(tpDealAll), sub: tpLostAll + ' gagal · konversi ' + (tpDealAll + tpLostAll ? Math.round(tpDealAll / (tpDealAll + tpLostAll) * 100) + '%' : '—')}, {label: 'Paling aktif', value: tpTop ? tpTop.pp.name : '—', sub: tpTop ? tpTop.n + ' aktivitas' : 'Belum ada aktivitas', small: true}].map(k => ({small: false, ...k, fs: k.small ? '18px' : '22px'})),
+      tpMonthOpts: [{v: 'all', l: 'Semua waktu'}, ...tpMonths.map(m2 => ({v: m2, l: new Date(m2 + '-01T00:00:00').toLocaleDateString('id-ID', {month: 'long', year: 'numeric'})}))],
+      tpMonth: tpM, tpSetMonth: ev => this.setState({tpMonth: ev.target.value}),
+      tpPeriod: tpM === 'all' ? 'Semua waktu' : new Date(tpM + '-01T00:00:00').toLocaleDateString('id-ID', {month: 'long', year: 'numeric'}),
+      tpEmpty: !tpData.length,
+      tpRows: tpData.map((x, i) => ({rank: String(i + 1), name: x.pp.name, role: x.pp.role || '—', photo: x.pp.photo, hasPhoto: !!x.pp.photo, noPhoto: !x.pp.photo, ini: x.pp.name.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+        n: String(x.n), assist: String(x.assist), offer: String(x.offer), deal: String(x.deal), schools: String(x.schools), pros: String(x.prosActive), late: x.prosLate ? x.prosLate + ' terlambat' : '', hasLate: x.prosLate > 0,
+        conv: x.conv < 0 ? '—' : x.conv + '%', att: x.attTxt, attC: x.attPct < 0 ? '#8A857A' : x.attPct >= 90 ? '#2F5D50' : x.attPct >= 75 ? '#8A5A12' : '#A23B28',
+        last: x.last ? fd(x.last, true) : '—', w1: (x.n / tpMax * 100) + '%', w2: (x.assist / tpMax * 100) + '%'})),
+    };
     // Absensi
     const AT_STATUS = [['', 'Belum diisi', 'gray'], ['Hadir', 'Hadir', 'green'], ['Lapangan', 'Lapangan', 'blue'], ['Izin', 'Izin', 'amber'], ['Sakit', 'Sakit', 'amber'], ['Cuti', 'Cuti', 'gray'], ['Alpha', 'Alpha', 'red']];
     const attD = s.attDate || iso(TODAY);
@@ -3136,6 +3203,7 @@ class Component extends DCLogic {
         return {name: pname(r.p), sub: (+r.p.copies > 1 ? (+r.p.copies).toLocaleString('id-ID') + ' eks × ' + rps(r.p.price) : 'Nilai kontrak') , tender: rps(r.tender), recv: rps(r.recv), sisa: rps(r.sisa), sisaC: r.sisa > 0 ? '#A23B28' : '#2F5D50', pct: pct + '%', w: pct + '%', cnt: r.pays.length ? r.pays.length + ' pembayaran · terakhir ' + fd(last.date, true) : 'Belum ada pembayaran tercatat', status: st[0], bg: tn.bg, fg: tn.fg,
           pays: r.pays.map(x => ({dt: fd(x.date, true), desc: x.purpose || x.payee || '—', amt: rps(+x.in || 0)})), hasPays: r.pays.length > 0, noPays: !r.pays.length}; }),
       piuEmpty: !piuP.length,
+      ...tpVals,
       invList, invKpis, inf: infv, infSchool: this.fset('inf', 'schoolId'), infDesc: this.fset('inf', 'desc'), infAmount: this.fset('inf', 'amount'),
       addInvoice: () => { const a = +s.inf.amount; if (!infv.schoolId) return this.flash('Tambahkan sekolah dulu di Sekolah & CRM'); if (!a || !s.inf.desc) return this.flash('Isi keterangan dan jumlah'); const no = 'INV/2026/' + String(101 + d.invoices.length).padStart(3, '0');
         this.upd(dd2 => dd2.invoices.push({id: 'i' + Date.now(), no, schoolId: infv.schoolId, desc: s.inf.desc, amount: a, due: iso(new Date(TODAY.getTime() + 14 * 864e5)), status: 'Belum'}), `${no} diterbitkan`); this.setState({inf: {...s.inf, desc: '', amount: ''}}); },
