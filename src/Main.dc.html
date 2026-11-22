@@ -1366,22 +1366,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
 
     <!-- ABSENSI -->
     <sc-if value="{{ is.absensi }}" hint-placeholder-val="{{ false }}">
-    <div style="display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:16px;align-items:start" class="nf-att-grid">
-      <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-          <button onClick="{{ attCalPrev }}" aria-label="Bulan sebelumnya" style="border:1px solid #D8D3C7;background:#fff;width:30px;height:30px;border-radius:7px;font-size:15px;line-height:1">‹</button>
-          <span style="font-size:15px;font-weight:600">{{ attCalLabel }}</span>
-          <button onClick="{{ attCalNext }}" aria-label="Bulan berikutnya" style="border:1px solid #D8D3C7;background:#fff;width:30px;height:30px;border-radius:7px;font-size:15px;line-height:1">›</button>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center">
-          <sc-for list="{{ attCalHead }}" as="h" hint-placeholder-count="7"><span style="font-size:10.5px;font-weight:600;color:#6B675E;letter-spacing:.03em;padding:4px 0">{{ h }}</span></sc-for>
-          <sc-for list="{{ attCalDays }}" as="c" hint-placeholder-count="35"><button onClick="{{ c.pick }}" aria-label="{{ c.aria }}" aria-pressed="{{ c.pressed }}" style="border:{{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-weight:{{ c.fw }};height:36px;border-radius:99px;font-size:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0;opacity:{{ c.op }};visibility:{{ c.vis }}"><span>{{ c.n }}</span><span style="width:4px;height:4px;border-radius:50%;background:{{ c.dot }}"></span></button></sc-for>
-        </div>
-        <div style="border-top:1px solid #EFECE5;padding-top:8px;font-size:12px;color:#6B675E;text-align:center">{{ attCalFilled }} hari terisi di bulan ini</div>
-        <button onClick="{{ attToday }}" style="border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:8px 12px;border-radius:7px;font-size:12px;font-weight:600">Ke hari ini</button>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
           <div><div style="font-size:12px;color:#6B675E">Tanggal dipilih</div><div style="font-size:17px;font-weight:600">{{ attDateLabel }}</div></div>
           <button onClick="{{ attAllPresent }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:10px 16px;border-radius:7px;font-size:13px;font-weight:600;min-height:40px">Tandai semua hadir</button>
         </div>
@@ -1390,6 +1375,21 @@ input[type=range]{accent-color:#2F5D50;width:100%}
         <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:4px"><div style="font-size:13px;color:#6B675E">{{ k.label }}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500">{{ k.value }}</div></div>
       </sc-for>
     </div>
+    <div style="display:grid;grid-template-columns:minmax(0,248px) minmax(0,1fr);gap:14px;align-items:start" class="nf-att-grid">
+      <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;min-width:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <button onClick="{{ attCalPrev }}" aria-label="Bulan sebelumnya" style="border:1px solid #D8D3C7;background:#fff;width:24px;height:24px;padding:0;border-radius:6px;font-size:13px;line-height:1">‹</button>
+          <span style="font-size:13px;font-weight:600">{{ attCalLabel }}</span>
+          <button onClick="{{ attCalNext }}" aria-label="Bulan berikutnya" style="border:1px solid #D8D3C7;background:#fff;width:24px;height:24px;padding:0;border-radius:6px;font-size:13px;line-height:1">›</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center">
+          <sc-for list="{{ attCalHead }}" as="h" hint-placeholder-count="7"><span style="font-size:9.5px;font-weight:600;color:#6B675E;letter-spacing:.02em;padding:2px 0">{{ h }}</span></sc-for>
+          <sc-for list="{{ attCalDays }}" as="c" hint-placeholder-count="35"><button onClick="{{ c.pick }}" aria-label="{{ c.aria }}" aria-pressed="{{ c.pressed }}" style="border:{{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-weight:{{ c.fw }};height:28px;border-radius:99px;font-size:11.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;opacity:{{ c.op }};visibility:{{ c.vis }}"><span>{{ c.n }}</span><span style="width:3px;height:3px;border-radius:50%;background:{{ c.dot }}"></span></button></sc-for>
+        </div>
+        <div style="border-top:1px solid #EFECE5;padding-top:6px;font-size:11px;color:#6B675E;text-align:center">{{ attCalFilled }} hari terisi di bulan ini</div>
+        <button onClick="{{ attToday }}" style="border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600">Ke hari ini</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
     <sc-if value="{{ noAttEmps }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #CFC9BC;border-radius:8px;padding:22px;text-align:center;font-size:14px;color:#6B675E">Belum ada anggota tim. Tambahkan anggota di halaman Our Team untuk mulai mencatat absensi.</div></sc-if>
     <sc-if value="{{ hasAttEmps }}" hint-placeholder-val="{{ true }}">
     <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;overflow-x:auto">
