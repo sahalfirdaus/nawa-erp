@@ -505,6 +505,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
             <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Peran<select data-rkv="{{ usf.role }}" value="{{ usf.role }}" onChange="{{ usfRole }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"><sc-for list="{{ stRoleOpts }}" as="o" hint-placeholder-count="5"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
             <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Status<select data-rkv="{{ usf.active }}" value="{{ usf.active }}" onChange="{{ usfActive }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"><option value="1">Aktif</option><option value="0">Nonaktif</option></select></label>
           </div>
+          <div style="background:#F7F5F0;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:12px;color:#3A3832;line-height:1.45"><div><b>Peran {{ usf.role }}</b> — {{ usRole.desc }}</div><div><span style="color:#2F5D50;font-weight:600">Edit ({{ usRole.nEdit }}):</span> {{ usRole.edit }}</div><div><span style="color:#3B5A8A;font-weight:600">Lihat ({{ usRole.nView }}):</span> {{ usRole.view }}</div><div style="color:#6B675E">Ubah halaman yang bisa dibuka di kartu “Hak akses per peran” di bawah.</div></div>
           <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><div><sc-if value="{{ usEditing }}" hint-placeholder-val="{{ false }}"><button onClick="{{ deleteUs }}" style="white-space:nowrap;border:1px solid #E3B9AE;background:#fff;color:#A23B28;padding:9px 14px;border-radius:7px;font-size:13px">Hapus</button></sc-if></div><div style="display:flex;gap:8px"><button onClick="{{ closeUs }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:9px 14px;border-radius:7px;font-size:13px">Batal</button><button onClick="{{ saveUs }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:9px 16px;border-radius:7px;font-size:13px;font-weight:600">Simpan</button></div></div>
         </div>
         </sc-if>
@@ -540,12 +541,33 @@ input[type=range]{accent-color:#2F5D50;width:100%}
         <label style="font-size:12px;color:#6B675E;display:flex;flex-direction:column;gap:5px">Atau pilih file hasil ekspor (.json)<input type="file" accept=".json,application/json" onChange="{{ xferFile }}" style="font-size:13px"></label>
         <sc-if value="{{ hasXferMsg }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;line-height:1.4;color:#3A3832">{{ xferMsg }}</div></sc-if>
       </div></sc-if>
+      <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px 20px;min-width:0;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><h2 style="margin:0;font-size:15px;font-weight:600">Peran</h2><div style="font-size:12px;color:#6B675E;margin-top:2px">Setiap pengguna punya satu peran. Peran menentukan halaman yang bisa dibuka.</div></div><button onClick="{{ rlNew }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:9px 14px;border-radius:7px;font-size:13px;font-weight:600">+ Peran baru</button></div>
+        <sc-if value="{{ rlfOn }}" hint-placeholder-val="{{ false }}"><div style="border:1px solid #E4E0D6;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;background:#FBFAF7">
+          <h3 style="margin:0;font-size:14px;font-weight:600">{{ rlfTitle }}</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Nama peran<input value="{{ rlf.name }}" onChange="{{ rlfName }}" placeholder="mis. Keuangan" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+            <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Keterangan<input value="{{ rlf.desc }}" onChange="{{ rlfDesc }}" placeholder="Siapa yang memakai peran ini" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"></label>
+            <sc-if value="{{ rlfNew }}" hint-placeholder-val="{{ true }}"><label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Hak akses awal<select data-rkv="{{ rlf.base }}" value="{{ rlf.base }}" onChange="{{ rlfBase }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:9px 10px;color:#1C1B18;background:#fff;min-width:0"><sc-for list="{{ rlfBaseOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select></label></sc-if>
+          </div>
+          <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><div><sc-if value="{{ rlfEditing }}" hint-placeholder-val="{{ false }}"><button onClick="{{ rlDelete }}" style="white-space:nowrap;border:1px solid #E3B9AE;background:#fff;color:#A23B28;padding:8px 12px;border-radius:7px;font-size:13px">Hapus peran</button></sc-if></div><div style="display:flex;gap:8px"><button onClick="{{ rlClose }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:8px 12px;border-radius:7px;font-size:13px">Batal</button><button onClick="{{ rlSave }}" style="white-space:nowrap;border:0;background:#2F5D50;color:#fff;padding:8px 14px;border-radius:7px;font-size:13px;font-weight:600">Simpan</button></div></div>
+        </div></sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px">
+          <sc-for list="{{ roleRows }}" as="r" hint-placeholder-count="3"><div style="border:1px solid #E4E0D6;border-radius:9px;padding:12px 14px;display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span style="font-size:14px;font-weight:600">{{ r.name }}</span><sc-if value="{{ r.editable }}" hint-placeholder-val="{{ true }}"><button onClick="{{ r.edit }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:4px 10px;border-radius:6px;font-size:12px">Edit</button></sc-if><sc-if value="{{ r.locked }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#6B675E">Tetap</span></sc-if></div>
+            <div style="font-size:12px;color:#6B675E;line-height:1.45">{{ r.desc }}</div>
+            <div style="font-size:11px;color:#3A3832;font-family:'IBM Plex Mono',monospace">{{ r.n }} pengguna · {{ r.pages }} halaman</div>
+          </div></sc-for>
+        </div>
+      </div>
       <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px 20px;min-width:0">
         <h2 style="margin:0;font-size:15px;font-weight:600">Hak akses per peran</h2>
-        <div style="font-size:12px;color:#6B675E;margin:2px 0 12px">Klik sel untuk mengganti: Tidak, Lihat, atau Edit. Admin selalu akses penuh.</div>
-        <div style="display:grid;grid-template-columns:150px repeat(5,minmax(0,1fr));gap:0 8px;align-items:center;padding:6px 0;border-bottom:1.5px solid #1C1B18;font-size:11px;font-weight:600;color:#3A3832"><span>Menu</span><sc-for list="{{ stRoleHead }}" as="h" hint-placeholder-count="5"><span style="text-align:center">{{ h.role }} <span style="font-weight:400;color:#8A857A">({{ h.n }})</span></span></sc-for></div>
-        <sc-for list="{{ stMatrix }}" as="g" hint-placeholder-count="8"><div style="display:grid;grid-template-columns:150px repeat(5,minmax(0,1fr));gap:0 8px;align-items:center;padding:7px 0;border-bottom:1px solid #EFECE5;font-size:13px"><span style="font-weight:500">{{ g.group }}</span><sc-for list="{{ g.cells }}" as="c" hint-placeholder-count="5"><button onClick="{{ c.on }}" style="border:0;padding:6px 0;border-radius:6px;font-size:12px;font-weight:500;background:{{ c.bg }};color:{{ c.fg }};opacity:{{ c.op }}">{{ c.label }}</button></sc-for></div></sc-for>
-        <div style="font-size:11px;color:#6B675E;margin-top:10px">Pengaturan ini tersimpan bersama data aplikasi (di Supabase jika Wajib login aktif). Pembatasan menu per peran hanya berlaku di tampilan.</div>
+        <div style="font-size:12px;color:#6B675E;margin:2px 0 12px">Klik sel untuk mengganti: Tidak → Lihat → Edit. Klik baris menu (tebal) untuk mengubah semua halaman di menu itu sekaligus. Admin selalu akses penuh.</div>
+        <div style="overflow-x:auto"><div style="min-width:{{ stGridMin }}">
+        <div style="display:grid;grid-template-columns:{{ stGridCols }};gap:0 8px;align-items:center;padding:6px 0;border-bottom:1.5px solid #1C1B18;font-size:11px;font-weight:600;color:#3A3832"><span>Halaman</span><sc-for list="{{ stRoleHead }}" as="h" hint-placeholder-count="3"><span style="text-align:center">{{ h.role }} <span style="font-weight:400;color:#8A857A">({{ h.n }})</span></span></sc-for></div>
+        <sc-for list="{{ stMatrix }}" as="g" hint-placeholder-count="12"><div style="display:grid;grid-template-columns:{{ stGridCols }};gap:0 8px;align-items:center;padding:{{ g.pad }};border-bottom:1px solid #EFECE5;font-size:{{ g.fs }};background:{{ g.rowBg }}"><span style="font-weight:{{ g.fw }};padding-left:{{ g.indent }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ g.label }}</span><sc-for list="{{ g.cells }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.on }}" style="border:0;padding:5px 0;border-radius:6px;font-size:11.5px;font-weight:500;background:{{ c.bg }};color:{{ c.fg }};opacity:{{ c.op }}">{{ c.label }}</button></sc-for></div></sc-for>
+        </div></div>
+        <div style="font-size:11px;color:#6B675E;margin-top:10px">Tersimpan bersama data aplikasi di Supabase. Halaman Setting selalu khusus pemilik akun.</div>
       </div>
     </div>
     </sc-if>
@@ -1649,6 +1671,15 @@ const catFix = d => { if (d && !d.catalog) d.catalog = CATALOG_SEED(); return d;
 const OWNER_EMAIL = 'firdaussahal@gmail.com'; // satu-satunya akun yang bisa membuka Setting
 const ST_ROLES = ['Admin', 'Manajer', 'Keuangan', 'Marketing', 'Operasional'], ST_GROUPS = ['Utama', 'Marketing', 'Operasional', 'Keuangan', 'Administrasi', 'Tim', 'Archive Project', 'Setting'], ST_LV = ['Tidak', 'Lihat', 'Edit'];
 const stDefAccess = () => ({Admin: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 2}, Manajer: {Utama: 2, Marketing: 2, Operasional: 2, Keuangan: 2, Administrasi: 2, Tim: 2, 'Archive Project': 2, Setting: 0}, Keuangan: {Utama: 1, Marketing: 0, Operasional: 0, Keuangan: 2, Administrasi: 1, Tim: 0, 'Archive Project': 0, Setting: 0}, Marketing: {Utama: 1, Marketing: 2, Operasional: 1, Keuangan: 0, Administrasi: 0, Tim: 0, 'Archive Project': 1, Setting: 0}, Operasional: {Utama: 1, Marketing: 0, Operasional: 2, Keuangan: 0, Administrasi: 1, Tim: 0, 'Archive Project': 1, Setting: 0}});
+const ROLE_SEED = () => [
+  {name: 'Admin', desc: 'Akses penuh ke semua halaman. Tidak bisa dibatasi.'},
+  {name: 'Management', desc: 'Pimpinan & manajer: membuka dan mengelola semua menu kerja, termasuk Keuangan.'},
+  {name: 'Staff', desc: 'Tim harian: membuka halaman sesuai tugasnya. Keuangan tertutup secara bawaan.'}];
+// Level bawaan bila belum diatur: 0 Tidak, 1 Lihat, 2 Edit
+const roleDefLvl = (role, g, id) => role === 'Admin' || role === 'Management' ? 2 : role !== 'Staff' ? 0
+  : g === 'Keuangan' ? 0 : g === 'Utama' || g === 'Tim' || g === 'Archive Project' ? 1 : id === 'absrekap' || id === 'aset' ? 1 : 2;
+const ROLE_MAP_V1 = {Admin: 'Admin', Manajer: 'Management'};
+const rolesFix = d => { if (!d || d.rolesV2) return d; d.roles = ROLE_SEED(); d.pageAccess = {}; (d.users || []).forEach(u => { u.role = ROLE_MAP_V1[u.role] || 'Staff'; }); d.rolesV2 = true; return d; };
 const ST_AUTH = () => ({url: 'https://bfohwbaitznoqhfceqnh.supabase.co', key: 'sb_publishable_C-FM2kU1CFPhkHUjPpbLBQ_RTcKeMZX', required: false, google: false});
 const stSeedUsers = () => ['Thia', 'Tasya', 'Dhimas'].map(n => ({id: 'u-' + n.toLowerCase(), name: n, email: '', role: 'Marketing', active: true}));
 const DP_GROUPS = [['Deal / MOU','green'],['Interested','green'],['Meeting','blue'],['Harga terkirim','blue'],['Follow up','gray'],['Pending','amber'],['Cancelled','red'],['Tanpa status','gray']];
@@ -1760,7 +1791,7 @@ class Component extends DCLogic {
     if (d && d.projects && !d.teamCleared) { d.employees = []; d.teamCleared = true; }
     if (d && d.projects && !d.assets) { d.assets = seed().assets; }
     if (d && d.projects && !d.prospects) { d.prospects = []; }
-    if (d && d.projects) { dealFix(d); catFix(d); }
+    if (d && d.projects) { dealFix(d); catFix(d); rolesFix(d); }
     if (d && d.projects && !d.auth) { d.auth = ST_AUTH(); }
     if (d && d.projects && !d.users) { d.users = stSeedUsers(); d.access = stDefAccess(); }
     if (d && d.projects && !d.attendance) { d.attendance = {}; }
@@ -1844,10 +1875,11 @@ class Component extends DCLogic {
       const role = rr.data;
       const r = await c.from('app_state').select('data,version').eq('id', 'main').maybeSingle();
       if (r.error) throw r.error;
-      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1), needCat = !!(r.data && !(r.data.data || {}).catalog);
+      const needDeal = !!(r.data && !(r.data.data || {}).dealMouV1), needCat = !!(r.data && !(r.data.data || {}).catalog), needRoles = !!(r.data && !(r.data.data || {}).rolesV2);
       if (r.data) this.cloudApply(r.data);
       else { const ins = await c.from('app_state').insert({id: 'main', data: this.cloudStrip(this.state.d), version: 1, updated_by: this._cloudBy}); if (ins.error) throw ins.error; this._cloudVer = 1; }
       this._cloudOn = true; this.setState({cloudState: 'ok', cloudRole: role});
+      if (needRoles) this.upd(dd => { rolesFix(dd); }, 'Peran diperbarui: Admin, Management, Staff');
       if (needCat) this.upd(dd => { catFix(dd); }, 'Katalog Product & Service dibuat');
       if (needDeal) this.upd(dd => { dealFix(dd); }, 'Sekolah berstatus Kontrak dipindah ke Deal (MoU)');
       this.cloudSyncUsers(); this.loadArchive(); this.loadRequests();
@@ -1946,7 +1978,7 @@ class Component extends DCLogic {
     } catch (e) { this.setState({reqs: []}); }
   }
   async decideReq(q, ok) {
-    const role = (this.state.reqRole || {})[q.id] || 'Marketing';
+    const role = (this.state.reqRole || {})[q.id] || 'Staff';
     if (ok) this.upd(d => { d.users = d.users || []; const em = String(q.email).toLowerCase(), ex = d.users.find(u => String(u.email || '').toLowerCase() === em);
       const rec = {name: q.name, email: em, role, active: true, phone: q.phone || '', jabatan: q.jabatan || '', divisi: q.divisi || ''};
       if (ex) Object.assign(ex, rec); else d.users.push({id: 'u' + Date.now(), ...rec}); }, q.name + ' disetujui sebagai ' + role);
@@ -2170,10 +2202,14 @@ class Component extends DCLogic {
     const cloudDone = ['denied', 'error'].includes(s.cloudState);
     const accOf = d.access || stDefAccess();
     const isOwner = authOn && !!me && String(me.email || '').toLowerCase() === OWNER_EMAIL;
-    const grpLvl = g => g === 'Setting' ? (isOwner ? 2 : 0) : !authOn ? 2 : !me ? 0 : me.role === 'Admin' ? 2 : ((accOf[me.role] || {})[g] || 0);
+    const roleList = (d.roles && d.roles.length ? d.roles : ROLE_SEED()), roleNames = roleList.map(r => r.name);
+    const pageGrp = {}; NAV.forEach(g => g.items.forEach(([id]) => { pageGrp[id] = g.g; }));
+    const roleLvl = (role, id) => { if (role === 'Admin') return 2; const v = ((d.pageAccess || {})[role] || {})[id]; return v == null ? roleDefLvl(role, pageGrp[id], id) : v; };
+    const pageLvl = id => id === 'setting' ? (isOwner ? 2 : 0) : !authOn ? 2 : !me ? 0 : roleLvl(me.role, id);
+    const grpLvl = g => g === 'Setting' ? (isOwner ? 2 : 0) : Math.max(0, ...((NAV.find(x => x.g === g) || {items: []}).items.map(([id]) => pageLvl(id))));
 
     // Product & Service
-    const catAll = d.catalog || [], catBrand = s.catBrand === 'navinus' ? 'navinus' : 'nawa', catCanEdit = grpLvl('Marketing') === 2;
+    const catAll = d.catalog || [], catBrand = s.catBrand === 'navinus' ? 'navinus' : 'nawa', catCanEdit = pageLvl('produk') === 2;
     const catf = s.catf || {}, catStat = {};
     (s.rkData || []).forEach(o => { if (!o.range) return; const x = catStat[o.range] = catStat[o.range] || {n: 0, q: [], tot: 0, qty: 0, pg: []}; x.n++; if (o.qty) { x.q.push(o.qty); x.qty += o.qty; x.tot += (o.total || o.price * o.qty || 0); } if (o.pages) x.pg.push(o.pages); });
     const med = a => { const b = [...a].sort((m, n) => m - n); return b.length ? b[Math.floor(b.length / 2)] : 0; };
@@ -2184,9 +2220,9 @@ class Component extends DCLogic {
         hasStat: !!(st && st.n), statN: st ? String(st.n) : '', statQty: st && st.q.length ? 'Eksemplar ' + Math.min(...st.q) + '–' + Math.max(...st.q) + ' (median ' + med(st.q) + ')' : '', statPrice: st && st.qty ? 'Rata-rata ' + rps(st.tot / st.qty) + ' / eks' : '', statPages: st && st.pg.length ? 'Median ' + med(st.pg) + ' halaman' : '', hasStatPages: !!(st && st.pg.length),
         edit: () => this.setState({catFormOn: true, catf: {id: c.id, brand: c.brand, name: c.name, tagline: c.tagline || '', price: c.price || '', items: c.items || ''}})}; });
     const viewGrp = view === 'setting' ? 'Setting' : ((NAV.find(g => g.items.some(it => it[0] === view)) || {}).g || 'Utama');
-    const blocked = authOn && !!me && grpLvl(viewGrp) === 0;
+    const blocked = authOn && !!me && (view === 'setting' ? grpLvl('Setting') : pageLvl(view)) === 0;
     const gateOn = authOn && (!s.authReady || !s.authEmail || !me);
-    const nav = NAV.filter(g => grpLvl(g.g) > 0).map(g => ({group: g.g, icon: NAV_ICONS[g.g] || NAV_ICONS['Utama'], plain: false, collapsible: g.g !== 'Utama', open: g.g === 'Utama' || s.grpOpen[g.g] !== false, expanded: s.grpOpen[g.g] !== false ? 'true' : 'false', mark: s.grpOpen[g.g] !== false ? '−' : '+', toggleLabel: (s.grpOpen[g.g] !== false ? 'Minimize ' : 'Buka ') + g.g, toggle: () => this.setState(st => ({grpOpen: {...st.grpOpen, [g.g]: st.grpOpen[g.g] === false}})), items: g.items.map(([id, label, b]) => ({label, hasIcon: g.g === 'Utama', pl: g.g === 'Utama' ? '0' : '14px', icon: NAV_ICONS['Utama'], ic: view === id ? '#FFFFFF' : '#404A7C', badge: b || '', hasBadge: !!b, go: go(id), bg: view === id ? '#1C1B18' : 'transparent', fg: view === id ? '#FFFFFF' : '#3A3832'}))}));
+    const nav = NAV.filter(g => grpLvl(g.g) > 0).map(g => ({group: g.g, icon: NAV_ICONS[g.g] || NAV_ICONS['Utama'], plain: false, collapsible: g.g !== 'Utama', open: g.g === 'Utama' || s.grpOpen[g.g] !== false, expanded: s.grpOpen[g.g] !== false ? 'true' : 'false', mark: s.grpOpen[g.g] !== false ? '−' : '+', toggleLabel: (s.grpOpen[g.g] !== false ? 'Minimize ' : 'Buka ') + g.g, toggle: () => this.setState(st => ({grpOpen: {...st.grpOpen, [g.g]: st.grpOpen[g.g] === false}})), items: g.items.filter(([id]) => pageLvl(id) > 0).map(([id, label, b]) => ({label, hasIcon: g.g === 'Utama', pl: g.g === 'Utama' ? '0' : '14px', icon: NAV_ICONS['Utama'], ic: view === id ? '#FFFFFF' : '#404A7C', badge: b || '', hasBadge: !!b, go: go(id), bg: view === id ? '#1C1B18' : 'transparent', fg: view === id ? '#FFFFFF' : '#3A3832'}))}));
     const roles = [['internal','Internal'],['sekolah','Portal Sekolah']].map(([id, label]) => ({label, on: () => this.setState({role: id, navOpen: false, selProject: null}), bg: s.role === id ? '#FFFFFF' : 'transparent', fg: s.role === id ? '#1C1B18' : '#5C5850'}));
     const is = {}; Object.keys(titles).forEach(k => is[k] = internal && view === k && !blocked); is.blocked = blocked;
     is.arcAny = internal && view.startsWith('arc_');
@@ -2410,9 +2446,26 @@ class Component extends DCLogic {
     const stUserRows = stUsers.map(u => ({name: u.name, email: u.email || '—', role: u.role, st: u.active ? 'Aktif' : 'Nonaktif', sbg: u.active ? T('green').bg : T('gray').bg, sfg: u.active ? T('green').fg : T('gray').fg, init: (u.name || '?').trim().charAt(0).toUpperCase(),
       edit: () => this.setState({showUs: true, usf: {id: u.id, name: u.name, email: u.email || '', role: u.role, active: u.active ? '1' : '0'}}),
       toggle: () => this.upd(dd2 => { const x = dd2.users.find(z => z.id === u.id); x.active = !x.active; }, u.active ? u.name + ' dinonaktifkan' : u.name + ' diaktifkan')}));
-    const stMatrix = ST_GROUPS.filter(g => g !== 'Setting').map(g => ({group: g, cells: ST_ROLES.map(r => { const lv = r === 'Admin' ? 2 : ((stAcc[r] || {})[g] || 0), tn = ['gray', 'blue', 'green'][lv];
+    const stMatrixOld = ST_GROUPS.filter(g => g !== 'Setting').map(g => ({group: g, cells: ST_ROLES.map(r => { const lv = r === 'Admin' ? 2 : ((stAcc[r] || {})[g] || 0), tn = ['gray', 'blue', 'green'][lv];
       return {label: ST_LV[lv], bg: T(tn).bg, fg: T(tn).fg, op: r === 'Admin' ? 0.6 : 1, on: () => { if (r === 'Admin') return; this.upd(dd2 => { dd2.access = dd2.access || stDefAccess(); dd2.access[r] = dd2.access[r] || {}; dd2.access[r][g] = ((dd2.access[r][g] || 0) + 1) % 3; }, 'Hak akses ' + r + ' · ' + g + ' diubah'); }}; })}));
-    const stRoleHead = ST_ROLES.map(r => ({role: r, n: stUsers.filter(u => u.role === r && u.active).length}));
+    const stRoleHead = roleNames.map(r => ({role: r, n: stUsers.filter(u => u.role === r && u.active).length}));
+    const LV_T = ['gray', 'blue', 'green'];
+    const setLvl = (role, ids, lv) => this.upd(dd2 => { dd2.pageAccess = dd2.pageAccess || {}; const m = dd2.pageAccess[role] = dd2.pageAccess[role] || {}; ids.forEach(id => { m[id] = lv; }); }, 'Hak akses ' + role + ' diubah');
+    const stMatrix = [];
+    NAV.forEach(g => { const ids = g.items.map(([id]) => id);
+      stMatrix.push({head: true, pad: '8px 0 6px', fs: '12.5px', fw: 700, indent: '0', rowBg: '#F7F5F0', label: g.g, cells: roleNames.map(r => { const lvs = ids.map(id => roleLvl(r, id)), same = lvs.every(v => v === lvs[0]), mx = Math.max(...lvs), tn = T(same ? LV_T[lvs[0]] : 'amber');
+        return {label: same ? ST_LV[lvs[0]] : 'Campur', bg: tn.bg, fg: tn.fg, op: r === 'Admin' ? 0.55 : 1, on: () => { if (r !== 'Admin') setLvl(r, ids, same ? (mx + 1) % 3 : mx); }}; })});
+      g.items.forEach(([id, l]) => stMatrix.push({head: false, pad: '4px 0', fs: '12.5px', fw: 400, indent: '12px', rowBg: 'transparent', label: l, cells: roleNames.map(r => { const lv = roleLvl(r, id), tn = T(LV_T[lv]);
+        return {label: ST_LV[lv], bg: tn.bg, fg: tn.fg, op: r === 'Admin' ? 0.55 : 1, on: () => { if (r !== 'Admin') setLvl(r, [id], (lv + 1) % 3); }}; })})); });
+    const stGridCols = '170px repeat(' + roleNames.length + ', minmax(76px,1fr))', stGridMin = (170 + roleNames.length * 84) + 'px';
+    const rlf = s.rlf || {};
+    const roleRows = roleList.map(r => ({name: r.name, desc: r.desc || '', n: String(stUsers.filter(u => u.role === r.name).length), locked: r.name === 'Admin', editable: r.name !== 'Admin',
+      pages: String(NAV.reduce((a, g) => a + g.items.filter(([id]) => roleLvl(r.name, id) > 0).length, 0)),
+      edit: () => this.setState({rlfOn: true, rlf: {orig: r.name, name: r.name, desc: r.desc || '', base: ''}})}));
+    const roleInfo = nm => { const r = roleList.find(x => x.name === nm) || {name: nm, desc: ''}; const ed = [], vw = [];
+      NAV.forEach(g => g.items.forEach(([id, l]) => { const lv = roleLvl(nm, id); if (lv === 2) ed.push(l); else if (lv === 1) vw.push(l); }));
+      return {desc: r.desc || 'Belum ada keterangan.', edit: ed.length ? ed.join(', ') : '—', view: vw.length ? vw.join(', ') : '—', nEdit: String(ed.length), nView: String(vw.length)}; };
+    const usRole = roleInfo(usf.role || 'Staff');
 
     // Daily performance (Marketing report)
     const dpMonth = s.dpMonth || 'all', dpType = s.dpType || 'all';
@@ -2780,7 +2833,7 @@ class Component extends DCLogic {
         this.upd(dd2 => { dd2.catalog = dd2.catalog || []; if (catf.id) Object.assign(dd2.catalog.find(z => z.id === catf.id), rec); else dd2.catalog.push({id: 'cat' + Date.now(), ...rec}); }, catf.id ? 'Paket diperbarui' : 'Paket ditambahkan'); this.setState({catFormOn: false, catBrand: rec.brand}); },
       catDelete: () => { if (!catf.id || !window.confirm('Hapus paket ' + catf.name + '?')) return; this.upd(dd2 => { dd2.catalog = (dd2.catalog || []).filter(z => z.id !== catf.id); }, 'Paket dihapus'); this.setState({catFormOn: false}); },
       showSetBtn: grpLvl('Setting') > 0, reqCount: String((s.reqs || []).length), hasReqBadge: isOwner && (s.reqs || []).length > 0, noReqs: !(s.reqs || []).length, reqReload: () => this.loadRequests(),
-      reqRows: (s.reqs || []).map(q => ({name: q.name, email: q.email, phone: q.phone || '—', jabatan: q.jabatan || '—', divisi: q.divisi || '—', note: q.note || '', hasNote: !!q.note, date: q.created_at ? new Date(q.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) : '', role: (s.reqRole || {})[q.id] || 'Marketing',
+      reqRows: (s.reqs || []).map(q => ({name: q.name, email: q.email, phone: q.phone || '—', jabatan: q.jabatan || '—', divisi: q.divisi || '—', note: q.note || '', hasNote: !!q.note, date: q.created_at ? new Date(q.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) : '', role: (s.reqRole || {})[q.id] || 'Staff',
         setRole: e => { const v = e.target.value; this.setState(st => ({reqRole: {...st.reqRole, [q.id]: v}})); }, approve: () => this.decideReq(q, true), reject: () => { if (window.confirm('Tolak pendaftaran ' + q.name + '?')) this.decideReq(q, false); }})), hasAuthMe: !!(authOn && s.authEmail), authTest: s.authTest || '', hasAuthTest: !!s.authTest, authRedirect: (typeof location !== 'undefined' && !/^about:/.test(location.href)) ? location.href.split('#')[0] : 'Alamat belum terdeteksi karena aplikasi sedang dibuka di dalam bingkai pratinjau. Buka aplikasi di tab sendiri dari halaman utamanya, lalu alamat yang benar akan tampil di sini. Login dengan email dan kata sandi tidak membutuhkan alamat ini.',
       authStatus: authOn ? 'Login aktif' : (au.url && au.key ? 'Tersambung, belum wajib' : 'Belum diatur'), authBg: authOn ? T('green').bg : T('gray').bg, authFg: authOn ? T('green').fg : T('gray').fg,
       auf: s.auf || {url: au.url || '', key: au.key || '', required: au.required ? '1' : '0', google: au.google ? '1' : '0'},
@@ -2794,10 +2847,20 @@ class Component extends DCLogic {
         this.upd(dd2 => { dd2.auth = {url, key, required: f.required === '1', google: f.google === '1'}; }, f.required === '1' ? 'Pengaturan login disimpan. Login diwajibkan' : 'Pengaturan login disimpan');
         this._sb = null; this.setState({authTest: '', authEmail: '', authReady: false}); setTimeout(() => this.authInit(), 50); },
       cloudText: !authOn ? 'Data hanya tersimpan di browser ini. Aktifkan Wajib login agar data tersimpan di Supabase.' : s.cloudState === 'denied' ? 'Akun ini belum disetujui admin' : s.cloudState === 'ok' ? 'Data tersimpan di Supabase' : s.cloudState === 'saving' ? 'Menyimpan ke Supabase…' : s.cloudState === 'loading' ? 'Memuat data dari Supabase…' : s.cloudState === 'error' ? (s.cloudErr || 'Gagal terhubung ke database') : 'Menunggu login', cloudOk: authOn && (s.cloudState === 'ok' || s.cloudState === 'saving'), cloudDot: s.cloudState === 'error' ? '#A23B28' : (authOn && (s.cloudState === 'ok' || s.cloudState === 'saving')) ? '#2F5D50' : '#B8B2A4', setupMode: false,
-      goSetting: go('setting'), setBg: is.setting ? '#FFFFFF' : 'transparent', stUserRows, stMatrix, stRoleHead, stRoleOpts: ST_ROLES, showUs: !!s.showUs, usf, usEditing: !!usf.id, usFormTitle: usf.id ? 'Edit pengguna' : 'Pengguna baru',
-      newUs: () => this.setState({showUs: true, usf: {id: null, name: '', email: '', role: 'Marketing', active: '1'}}), closeUs: () => this.setState({showUs: false}),
+      goSetting: go('setting'), setBg: is.setting ? '#FFFFFF' : 'transparent', stUserRows, stMatrix, stRoleHead, stRoleOpts: roleNames, stGridCols, stGridMin, roleRows, usRole, rlfOn: !!s.rlfOn, rlf, rlfEditing: !!rlf.orig, rlfNew: !rlf.orig, rlfTitle: rlf.orig ? 'Edit peran' : 'Peran baru', rlfBaseOpts: [{v: '', l: 'Mulai kosong (semua Tidak)'}, ...roleNames.filter(n => n !== 'Admin').map(n => ({v: n, l: 'Salin dari ' + n}))],
+      rlNew: () => this.setState({rlfOn: true, rlf: {orig: '', name: '', desc: '', base: 'Staff'}}), rlClose: () => this.setState({rlfOn: false}),
+      rlfName: this.fset('rlf', 'name'), rlfDesc: this.fset('rlf', 'desc'), rlfBase: this.fset('rlf', 'base'),
+      rlSave: () => { const nm = String(rlf.name || '').trim(); if (!nm) return this.flash('Isi nama peran'); if (nm !== rlf.orig && roleNames.some(x => x.toLowerCase() === nm.toLowerCase())) return this.flash('Nama peran sudah dipakai'); if (rlf.orig === 'Admin' || nm === 'Admin' && rlf.orig !== 'Admin') return this.flash('Nama Admin dicadangkan');
+        this.upd(dd2 => { dd2.roles = dd2.roles && dd2.roles.length ? dd2.roles : ROLE_SEED(); dd2.pageAccess = dd2.pageAccess || {};
+          if (rlf.orig) { const r = dd2.roles.find(x => x.name === rlf.orig); r.name = nm; r.desc = String(rlf.desc || '').trim();
+            if (nm !== rlf.orig) { const pa = {}; NAV.forEach(g => g.items.forEach(([id]) => { pa[id] = roleLvl(rlf.orig, id); })); dd2.pageAccess[nm] = pa; delete dd2.pageAccess[rlf.orig]; (dd2.users || []).forEach(u => { if (u.role === rlf.orig) u.role = nm; }); } }
+          else { dd2.roles.push({name: nm, desc: String(rlf.desc || '').trim()}); const pa = {}; NAV.forEach(g => g.items.forEach(([id]) => { pa[id] = rlf.base ? roleLvl(rlf.base, id) : 0; })); dd2.pageAccess[nm] = pa; } },
+          rlf.orig ? 'Peran ' + nm + ' diperbarui' : 'Peran ' + nm + ' ditambahkan'); this.setState({rlfOn: false}); },
+      rlDelete: () => { const nm = rlf.orig; if (!nm || nm === 'Admin') return; const used = stUsers.filter(u => u.role === nm).length; if (used) return this.flash(used + ' pengguna masih memakai peran ' + nm + '. Pindahkan dulu ke peran lain.');
+        if (!window.confirm('Hapus peran ' + nm + '?')) return; this.upd(dd2 => { dd2.roles = (dd2.roles || []).filter(x => x.name !== nm); if (dd2.pageAccess) delete dd2.pageAccess[nm]; }, 'Peran ' + nm + ' dihapus'); this.setState({rlfOn: false}); }, showUs: !!s.showUs, usf, usEditing: !!usf.id, usFormTitle: usf.id ? 'Edit pengguna' : 'Pengguna baru',
+      newUs: () => this.setState({showUs: true, usf: {id: null, name: '', email: '', role: 'Staff', active: '1'}}), closeUs: () => this.setState({showUs: false}),
       usfName: this.fset('usf', 'name'), usfEmail: this.fset('usf', 'email'), usfRole: this.fset('usf', 'role'), usfActive: this.fset('usf', 'active'),
-      saveUs: () => { if (!usf.name || !usf.name.trim()) return this.flash('Isi nama pengguna'); const rec = {name: usf.name.trim(), email: (usf.email || '').trim(), role: usf.role || 'Marketing', active: usf.active !== '0'};
+      saveUs: () => { if (!usf.name || !usf.name.trim()) return this.flash('Isi nama pengguna'); const rec = {name: usf.name.trim(), email: (usf.email || '').trim(), role: usf.role || 'Staff', active: usf.active !== '0'};
         this.upd(dd2 => { dd2.users = dd2.users || []; if (usf.id) Object.assign(dd2.users.find(z => z.id === usf.id), rec); else dd2.users.push({id: 'u' + Date.now(), ...rec}); }, usf.id ? 'Pengguna diperbarui' : 'Pengguna ditambahkan'); this.setState({showUs: false}); },
       deleteUs: () => { if (!usf.id || !window.confirm('Hapus pengguna ' + usf.name + '?')) return; this.upd(dd2 => { dd2.users = dd2.users.filter(z => z.id !== usf.id); }, 'Pengguna dihapus'); this.setState({showUs: false}); },
       dpMonthChips, dpTypeChips, dpKpis, dpBars, dpStatus, dpPeople, dpTable, dpRange, dpCount: dpRows.length, stageCards, prKpis, prKpisDash: [], ctBars, ctTotal, ctRange, prStageStrip, goPr: go('pencarian'), goJournal: go('laporan'), goLaba: go('labarugi'),
