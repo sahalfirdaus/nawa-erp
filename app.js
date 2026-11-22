@@ -1130,7 +1130,7 @@ class Component extends DCLogic {
       const schools = new Set(mine.map(r => tpNorm(r.sekolah)).filter(Boolean)).size;
       const pros = (d.prospects || []).filter(p => tpNorm(p.owner) === k), prosActive = pros.filter(p => p.stage < 4).length, prosLate = pros.filter(p => p.stage < 4 && p.follow && dd(p.follow) < 0).length;
       const last = [...mine, ...assist].reduce((m2, r) => (r.dt || '') > m2 ? r.dt : m2, '');
-      let attTxt = '—', attPct = -1; if (pp.emp) { const ks = Object.keys(att).filter(x => x.endsWith('|' + pp.emp.id) && (tpM === 'all' || x.startsWith(tpM)) && att[x] && att[x].status); if (ks.length) { const ok = ks.filter(x => ['Hadir', 'Lapangan'].includes(att[x].status)).length; attPct = Math.round(ok / ks.length * 100); attTxt = attPct + '% · ' + ok + '/' + ks.length + ' hari'; } }
+      let attTxt = '—', attPct = -1; if (pp.emp) { const A = d.attendance || {}; const ks = Object.keys(A).filter(x => x.endsWith('|' + pp.emp.id) && (tpM === 'all' || x.startsWith(tpM)) && A[x] && A[x].status); if (ks.length) { const ok = ks.filter(x => ['Hadir', 'Lapangan'].includes(A[x].status)).length; attPct = Math.round(ok / ks.length * 100); attTxt = attPct + '% · ' + ok + '/' + ks.length + ' hari'; } }
       return {pp, n: mine.length, assist: assist.length, offer, deal, lost, schools, prosActive, prosLate, last, attTxt, attPct, conv: deal + lost ? Math.round(deal / (deal + lost) * 100) : -1}; })
       .filter(x => x.n || x.assist || x.prosActive || x.pp.emp).sort((a2, b2) => b2.n - a2.n || b2.assist - a2.assist || a2.pp.name.localeCompare(b2.pp.name));
     const tpMax = Math.max(1, ...tpData.map(x => x.n + x.assist));
