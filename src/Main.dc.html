@@ -28,6 +28,31 @@ input[type=range]{accent-color:#2F5D50;width:100%}
     <sc-if value="{{ gDenied }}" hint-placeholder-val="{{ false }}">
       <div style="display:flex;flex-direction:column;gap:10px"><h1 style="margin:0;font-size:18px;font-weight:600">{{ gDeniedTitle }}</h1><div style="font-size:13px;color:#6B675E;line-height:1.5">{{ gDeniedText }}</div><button onClick="{{ doLogout }}" style="border:0;background:#1C1B18;color:#fff;padding:11px 16px;border-radius:7px;font-size:14px;font-weight:600;min-height:44px">Keluar</button></div>
     </sc-if>
+    <sc-if value="{{ gReg }}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{ regLoading }}" hint-placeholder-val="{{ false }}"><div style="font-size:14px;color:#6B675E">Memeriksa pendaftaran…</div></sc-if>
+      <sc-if value="{{ regFormOn }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div><h1 style="margin:0;font-size:18px;font-weight:600">Daftar akun baru</h1><div style="font-size:13px;color:#6B675E;margin-top:2px;line-height:1.45">Masuk sebagai <b style="color:#1C1B18">{{ authEmail }}</b>. Lengkapi data berikut, lalu admin akan meninjau pendaftaran Anda.</div></div>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Nama lengkap *<input autocomplete="name" value="{{ regf.name }}" onChange="{{ regName }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:11px 12px;color:#1C1B18;background:#fff;min-width:0"></label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">No. telepon / WhatsApp *<input type="tel" autocomplete="tel" placeholder="08xxxxxxxxxx" value="{{ regf.phone }}" onChange="{{ regPhone }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:11px 12px;color:#1C1B18;background:#fff;min-width:0"></label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Jabatan *<input placeholder="mis. Staf Marketing" value="{{ regf.jabatan }}" onChange="{{ regJabatan }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:11px 12px;color:#1C1B18;background:#fff;min-width:0"></label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Divisi<select data-rkv="{{ regf.divisi }}" value="{{ regf.divisi }}" onChange="{{ regDivisi }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:11px 12px;color:#1C1B18;background:#fff;min-width:0"><sc-for list="{{ regDivOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#6B675E">Catatan untuk admin (opsional)<input value="{{ regf.note }}" onChange="{{ regNote }}" style="border:1px solid #D8D3C7;border-radius:7px;padding:11px 12px;color:#1C1B18;background:#fff;min-width:0"></label>
+        <sc-if value="{{ hasRegErr }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#A23B28;background:#F6E2DC;border-radius:7px;padding:9px 11px;line-height:1.4">{{ regErr }}</div></sc-if>
+        <button onClick="{{ submitReg }}" style="border:0;background:#1C1B18;color:#fff;padding:11px 16px;border-radius:7px;font-size:14px;font-weight:600;min-height:44px;opacity:{{ regOpacity }}">Kirim pendaftaran</button>
+        <button onClick="{{ doLogout }}" style="border:0;background:transparent;color:#6B675E;padding:4px;font-size:13px;text-decoration:underline">Batal, keluar dari akun ini</button>
+      </div>
+      </sc-if>
+      <sc-if value="{{ regWaitOn }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:inline-flex;align-self:flex-start;font-size:12px;font-weight:600;border-radius:99px;padding:4px 10px;background:{{ regBadgeBg }};color:{{ regBadgeFg }}">{{ regBadge }}</div>
+        <h1 style="margin:0;font-size:18px;font-weight:600">{{ regWaitTitle }}</h1>
+        <div style="font-size:13px;color:#6B675E;line-height:1.5">{{ regWaitText }}</div>
+        <button onClick="{{ regRecheck }}" style="border:0;background:#1C1B18;color:#fff;padding:11px 16px;border-radius:7px;font-size:14px;font-weight:600;min-height:44px">Cek status</button>
+        <button onClick="{{ doLogout }}" style="border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:11px 16px;border-radius:7px;font-size:14px;font-weight:500;min-height:44px">Keluar</button>
+      </div>
+      </sc-if>
+    </sc-if>
     <sc-if value="{{ gForm }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex;flex-direction:column;gap:14px">
         <div><h1 style="margin:0;font-size:18px;font-weight:600">Masuk ke aplikasi</h1><div style="font-size:13px;color:#6B675E;margin-top:2px">Khusus tim internal Nawa Factory</div></div>
@@ -38,6 +63,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
         <button onClick="{{ doLogin }}" style="border:0;background:#1C1B18;color:#fff;padding:11px 16px;border-radius:7px;font-size:14px;font-weight:600;min-height:44px;opacity:{{ authOpacity }}">Masuk</button>
         <sc-if value="{{ authGoogle }}" hint-placeholder-val="{{ false }}"><button onClick="{{ doGoogle }}" style="border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:11px 16px;border-radius:7px;font-size:14px;font-weight:500;min-height:44px">Masuk dengan Google</button></sc-if>
         <sc-if value="{{ authMagic }}" hint-placeholder-val="{{ true }}"><button onClick="{{ doMagic }}" style="border:0;background:transparent;color:#2F5D50;padding:4px;font-size:13px;text-decoration:underline">Kirim link masuk ke email saya</button></sc-if>
+        <div style="border-top:1px solid #EFECE5;padding-top:12px;display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center"><span style="font-size:13px;color:#6B675E">Belum punya akun?</span><button onClick="{{ doRegister }}" style="border:0;background:transparent;color:#2F5D50;padding:4px;font-size:14px;font-weight:600;text-decoration:underline">Daftar akun baru</button><span style="font-size:11px;color:#8A867C;line-height:1.4">Daftar memakai akun Google Anda, lalu isi data diri. Admin akan meninjau sebelum akun aktif.</span></div>
       </div>
     </sc-if>
   </div>
@@ -72,7 +98,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
   <sc-if value="{{ isPortal }}" hint-placeholder-val="{{ false }}">
   <div style="flex:1;padding:0 10px;font-size:13px;color:#6B675E;line-height:1.5">Tampilan yang dilihat panitia sekolah saat login ke portal klien.</div>
   </sc-if>
-  <sc-if value="{{ showSetBtn }}" hint-placeholder-val="{{ true }}"><div style="padding-top:12px;border-top:1px solid #DDD8CC;margin-top:12px"><button onClick="{{ goSetting }}" style="width:100%;white-space:nowrap;display:flex;align-items:center;gap:8px;border:0;text-align:left;padding:9px 10px;border-radius:7px;font-size:14px;font-weight:500;background:{{ setBg }};color:#1C1B18"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Setting</button></div></sc-if><sc-if value="{{ hasAuthMe }}" hint-placeholder-val="{{ true }}"><button onClick="{{ doLogout }}" title="Keluar dari {{ authEmail }}" style="width:100%;white-space:nowrap;display:flex;align-items:center;gap:8px;border:0;text-align:left;padding:9px 10px;border-radius:7px;font-size:14px;font-weight:500;background:transparent;color:#9A3B2E;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Log out</button></sc-if>
+  <sc-if value="{{ showSetBtn }}" hint-placeholder-val="{{ true }}"><div style="padding-top:12px;border-top:1px solid #DDD8CC;margin-top:12px"><button onClick="{{ goSetting }}" style="width:100%;white-space:nowrap;display:flex;align-items:center;gap:8px;border:0;text-align:left;padding:9px 10px;border-radius:7px;font-size:14px;font-weight:500;background:{{ setBg }};color:#1C1B18"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Setting<sc-if value="{{ hasReqBadge }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;font-size:11px;font-weight:600;background:#B4532A;color:#fff;border-radius:99px;padding:1px 7px">{{ reqCount }}</span></sc-if></button></div></sc-if><sc-if value="{{ hasAuthMe }}" hint-placeholder-val="{{ true }}"><button onClick="{{ doLogout }}" title="Keluar dari {{ authEmail }}" style="width:100%;white-space:nowrap;display:flex;align-items:center;gap:8px;border:0;text-align:left;padding:9px 10px;border-radius:7px;font-size:14px;font-weight:500;background:transparent;color:#9A3B2E;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Log out</button></sc-if>
 </aside>
 </sc-if>
 
@@ -99,7 +125,7 @@ input[type=range]{accent-color:#2F5D50;width:100%}
       </div>
     </sc-for>
     </sc-if>
-    <sc-if value="{{ showSetBtn }}" hint-placeholder-val="{{ true }}"><div style="padding-top:12px;border-top:1px solid #DDD8CC;margin-top:8px"><button onClick="{{ goSetting }}" style="width:100%;white-space:nowrap;display:flex;align-items:center;gap:8px;border:0;text-align:left;padding:9px 10px;border-radius:7px;font-size:15px;background:{{ setBg }};color:#1C1B18"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Setting</button></div></sc-if><sc-if value="{{ hasAuthMe }}" hint-placeholder-val="{{ true }}"><button onClick="{{ doLogout }}" title="Keluar dari {{ authEmail }}" style="width:100%;white-space:nowrap;display:flex;align-items:center;gap:8px;border:0;text-align:left;padding:9px 10px;border-radius:7px;font-size:15px;font-weight:500;background:transparent;color:#9A3B2E;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Log out</button></sc-if>
+    <sc-if value="{{ showSetBtn }}" hint-placeholder-val="{{ true }}"><div style="padding-top:12px;border-top:1px solid #DDD8CC;margin-top:8px"><button onClick="{{ goSetting }}" style="width:100%;white-space:nowrap;display:flex;align-items:center;gap:8px;border:0;text-align:left;padding:9px 10px;border-radius:7px;font-size:15px;background:{{ setBg }};color:#1C1B18"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Setting<sc-if value="{{ hasReqBadge }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;font-size:11px;font-weight:600;background:#B4532A;color:#fff;border-radius:99px;padding:1px 7px">{{ reqCount }}</span></sc-if></button></div></sc-if><sc-if value="{{ hasAuthMe }}" hint-placeholder-val="{{ true }}"><button onClick="{{ doLogout }}" title="Keluar dari {{ authEmail }}" style="width:100%;white-space:nowrap;display:flex;align-items:center;gap:8px;border:0;text-align:left;padding:9px 10px;border-radius:7px;font-size:15px;font-weight:500;background:transparent;color:#9A3B2E;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Log out</button></sc-if>
   </div>
   </sc-if>
 
@@ -459,6 +485,14 @@ input[type=range]{accent-color:#2F5D50;width:100%}
     <!-- SETTING -->
     <sc-if value="{{ is.setting }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;flex-direction:column;gap:12px">
+      <sc-if value="{{ isAdminCloud }}" hint-placeholder-val="{{ true }}"><div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px 20px;min-width:0;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><h2 style="margin:0;font-size:15px;font-weight:600">Permintaan akses <span style="font-family:'IBM Plex Mono',monospace;font-weight:500;color:#6B675E">({{ reqCount }})</span></h2><div style="font-size:12px;color:#6B675E;margin-top:2px">Pendaftaran akun baru dari halaman login. Pilih peran, lalu setujui atau tolak.</div></div><button onClick="{{ reqReload }}" style="white-space:nowrap;border:1px solid #D8D3C7;background:#fff;color:#1C1B18;padding:8px 12px;border-radius:7px;font-size:12px">Muat ulang</button></div>
+        <sc-if value="{{ noReqs }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px;color:#6B675E;padding:6px 0">Tidak ada permintaan yang menunggu.</div></sc-if>
+        <sc-for list="{{ reqRows }}" as="q" hint-placeholder-count="2"><div style="border:1px solid #E4E0D6;border-radius:9px;padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 14px;align-items:center;background:#FBFAF7">
+          <div style="min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">{{ q.name }}</span><span style="font-size:12px;color:#6B675E;word-break:break-all">{{ q.email }}</span><span style="font-size:12px;color:#3A3832">{{ q.jabatan }} · {{ q.divisi }} · {{ q.phone }}</span><sc-if value="{{ q.hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:#6B675E;font-style:italic">“{{ q.note }}”</span></sc-if><span style="font-size:11px;color:#8A867C">Daftar {{ q.date }}</span></div>
+          <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap"><select data-rkv="{{ q.role }}" value="{{ q.role }}" onChange="{{ q.setRole }}" aria-label="Peran" style="border:1px solid #D8D3C7;border-radius:7px;padding:8px 10px;background:#fff;font-size:13px"><sc-for list="{{ stRoleOpts }}" as="o" hint-placeholder-count="5"><option value="{{ o }}">{{ o }}</option></sc-for></select><button onClick="{{ q.reject }}" style="white-space:nowrap;border:1px solid #E3B9AE;background:#fff;color:#A23B28;padding:8px 12px;border-radius:7px;font-size:13px">Tolak</button><button onClick="{{ q.approve }}" style="white-space:nowrap;border:0;background:#2F5D50;color:#fff;padding:8px 14px;border-radius:7px;font-size:13px;font-weight:600">Setujui</button></div>
+        </div></sc-for>
+      </div></sc-if>
       <div style="background:#FFFFFF;border:1px solid #E4E0D6;border-radius:10px;padding:18px 20px;min-width:0">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px"><div><h2 style="margin:0;font-size:15px;font-weight:600">Pengguna</h2><div style="font-size:12px;color:#6B675E;margin-top:2px">Akun yang bisa masuk ke aplikasi dan peran masing-masing</div></div><button onClick="{{ newUs }}" style="white-space:nowrap;border:0;background:#1C1B18;color:#fff;padding:10px 16px;border-radius:7px;font-size:13px;font-weight:600;min-height:40px">+ Tambah pengguna</button></div>
         <sc-if value="{{ showUs }}" hint-placeholder-val="{{ false }}">
@@ -1747,14 +1781,14 @@ class Component extends DCLogic {
       if (!sess) { this._cloudBusy = false; this.setState({cloudState: undefined}); return; }
       this._cloudEmail = sess.user.email; this._cloudBy = sess.user.email + '#' + Math.random().toString(36).slice(2, 8);
       const rr = await c.rpc('my_role'); if (rr.error) throw rr.error;
-      if (!rr.data) { this._cloudBusy = false; this.setState({cloudState: 'denied', cloudRole: null}); return; }
+      if (!rr.data) { this._cloudBusy = false; const md = sess.user.user_metadata || {}; this.setState(st => ({cloudState: 'denied', cloudRole: null, regf: {divisi: 'Marketing', ...st.regf, name: (st.regf && st.regf.name) || md.full_name || md.name || ''}})); this.loadMyRequest(); return; }
       const role = rr.data;
       const r = await c.from('app_state').select('data,version').eq('id', 'main').maybeSingle();
       if (r.error) throw r.error;
       if (r.data) this.cloudApply(r.data);
       else { const ins = await c.from('app_state').insert({id: 'main', data: this.cloudStrip(this.state.d), version: 1, updated_by: this._cloudBy}); if (ins.error) throw ins.error; this._cloudVer = 1; }
       this._cloudOn = true; this.setState({cloudState: 'ok', cloudRole: role});
-      this.cloudSyncUsers(); this.loadArchive();
+      this.cloudSyncUsers(); this.loadArchive(); this.loadRequests();
       if (!this._cloudCh) this._cloudCh = c.channel('app_state_main').on('postgres_changes', {event: '*', schema: 'public', table: 'app_state'}, p => { const row = p.new; if (row && row.data && row.version > (this._cloudVer || 0) && row.updated_by !== this._cloudBy) { this.cloudApply(row); this.flash('Data diperbarui oleh pengguna lain'); } }).subscribe();
     } catch (e) { this.setState({cloudState: 'error', cloudErr: this.cloudMsg(e)}); }
     this._cloudBusy = false;
@@ -1812,6 +1846,56 @@ class Component extends DCLogic {
     this.setState({authErr: '', authInfo: ''});
     try { const c = await this.sbClient(au.url, au.key, true); const r = await c.auth.signInWithOAuth({provider: 'google', options: {redirectTo: location.href.split('#')[0]}}); if (r.error) throw r.error; }
     catch (e) { this.setState({authErr: e.message || String(e)}); }
+  }
+  regClient() { const au = this.state.d.auth || {}; return this.sbClient(au.url, au.key, true); }
+  regMsg(e) { const m = (e && e.message) || String(e); return /access_requests/.test(m) && /not find|does not exist|schema cache/i.test(m) ? 'Fitur pendaftaran belum disiapkan di database. Hubungi admin.' : m; }
+  async loadMyRequest() {
+    this.setState({regState: 'loading', regErr: ''});
+    try {
+      const c = await this.regClient();
+      const r = await c.from('access_requests').select('id,status,name,created_at').order('created_at', {ascending: false}).limit(1);
+      if (r.error) throw r.error;
+      const x = (r.data || [])[0];
+      this.setState({regState: x ? x.status : 'none'});
+      if (x && x.status === 'pending' && !this._regCh) this._regCh = c.channel('my_access_req').on('postgres_changes', {event: 'UPDATE', schema: 'public', table: 'access_requests', filter: 'id=eq.' + x.id}, p => { const st = p.new && p.new.status; if (st) this.setState({regState: st}); if (st === 'approved') setTimeout(() => location.reload(), 4000); }).subscribe();
+    } catch (e) { this.setState({regState: 'none', regErr: this.regMsg(e)}); }
+  }
+  async submitReg() {
+    const f = this.state.regf || {}, t = v => String(v || '').trim();
+    if (!t(f.name) || !t(f.phone) || !t(f.jabatan)) return this.setState({regErr: 'Isi nama, nomor telepon, dan jabatan'});
+    if (!/^[+0-9][0-9 ()-]{7,}$/.test(t(f.phone))) return this.setState({regErr: 'Nomor telepon tidak valid'});
+    this.setState({regBusy: true, regErr: ''});
+    try {
+      const c = await this.regClient();
+      const r = await c.from('access_requests').insert({email: (this._cloudEmail || this.state.authEmail || '').toLowerCase(), name: t(f.name), phone: t(f.phone), jabatan: t(f.jabatan), divisi: t(f.divisi) || 'Lainnya', note: t(f.note)});
+      if (r.error) throw r.error;
+      await this.loadMyRequest();
+    } catch (e) { this.setState({regErr: /duplicate|unique/i.test((e && e.message) || '') ? 'Anda sudah pernah mendaftar. Klik Cek status atau hubungi admin.' : this.regMsg(e)}); }
+    this.setState({regBusy: false});
+  }
+  async loadRequests() {
+    if (this.state.cloudRole !== 'Admin') return;
+    try {
+      const c = await this.regClient();
+      const r = await c.from('access_requests').select('*').eq('status', 'pending').order('created_at', {ascending: true});
+      if (r.error) throw r.error;
+      this.setState({reqs: r.data || []});
+      if (!this._reqCh) this._reqCh = c.channel('access_req_admin').on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'access_requests'}, () => { this.loadRequests(); this.flash('Ada permintaan akses baru'); }).subscribe();
+    } catch (e) { this.setState({reqs: []}); }
+  }
+  async decideReq(q, ok) {
+    const role = (this.state.reqRole || {})[q.id] || 'Marketing';
+    if (ok) this.upd(d => { d.users = d.users || []; const em = String(q.email).toLowerCase(), ex = d.users.find(u => String(u.email || '').toLowerCase() === em);
+      const rec = {name: q.name, email: em, role, active: true, phone: q.phone || '', jabatan: q.jabatan || '', divisi: q.divisi || ''};
+      if (ex) Object.assign(ex, rec); else d.users.push({id: 'u' + Date.now(), ...rec}); }, q.name + ' disetujui sebagai ' + role);
+    try {
+      if (ok) await new Promise(res => setTimeout(res, 2500)); // beri waktu daftar email tersinkron sebelum pemohon diberi tahu
+      const c = await this.regClient();
+      const r = await c.from('access_requests').update({status: ok ? 'approved' : 'rejected', decided_at: new Date().toISOString(), decided_by: this._cloudEmail || ''}).eq('id', q.id);
+      if (r.error) throw r.error;
+      if (!ok) this.flash('Permintaan ' + q.name + ' ditolak');
+    } catch (e) { this.flash('Gagal memperbarui permintaan: ' + ((e && e.message) || e)); }
+    this.loadRequests();
   }
   async doLogout() {
     const au = this.state.d.auth || {};
@@ -2589,10 +2673,18 @@ class Component extends DCLogic {
       showSidebar: !s.narrow, narrow: s.narrow, navOpen: s.navOpen, toggleNav: () => this.setState(st => ({navOpen: !st.navOpen})),
       nav, roles, isInternal: internal, isPortal: !internal, is, dashTabs,
       title: internal ? titles[view] : 'Portal Sekolah', todayLabel: 'Year ' + TODAY.getFullYear(),
-      gateOn, appOn: !gateOn, gLoading: gateOn && (!s.authReady || (!!s.authEmail && !cloudDone)), gDenied: gateOn && s.authReady && !!s.authEmail && cloudDone, gDeniedTitle: s.cloudState === 'error' ? 'Tidak bisa membuka data' : 'Akses ditolak', gDeniedText: s.cloudState === 'error' ? (s.cloudErr || 'Gagal terhubung ke database') : 'Akun ' + (s.authEmail || '') + ' belum disetujui admin atau sudah dinonaktifkan. Hubungi admin untuk didaftarkan.', gForm: gateOn && s.authReady && !s.authEmail, authEmail: s.authEmail || '', lgf: s.lgf || {}, lgEmail: this.fset('lgf', 'email'), lgPass: this.fset('lgf', 'password'),
+      gateOn, appOn: !gateOn, gLoading: gateOn && (!s.authReady || (!!s.authEmail && !cloudDone)), gDenied: gateOn && s.authReady && !!s.authEmail && s.cloudState === 'error', gReg: gateOn && s.authReady && !!s.authEmail && s.cloudState === 'denied', gDeniedTitle: s.cloudState === 'error' ? 'Tidak bisa membuka data' : 'Akses ditolak', gDeniedText: s.cloudState === 'error' ? (s.cloudErr || 'Gagal terhubung ke database') : 'Akun ' + (s.authEmail || '') + ' belum disetujui admin atau sudah dinonaktifkan. Hubungi admin untuk didaftarkan.', gForm: gateOn && s.authReady && !s.authEmail,
+      doRegister: () => this.doGoogle(), regf: s.regf || {}, regName: this.fset('regf', 'name'), regPhone: this.fset('regf', 'phone'), regJabatan: this.fset('regf', 'jabatan'), regDivisi: this.fset('regf', 'divisi'), regNote: this.fset('regf', 'note'),
+      regDivOpts: ['Manajemen', 'Marketing', 'Desain', 'Foto', 'Produksi', 'Keuangan', 'Operasional', 'Lainnya'], regLoading: !s.regState || s.regState === 'loading', regFormOn: s.regState === 'none', regWaitOn: ['pending', 'approved', 'rejected'].includes(s.regState),
+      regErr: s.regErr || '', hasRegErr: !!s.regErr, regOpacity: s.regBusy ? 0.6 : 1, submitReg: () => this.submitReg(), regRecheck: () => location.reload(),
+      regBadge: s.regState === 'approved' ? 'Disetujui' : s.regState === 'rejected' ? 'Ditolak' : 'Menunggu persetujuan', regBadgeBg: s.regState === 'approved' ? '#E3ECE7' : s.regState === 'rejected' ? '#F6E2DC' : '#F7ECD9', regBadgeFg: s.regState === 'approved' ? '#2F5D50' : s.regState === 'rejected' ? '#A23B28' : '#8A5A12',
+      regWaitTitle: s.regState === 'approved' ? 'Akun Anda sudah disetujui' : s.regState === 'rejected' ? 'Pendaftaran tidak disetujui' : 'Pendaftaran terkirim',
+      regWaitText: s.regState === 'approved' ? 'Membuka aplikasi… Jika tidak terbuka otomatis, klik Cek status.' : s.regState === 'rejected' ? 'Admin tidak menyetujui pendaftaran akun ' + (s.authEmail || '') + '. Hubungi admin bila ini keliru.' : 'Data Anda sudah diterima. Admin akan meninjau pendaftaran akun ' + (s.authEmail || '') + '. Halaman ini akan terbuka otomatis setelah disetujui, atau klik Cek status nanti.', authEmail: s.authEmail || '', lgf: s.lgf || {}, lgEmail: this.fset('lgf', 'email'), lgPass: this.fset('lgf', 'password'),
       authErr: s.authErr || '', hasAuthErr: !!s.authErr, authInfo: s.authInfo || '', hasAuthInfo: !!s.authInfo, authOpacity: s.authBusy ? 0.6 : 1, authGoogle: !!au.google && !(typeof location !== 'undefined' && /^about:/.test(location.href)), authMagic: !(typeof location !== 'undefined' && /^about:/.test(location.href)),
       isAdminCloud: authOn && s.cloudRole === 'Admin', xferOn: !authOn || s.cloudRole === 'Admin', xfer: s.xfer || '', xferSet: e => this.setState({xfer: e.target.value}), xferExport: () => this.exportData(), xferImport: () => this.importData(this.state.xfer || ''), xferFile: e => this.importDataFile(e), xferMsg: s.xferMsg || '', hasXferMsg: !!s.xferMsg, arcImport: e => this.importArchive(e), arcStatus: s.arcStatus || '', hasArcStatus: !!s.arcStatus, arcCount: String((s.rkData || []).length), doLogin: () => this.doLogin(), doMagic: () => this.doMagic(), doGoogle: () => this.doGoogle(), doLogout: () => this.doLogout(), testConn: () => this.testConn(),
-      showSetBtn: grpLvl('Setting') > 0, hasAuthMe: !!(authOn && s.authEmail), authTest: s.authTest || '', hasAuthTest: !!s.authTest, authRedirect: (typeof location !== 'undefined' && !/^about:/.test(location.href)) ? location.href.split('#')[0] : 'Alamat belum terdeteksi karena aplikasi sedang dibuka di dalam bingkai pratinjau. Buka aplikasi di tab sendiri dari halaman utamanya, lalu alamat yang benar akan tampil di sini. Login dengan email dan kata sandi tidak membutuhkan alamat ini.',
+      showSetBtn: grpLvl('Setting') > 0, reqCount: String((s.reqs || []).length), hasReqBadge: authOn && s.cloudRole === 'Admin' && (s.reqs || []).length > 0, noReqs: !(s.reqs || []).length, reqReload: () => this.loadRequests(),
+      reqRows: (s.reqs || []).map(q => ({name: q.name, email: q.email, phone: q.phone || '—', jabatan: q.jabatan || '—', divisi: q.divisi || '—', note: q.note || '', hasNote: !!q.note, date: q.created_at ? new Date(q.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'}) : '', role: (s.reqRole || {})[q.id] || 'Marketing',
+        setRole: e => { const v = e.target.value; this.setState(st => ({reqRole: {...st.reqRole, [q.id]: v}})); }, approve: () => this.decideReq(q, true), reject: () => { if (window.confirm('Tolak pendaftaran ' + q.name + '?')) this.decideReq(q, false); }})), hasAuthMe: !!(authOn && s.authEmail), authTest: s.authTest || '', hasAuthTest: !!s.authTest, authRedirect: (typeof location !== 'undefined' && !/^about:/.test(location.href)) ? location.href.split('#')[0] : 'Alamat belum terdeteksi karena aplikasi sedang dibuka di dalam bingkai pratinjau. Buka aplikasi di tab sendiri dari halaman utamanya, lalu alamat yang benar akan tampil di sini. Login dengan email dan kata sandi tidak membutuhkan alamat ini.',
       authStatus: authOn ? 'Login aktif' : (au.url && au.key ? 'Tersambung, belum wajib' : 'Belum diatur'), authBg: authOn ? T('green').bg : T('gray').bg, authFg: authOn ? T('green').fg : T('gray').fg,
       auf: s.auf || {url: au.url || '', key: au.key || '', required: au.required ? '1' : '0', google: au.google ? '1' : '0'},
       aufUrl: e => { const v = e.target.value; this.setState(st => ({auf: {...(st.auf || st.d.auth || {}), url: v}})); }, aufKey: e => { const v = e.target.value; this.setState(st => ({auf: {...(st.auf || st.d.auth || {}), key: v}})); },
